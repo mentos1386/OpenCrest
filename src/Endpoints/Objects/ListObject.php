@@ -1,0 +1,58 @@
+<?php namespace OpenCrest\Endpoints\Objects;
+
+use OpenCrest\Endpoints\Endpoint;
+
+class ListObject extends AbstractObject
+{
+
+    /**
+     * @var Endpoint
+     */
+    public $endpoint;
+    /**
+     * @var integer
+     */
+    public $pageCount;
+    /**
+     * @var integer
+     */
+    public $totalCount;
+    /**
+     * @var array
+     */
+    public $items;
+    /**
+     * @var array
+     */
+    public $nextPage;
+    /**
+     * @var array
+     */
+    public $previousPage;
+
+    /**
+     * @return ListObject
+     */
+    public function nextPage()
+    {
+        $page = $this->endpoint->client->get($this->endpoint->uri, [
+            'query' => 'page='.$this->nextPage['page']
+        ]);
+
+        return $this->endpoint->parseAll($page->getBody()->getContents());
+    }
+
+    /**
+     * @return ListObject
+     */
+    public function previousPage()
+    {
+        $page = $this->endpoint->client->get($this->endpoint->uri, [
+            'query' => 'page='.$this->previousPage['page']
+        ]);
+
+        return $this->endpoint->parseAll($page->getBody()->getContents());
+    }
+
+
+}

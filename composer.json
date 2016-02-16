@@ -1,0 +1,21 @@
+{
+    "name": "mentos1386/opencrest",
+    "description": "CREST Library for Eve Online",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tine Jozelj",
+            "email": "mentos1386@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OpenCrest\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
