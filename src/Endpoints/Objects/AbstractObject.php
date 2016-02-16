@@ -5,7 +5,7 @@ class AbstractObject
 
     public function toArray()
     {
-        return (array) $this;
+        return (array)$this;
     }
 
     public function toJson()

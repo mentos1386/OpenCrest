@@ -1,6 +1,5 @@
 <?php namespace OpenCrest;
 
-use GuzzleHttp\Client;
 use OpenCrest\Endpoints\AlliancesEndpoint;
 
 class OpenCrest
@@ -15,7 +14,7 @@ class OpenCrest
      *
      * @param $token
      */
-    public function __construct($token="")
+    public function __construct($token = "")
     {
         $this->token = $token;
 

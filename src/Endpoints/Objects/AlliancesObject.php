@@ -2,8 +2,56 @@
 
 class AlliancesObject extends AbstractObject
 {
+    /**
+     * @var integer
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $shortName;
+    /**
+     * @var string
+     */
+    public $description;
+    /**
+     * @var string
+     */
+    public $startDate;
+    /**
+     * @var integer
+     */
+    public $corporationsCount;
+    /**
+     * @var CorporationsObject
+     */
+    public $executorCorporation;
+    /**
+     * @var CharactersObject
+     */
+    public $creatorCharacter;
+    /**
+     * @var CorporationsObject
+     */
+    public $creatorCorporation;
+    /**
+     * @var CorporationsObject
+     */
+    public $corporations;
+    /**
+     * @var string
+     */
     public $href;
+    /**
+     * @var string
+     */
+    public $url;
+    /**
+     * @var boolean
+     */
+    public $delete;
 }

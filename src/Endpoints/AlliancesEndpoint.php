@@ -1,46 +1,27 @@
 <?php namespace OpenCrest\Endpoints;
 
 use OpenCrest\Endpoints\Objects\AlliancesObject;
-use OpenCrest\Endpoints\Objects\ListObject;
 
 class AlliancesEndpoint extends Endpoint
 {
 
+    /**
+     * Uri
+     *
+     * @var string
+     */
     public $uri = "alliances/";
 
-    protected $oauth = False;
-
+    /**
+     * GET ALL Alliances
+     *
+     * @return mixed|Objects\ListObject
+     */
     public function all()
     {
         $uri = $this->uri;
 
-        $content = $this->client->get($uri)->getBody()->getContents();
-
-        $content = $this->parseAll($content);
-
-        return $content;
-    }
-
-
-
-    public function get($id)
-    {
-        $uri = $this->uri . $id . "/";
-
-        $content = $this->client->get($uri)->getBody()->getContents();
-
-        $content = $this->createObject($content);
-
-        return $content;
-    }
-
-    public function page($id)
-    {
-        $uri = $this->uri;
-
-        $content = $this->client->get($uri, [
-            'query' => 'page='.$id
-            ])->getBody()->getContents();
+        $content = $this->get($uri);
 
         $content = $this->parseAll($content);
 
@@ -48,12 +29,69 @@ class AlliancesEndpoint extends Endpoint
     }
 
     /**
-     * This is must have in every Endpoint, this is used to create objects in functions like paresAll()
+     * GET SPECIFIC Alliance
      *
+     * @param $id
+     * @return mixed|Objects\AbstractObject|AlliancesObject
+     */
+    public function show($id)
+    {
+        $uri = $this->uri . $id . "/";
+
+        $content = $this->get($uri);
+
+        $content = $this->createObject($content);
+
+        return $content;
+    }
+
+    /**
+     * GET SPECIFIC Page with Alliances
+     *
+     * @param $id
+     * @return mixed|Objects\ListObject
+     */
+    public function page($id)
+    {
+        $uri = $this->uri;
+
+        $content = $this->get($uri, [
+            'query' => 'page='.$id
+        ]);
+
+        $content = $this->parseAll($content);
+
+        return $content;
+    }
+
+    /**
+     * @param $item
+     * @return AlliancesObject
+     */
+    public static function createObject($item)
+    {
+        $instance = new AlliancesObject();
+        $instance->id = $item['id'];
+        $instance->name = $item['name'];
+        $instance->shortName = $item['shortName'];
+        $instance->startDate = $item['startDate'];
+        $instance->description = $item['description'];
+        $instance->corporationsCount = $item['corporationsCount'];
+        $instance->corporations = (object)CorporationsEndpoint::createObjectAll($item['corporations']);
+        $instance->executorCorporation = (object)CorporationsEndpoint::createObject($item['executorCorporation']);
+        $instance->creatorCorporation = (object)CorporationsEndpoint::createObject($item['creatorCorporation']);
+        $instance->creatorCharacter = (object)CharactersEndpoint::createObject($item['creatorCharacter']);
+        $instance->url = $item['url'];
+        $instance->delete = $item['deleted'];
+
+        return $instance;
+    }
+
+    /**
      * @param $items
      * @return AlliancesObject
      */
-    public function createObjectAll($items)
+    public static function createObjectAll($items)
     {
         $objects = [];
         foreach($items as $item){
@@ -67,5 +105,4 @@ class AlliancesEndpoint extends Endpoint
 
         return $objects;
     }
-
 }

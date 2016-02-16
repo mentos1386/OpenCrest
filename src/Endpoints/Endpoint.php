@@ -41,17 +41,24 @@ class Endpoint
         return $headers;
     }
 
+    // GET; POST; PUT; DELETE; METHODS
+    public function get($uri, $query = [])
+    {
+        return json_decode($this->client->get($uri, $query)->getBody()->getContents(), true);
+    }
+
+
     /**
      * @param $item
      * @return AbstractObject
      */
-    public function createObject($item){}
+    public static function createObject($item){}
 
     /**
      * @param $items
      * @return AbstractObject
      */
-    public function createObjectAll($items){}
+    public static function createObjectAll($items){}
 
     /**
      * @param $content
@@ -62,15 +69,12 @@ class Endpoint
         $instance = new ListObject();
         $instance->endpoint = new AlliancesEndpoint();
 
-        $content = json_decode($content, True);
-
         $instance->totalCount = $content['totalCount'];
         $instance->pageCount = $content['pageCount'];
 
         $this->parsePages($content, $instance);
 
         $instance->items = $this->createObjectAll($content['items']);
-
 
 
         return $instance;

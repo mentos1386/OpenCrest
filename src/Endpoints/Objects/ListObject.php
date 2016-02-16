@@ -35,11 +35,11 @@ class ListObject extends AbstractObject
      */
     public function nextPage()
     {
-        $page = $this->endpoint->client->get($this->endpoint->uri, [
-            'query' => 'page='.$this->nextPage['page']
+        $page = $this->endpoint->get($this->endpoint->uri, [
+            'query' => 'page=' . $this->nextPage['page']
         ]);
 
-        return $this->endpoint->parseAll($page->getBody()->getContents());
+        return $this->endpoint->parseAll($page);
     }
 
     /**
@@ -47,11 +47,11 @@ class ListObject extends AbstractObject
      */
     public function previousPage()
     {
-        $page = $this->endpoint->client->get($this->endpoint->uri, [
-            'query' => 'page='.$this->previousPage['page']
+        $page = $this->endpoint->get($this->endpoint->uri, [
+            'query' => 'page=' . $this->previousPage['page']
         ]);
 
-        return $this->endpoint->parseAll($page->getBody()->getContents());
+        return $this->endpoint->parseAll($page);
     }
 
 
