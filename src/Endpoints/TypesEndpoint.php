@@ -1,20 +1,19 @@
 <?php namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\AlliancesObject;
+use OpenCrest\Endpoints\Objects\TypesObject;
 use OpenCrest\Endpoints\Objects\ListObject;
 
-class AlliancesEndpoint extends Endpoint
+class TypesEndpoint extends Endpoint
 {
-
     /**
      * Uri
      *
      * @var string
      */
-    public $uri = "alliances/";
+    public $uri = "types/";
 
     /**
-     * GET ALL Alliances
+     * GET ALL Types
      *
      * @return ListObject
      */
@@ -29,11 +28,12 @@ class AlliancesEndpoint extends Endpoint
         return $content;
     }
 
+
     /**
-     * GET SPECIFIC Alliance
+     * GET SPECIFIC Type
      *
      * @param $id
-     * @return AlliancesObject
+     * @return TypesObject
      */
     public function show($id)
     {
@@ -47,7 +47,7 @@ class AlliancesEndpoint extends Endpoint
     }
 
     /**
-     * GET SPECIFIC Page with Alliances
+     * GET SPECIFIC Page with Types
      *
      * @param $id
      * @return ListObject
@@ -57,7 +57,7 @@ class AlliancesEndpoint extends Endpoint
         $uri = $this->uri;
 
         $content = $this->get($uri, [
-            'query' => 'page='.$id
+            'query' => 'page=' . $id
         ]);
 
         $content = $this->parseAll($content);
@@ -67,39 +67,35 @@ class AlliancesEndpoint extends Endpoint
 
     /**
      * @param $item
-     * @return AlliancesObject
+     * @return TypesObject
      */
     public static function createObject($item)
     {
-        $instance = new AlliancesObject();
+        $instance = new TypesObject();
         $instance->id = $item['id'];
         $instance->name = $item['name'];
-        $instance->shortName = $item['shortName'];
-        $instance->startDate = $item['startDate'];
         $instance->description = $item['description'];
-        $instance->corporationsCount = $item['corporationsCount'];
-        $instance->corporations = (object)CorporationsEndpoint::createObjectAll($item['corporations']);
-        $instance->executorCorporation = (object)CorporationsEndpoint::createObject($item['executorCorporation']);
-        $instance->creatorCorporation = (object)CorporationsEndpoint::createObject($item['creatorCorporation']);
-        $instance->creatorCharacter = (object)CharactersEndpoint::createObject($item['creatorCharacter']);
-        $instance->url = $item['url'];
-        $instance->delete = $item['deleted'];
+        $instance->capacity = $item['capacity'];
+        $instance->mass = $item['mass'];
+        $instance->radius = $item['radius'];
+        $instance->dogma = $item['dogma'];
+        $instance->portionSize = $item['portionSize'];
+        $instance->published = $item['published'];
 
         return $instance;
     }
 
     /**
      * @param $items
-     * @return AlliancesObject
+     * @return TypesObject
      */
     public static function createObjectAll($items)
     {
         $objects = [];
-        foreach($items as $item){
-            $instance = new AlliancesObject();
+        foreach ($items as $item) {
+            $instance = new TypesObject();
             $instance->id = $item['id'];
             $instance->name = $item['name'];
-            $instance->shortName = $item['shortName'];
             $instance->href = $item['href'];
             array_push($objects, $instance);
         }
