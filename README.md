@@ -36,7 +36,7 @@ $alliances = $alliances->previousPage();
 ```
 
 ## Example output
-`var_dump($api->alliances->show(99000006);`
+`var_dump($api->alliances->show(99000006);` which calls url https://public-crest.eveonline.com/alliances/99000006/
 
 ```
 object(OpenCrest\Endpoints\Objects\AlliancesObject)[151]
@@ -135,3 +135,6 @@ object(OpenCrest\Endpoints\Objects\AlliancesObject)[151]
 ```
 
 Data is returned as object, with whom you can interact and in feature you will be able to get additional data from objects that it is in relationship with.
+
+## License
+The MIT License (MIT). Please see [License File](https://github.com/mentos1386/OpenCrest/blob/master/LICENSE) for more information.
