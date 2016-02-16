@@ -53,5 +53,5 @@ class AlliancesObject extends AbstractObject
     /**
      * @var boolean
      */
-    public $delete;
+    public $deleted;
 }

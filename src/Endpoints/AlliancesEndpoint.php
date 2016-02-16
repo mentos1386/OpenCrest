@@ -83,7 +83,7 @@ class AlliancesEndpoint extends Endpoint
         $instance->creatorCorporation = (object)CorporationsEndpoint::createObject($item['creatorCorporation']);
         $instance->creatorCharacter = (object)CharactersEndpoint::createObject($item['creatorCharacter']);
         $instance->url = $item['url'];
-        $instance->delete = $item['deleted'];
+        $instance->deleted = $item['deleted'];
 
         return $instance;
     }
