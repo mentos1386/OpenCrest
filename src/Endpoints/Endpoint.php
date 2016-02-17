@@ -1,4 +1,6 @@
-<?php namespace OpenCrest\Endpoints;
+<?php
+
+namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\AbstractObject;

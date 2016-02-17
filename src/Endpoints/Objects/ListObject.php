@@ -1,4 +1,6 @@
-<?php namespace OpenCrest\Endpoints\Objects;
+<?php
+
+namespace OpenCrest\Endpoints\Objects;
 
 use OpenCrest\Endpoints\Endpoint;
 

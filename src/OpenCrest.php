@@ -1,4 +1,6 @@
-<?php namespace OpenCrest;
+<?php
+
+namespace OpenCrest;
 
 use OpenCrest\Endpoints\AlliancesEndpoint;
 use OpenCrest\Endpoints\CharactersEndpoint;

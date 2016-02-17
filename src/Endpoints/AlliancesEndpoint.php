@@ -1,4 +1,6 @@
-<?php namespace OpenCrest\Endpoints;
+<?php
+
+namespace OpenCrest\Endpoints;
 
 use OpenCrest\Endpoints\Objects\AlliancesObject;
 use OpenCrest\Endpoints\Objects\ListObject;
