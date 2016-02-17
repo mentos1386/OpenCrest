@@ -12,6 +12,8 @@ use OpenCrest\Endpoints\TypesEndpoint;
 class OpenCrest
 {
     protected $token;
+    protected static $apiVersion = "v3";
+    protected static $version = "0.1";
 
     // Endpoints
     public $alliances;
@@ -28,7 +30,7 @@ class OpenCrest
      *
      * @param $token
      */
-    public function __construct($token = "")
+    public function __construct($token = "", $apiVersion = null)
     {
         $this->token = $token;
 
@@ -41,5 +43,19 @@ class OpenCrest
         $this->systems = new SystemsEndpoint($token);
         $this->planets = new PlanetsEndpoint($token);
 
+        if ($apiVersion)
+        {
+            self::$apiVersion = $apiVersion;
+        }
+    }
+
+    public static function apiVersion()
+    {
+        return self::$apiVersion;
+    }
+
+    public static function version()
+    {
+        return self::$version;
     }
 }

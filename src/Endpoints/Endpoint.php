@@ -3,16 +3,17 @@
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\AbstractObject;
 use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\OpenCrest;
 
 class Endpoint
 {
     private $baseUrl = "https://public-crest.eveonline.com/";
     public $client;
-    protected $oauth = False;
     public $uri;
+    protected $oauth = False;
     protected $token;
 
-    public function __construct($token="")
+    public function __construct($token = "")
     {
         $this->client = new GuzzleHttp\Client($this->headers());
         $this->token = $token;
@@ -20,20 +21,21 @@ class Endpoint
 
     private function headers()
     {
-        if($this->oauth){
+        if ($this->oauth) {
             $headers = [
                 'base_uri' => $this->baseUrl,
-                'headers' => [
-                    'User-Agent' => 'OpenCrest/0.1',
-                    'Authorization' => 'Bearer '.$this->token,
-                    ]
-                ];
-        }
-        else {
+                'headers'  => [
+                    'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
+                    'Accept'        => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
+                    'Authorization' => 'Bearer ' . $this->token,
+                ]
+            ];
+        } else {
             $headers = [
                 'base_uri' => $this->baseUrl,
-                'headers' => [
-                    'User-Agent' => 'OpenCrest/0.1',
+                'headers'  => [
+                    'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
+                    'Accept'     => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
                 ]
             ];
         }
@@ -47,27 +49,14 @@ class Endpoint
         return json_decode($this->client->get($uri, $query)->getBody()->getContents(), true);
     }
 
-
-    /**
-     * @param $item
-     * @return AbstractObject
-     */
-    public static function createObject($item){}
-
-    /**
-     * @param $items
-     * @return AbstractObject
-     */
-    public static function createObjectAll($items){}
-
     /**
      * @param $content
      * @return ListObject
      */
-    public function parseAll($content)
+    public function parseAll($content, $endpoint)
     {
         $instance = new ListObject();
-        $instance->endpoint = new AlliancesEndpoint();
+        $instance->endpoint = $endpoint;
 
         $instance->totalCount = $content['totalCount'];
         $instance->pageCount = $content['pageCount'];
@@ -76,7 +65,6 @@ class Endpoint
 
         $instance->items = $this->createObjectAll($content['items']);
 
-
         return $instance;
     }
 
@@ -84,25 +72,40 @@ class Endpoint
     {
         $query = parse_url($url, PHP_URL_QUERY);
         parse_str($query, $value);
+
         return $value;
     }
 
     protected function parsePages($pages, $instance)
     {
 
-        if(isset($pages['next']))
-        {
+        if (isset($pages['next'])) {
             $instance->nextPage = [
                 'href' => $pages['next']['href'],
-                'page' => ($this->parseUrl($pages['next']['href'])['page']?(int)$this->parseUrl($pages['next']['href'])['page']:null)
+                'page' => ($this->parseUrl($pages['next']['href'])['page'] ? (int)$this->parseUrl($pages['next']['href'])['page'] : null)
             ];
         }
-        if(isset($pages['previous']))
-        {
+        if (isset($pages['previous'])) {
             $instance->previousPage = [
                 'href' => $pages['previous']['href'],
-                'page' => (int)(!empty($this->parseUrl($pages['previous']['href']))? $this->parseUrl($pages['previous']['href'])['page']:1)
+                'page' => (int)(!empty($this->parseUrl($pages['previous']['href'])) ? $this->parseUrl($pages['previous']['href'])['page'] : 1)
             ];
         }
+    }
+
+    /**
+     * @param $item
+     * @return AbstractObject
+     */
+    public static function createObject($item)
+    {
+    }
+
+    /**
+     * @param $items
+     * @return AbstractObject
+     */
+    public static function createObjectAll($items)
+    {
     }
 }

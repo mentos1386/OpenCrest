@@ -21,7 +21,7 @@ $id = 40000017;
 $planet = $api->planets->show($id);
 
 $id = 99000006;
-$alliances = $api->alliances->show($id);
+$alliances = $api->alliances->show($id)->;
 
 $alliances = $api->alliances->all();
 

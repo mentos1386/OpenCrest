@@ -24,7 +24,7 @@ class AlliancesEndpoint extends Endpoint
 
         $content = $this->get($uri);
 
-        $content = $this->parseAll($content);
+        $content = $this->parseAll($content, new $this);
 
         return $content;
     }
@@ -57,10 +57,10 @@ class AlliancesEndpoint extends Endpoint
         $uri = $this->uri;
 
         $content = $this->get($uri, [
-            'query' => 'page='.$id
+            'query' => 'page=' . $id
         ]);
 
-        $content = $this->parseAll($content);
+        $content = $this->parseAll($content, new $this);
 
         return $content;
     }
@@ -72,6 +72,7 @@ class AlliancesEndpoint extends Endpoint
     public static function createObject($item)
     {
         $instance = new AlliancesObject();
+        $instance->endpoint = new self; // TODO: Would it be useful to have endpoint in object? For future relationship models?
         $instance->id = $item['id'];
         $instance->name = $item['name'];
         $instance->shortName = $item['shortName'];
@@ -95,8 +96,9 @@ class AlliancesEndpoint extends Endpoint
     public static function createObjectAll($items)
     {
         $objects = [];
-        foreach($items as $item){
+        foreach ($items as $item) {
             $instance = new AlliancesObject();
+            $instance->endpoint = new self; // TODO: Look todo up!
             $instance->id = $item['id'];
             $instance->name = $item['name'];
             $instance->shortName = $item['shortName'];

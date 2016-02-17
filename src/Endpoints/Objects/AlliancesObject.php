@@ -2,6 +2,7 @@
 
 class AlliancesObject extends AbstractObject
 {
+    public $endpoint;
     /**
      * @var integer
      */

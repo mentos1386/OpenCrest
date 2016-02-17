@@ -23,7 +23,7 @@ class PlanetsEndpoint extends Endpoint
 
         $content = $this->get($uri);
 
-        $content = $this->parseAll($content);
+        $content = $this->parseAll($content, new $this);
 
         return $content;
     }
@@ -60,7 +60,7 @@ class PlanetsEndpoint extends Endpoint
             'query' => 'page=' . $id
         ]);
 
-        $content = $this->parseAll($content);
+        $content = $this->parseAll($content, new $this);
 
         return $content;
     }

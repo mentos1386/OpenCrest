@@ -60,7 +60,7 @@ class ConstellationsEndpoint extends Endpoint
             'query' => 'page=' . $id
         ]);
 
-        $content = $this->parseAll($content);
+        $content = $this->parseAll($content, new $this);
 
         return $content;
     }
