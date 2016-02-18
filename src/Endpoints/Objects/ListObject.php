@@ -4,7 +4,7 @@ namespace OpenCrest\Endpoints\Objects;
 
 use OpenCrest\Endpoints\Endpoint;
 
-class ListObject extends AbstractObject
+class ListObject extends Object
 {
 
     /**

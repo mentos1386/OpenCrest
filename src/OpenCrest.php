@@ -15,16 +15,16 @@ class OpenCrest
 {
     protected static $apiVersion = "v3";
     protected static $version = "0.1";
-    public $alliances;
+    public $characters;
 
     // Endpoints
-    public $characters;
     public $corporations;
     public $types;
     public $regions;
     public $constellations;
     public $systems;
     public $planets;
+    public $alliances;
     protected $token;
 
     /**

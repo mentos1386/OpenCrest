@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
-class CorporationsObject extends AbstractObject
+class CorporationsObject extends Object
 {
     /**
      * @var integer

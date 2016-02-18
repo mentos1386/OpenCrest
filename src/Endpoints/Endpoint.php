@@ -3,7 +3,6 @@
 namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
-use OpenCrest\Endpoints\Objects\AbstractObject;
 use OpenCrest\Endpoints\Objects\ListObject;
 use OpenCrest\OpenCrest;
 
@@ -86,17 +85,17 @@ abstract class Endpoint
 
     /**
      * @param       $uri
-     * @param array $query
+     * @param array $options
      * @return mixed
      */
-    public function get($uri, $query = [])
+    public function get($uri, $options = [])
     {
-        return json_decode($this->client->get($uri, $query)->getBody()->getContents(), true);
+        return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
     }
 
     /**
      * @param $item
-     * @return AbstractObject
+     * @return Object
      */
     public function createObject($item)
     {
@@ -149,7 +148,7 @@ abstract class Endpoint
      * @param $url
      * @return mixed
      */
-    public function parseUrl($url)
+    protected function parseUrl($url)
     {
         $query = parse_url($url, PHP_URL_QUERY);
         parse_str($query, $value);
@@ -165,7 +164,7 @@ abstract class Endpoint
 
     /**
      * @param $id
-     * @return AbstractObject
+     * @return Object
      */
     public function show($id)
     {

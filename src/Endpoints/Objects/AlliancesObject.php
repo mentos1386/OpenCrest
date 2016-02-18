@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
-class AlliancesObject extends AbstractObject
+class AlliancesObject extends Object
 {
     public $endpoint;
     /**

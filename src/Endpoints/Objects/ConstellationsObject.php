@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
-class ConstellationsObject extends AbstractObject
+class ConstellationsObject extends Object
 {
     /**
      * @var integer

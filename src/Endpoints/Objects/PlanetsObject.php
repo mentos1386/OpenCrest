@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
-class PlanetsObject extends AbstractObject
+class PlanetsObject extends Object
 {
     /**
      * @var array
