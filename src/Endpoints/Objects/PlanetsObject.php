@@ -2,23 +2,14 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\SystemsEndpoint;
+
 class PlanetsObject extends Object
 {
-    /**
-     * @var array
-     */
-    public $position;
-    /**
-     * @var array
-     */
-    public $type;
-    /**
-     * @var SystemsObject
-     */
-    public $system;
-    /**
-     * @var string
-     */
-    public $name;
-
+    protected function setRelations()
+    {
+        $this->relations = [
+            "system" => SystemsEndpoint::class,
+        ];
+    }
 }

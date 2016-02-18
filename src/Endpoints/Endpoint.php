@@ -9,6 +9,10 @@ use OpenCrest\OpenCrest;
 abstract class Endpoint
 {
     /**
+     * @var Object
+     */
+    protected static $object;
+    /**
      * @var GuzzleHttp\Client
      */
     public $client;
@@ -29,7 +33,6 @@ abstract class Endpoint
      */
     protected $token;
 
-
     /**
      * Endpoint constructor.
      *
@@ -39,7 +42,8 @@ abstract class Endpoint
     {
         $this->client = new GuzzleHttp\Client($this->headers());
         $this->token = $token;
-        $this->instance = $this;
+
+        $this->setObject();
     }
 
     /**
@@ -70,6 +74,11 @@ abstract class Endpoint
     }
 
     /**
+     * @return void
+     */
+    abstract protected function setObject();
+
+    /**
      * @return ListObject
      */
     public function all()
@@ -97,70 +106,22 @@ abstract class Endpoint
      * @param $item
      * @return Object
      */
-    public function createObject($item)
+    public static function createObject($item)
     {
-        if (isset($item['items'])) {
+        if (isset($item['items']) or isset($item[0])) {
             // If we have list of items
-            $items = $item['items'];
-            $collection = new ListObject();
-            $collection->endpoint = $this;
+            $listObject = new ListObject();
+            $listObject->setEndpoint(new static);
 
-            $collection->totalCount = $item['totalCount'];
-            $collection->pageCount = $item['pageCount'];
-
-            self::parsePages($item, $collection);
-
-            foreach ($items as $item) {
-
-                $object = $this->make($item);
-                array_push($collection->items, $object);
-            }
-
-            return $collection;
+            return $listObject->make($item);
         } else {
             // If there is only one item
-            return $this->make($item);
+            self::$object->setEndpoint(new static);
+
+            return self::$object->make($item);
         }
     }
 
-    /**
-     * @param $pages
-     * @param $instance
-     */
-    protected function parsePages($pages, $instance)
-    {
-
-        if (isset($pages['next'])) {
-            $instance->nextPage = [
-                'href' => $pages['next']['href'],
-                'page' => ($this->parseUrl($pages['next']['href'])['page'] ? (int)$this->parseUrl($pages['next']['href'])['page'] : null)
-            ];
-        }
-        if (isset($pages['previous'])) {
-            $instance->previousPage = [
-                'href' => $pages['previous']['href'],
-                'page' => (int)(!empty($this->parseUrl($pages['previous']['href'])) ? $this->parseUrl($pages['previous']['href'])['page'] : 1)
-            ];
-        }
-    }
-
-    /**
-     * @param $url
-     * @return mixed
-     */
-    protected function parseUrl($url)
-    {
-        $query = parse_url($url, PHP_URL_QUERY);
-        parse_str($query, $value);
-
-        return $value;
-    }
-
-    /**
-     * @param $item
-     * @return mixed
-     */
-    abstract protected function make($item);
 
     /**
      * @param $id
@@ -192,6 +153,11 @@ abstract class Endpoint
         $content = $this->createObject($content);
 
         return $content;
+    }
+
+    public function getObject()
+    {
+        return self::$object;
     }
 
 }

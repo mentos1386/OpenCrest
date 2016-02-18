@@ -2,35 +2,15 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\ConstellationsEndpoint;
+
 class RegionsObject extends Object
 {
-    /**
-     * @var integer
-     */
-    public $id;
-    /**
-     * @var string
-     */
-    public $name;
-    /**
-     * @var string
-     */
-    public $description;
-    /**
-     * @var string
-     */
-    public $href;
-    /**
-     * @var array
-     */
-    public $constellations;
-    /**
-     * @var array
-     */
-    public $marketBuyOrders;
-    /**
-     * @var array
-     */
-    public $marketSellOrders;
+    protected function setRelations()
+    {
+        $this->relations = [
+            "Constellations" => ConstellationsEndpoint::class,
+        ];
+    }
 
 }

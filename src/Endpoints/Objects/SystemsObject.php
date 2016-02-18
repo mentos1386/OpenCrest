@@ -2,46 +2,16 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\AlliancesEndpoint;
+use OpenCrest\Endpoints\ConstellationsEndpoint;
+
 class SystemsObject extends Object
 {
-    /**
-     * @var integer
-     */
-    public $id;
-    /**
-     * @var array
-     */
-    public $stats;
-    /**
-     * @var string
-     */
-    public $name;
-    /**
-     * @var float
-     */
-    public $securityStatus;
-    /**
-     * @var string
-     */
-    public $securityClass;
-    /**
-     * @var array
-     */
-    public $planets;
-    /**
-     * @var array
-     */
-    public $position;
-    /**
-     * @var array
-     */
-    public $sovereignty;
-    /**
-     * @var ConstellationsObject
-     */
-    public $constellation;
-    /**
-     * @var string
-     */
-    public $href;
+    protected function setRelations()
+    {
+        $this->relations = [
+            "Constellations" => ConstellationsEndpoint::class,
+            "sovereignty"    => AlliancesEndpoint::class,
+        ];
+    }
 }

@@ -2,30 +2,14 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\SystemsEndpoint;
+
 class ConstellationsObject extends Object
 {
-    /**
-     * @var integer
-     */
-    public $id;
-    /**
-     * @var string
-     */
-    public $name;
-    /**
-     * @var array
-     */
-    public $position;
-    /**
-     * @var array
-     */
-    public $region;
-    /**
-     * @var array
-     */
-    public $systems;
-    /**
-     * @var string
-     */
-    public $href;
+    protected function setRelations()
+    {
+        $this->relations = [
+            "systems" => SystemsEndpoint::class,
+        ];
+    }
 }

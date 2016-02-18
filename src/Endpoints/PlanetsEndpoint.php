@@ -13,19 +13,8 @@ class PlanetsEndpoint extends Endpoint
      */
     public $uri = "planets/";
 
-    /**
-     * @param $item
-     * @return PlanetsObject
-     */
-    protected function make($item)
+    protected function setObject()
     {
-        $instance = new PlanetsObject();
-        //$instance->id = $item['id'];  Not provided, probably bug
-        $instance->name = $item['name'];
-        $instance->type = $item['type'];
-
-        //$instance->system = SystemsEndpoint::createObject($item['system']);TODO Not Enough data is provided, need to implement some check system
-
-        return $instance;
+        self::$object = new PlanetsObject();
     }
 }
