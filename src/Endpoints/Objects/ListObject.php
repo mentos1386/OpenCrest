@@ -22,7 +22,7 @@ class ListObject extends AbstractObject
     /**
      * @var array
      */
-    public $items;
+    public $items = [];
     /**
      * @var array
      */
@@ -41,7 +41,7 @@ class ListObject extends AbstractObject
             'query' => 'page=' . $this->nextPage['page']
         ]);
 
-        return $this->endpoint->parseAll($page);
+        return $this->endpoint->createObject($page);
     }
 
     /**
@@ -53,7 +53,7 @@ class ListObject extends AbstractObject
             'query' => 'page=' . $this->previousPage['page']
         ]);
 
-        return $this->endpoint->parseAll($page);
+        return $this->endpoint->createObject($page);
     }
 
 

@@ -3,7 +3,6 @@
 namespace OpenCrest\Endpoints;
 
 use OpenCrest\Endpoints\Objects\AlliancesObject;
-use OpenCrest\Endpoints\Objects\ListObject;
 
 class AlliancesEndpoint extends Endpoint
 {
@@ -16,62 +15,10 @@ class AlliancesEndpoint extends Endpoint
     public $uri = "alliances/";
 
     /**
-     * GET ALL Alliances
-     *
-     * @return ListObject
-     */
-    public function all()
-    {
-        $uri = $this->uri;
-
-        $content = $this->get($uri);
-
-        $content = $this->parseAll($content, new $this);
-
-        return $content;
-    }
-
-    /**
-     * GET SPECIFIC Alliance
-     *
-     * @param $id
-     * @return AlliancesObject
-     */
-    public function show($id)
-    {
-        $uri = $this->uri . $id . "/";
-
-        $content = $this->get($uri);
-
-        $content = $this->createObject($content);
-
-        return $content;
-    }
-
-    /**
-     * GET SPECIFIC Page with Alliances
-     *
-     * @param $id
-     * @return ListObject
-     */
-    public function page($id)
-    {
-        $uri = $this->uri;
-
-        $content = $this->get($uri, [
-            'query' => 'page=' . $id
-        ]);
-
-        $content = $this->parseAll($content, new $this);
-
-        return $content;
-    }
-
-    /**
      * @param $item
      * @return AlliancesObject
      */
-    public static function createObject($item)
+    protected function make($item)
     {
         $instance = new AlliancesObject();
         $instance->endpoint = new self; // TODO: Would it be useful to have endpoint in object? For future relationship models?
@@ -81,7 +28,7 @@ class AlliancesEndpoint extends Endpoint
         $instance->startDate = $item['startDate'];
         $instance->description = $item['description'];
         $instance->corporationsCount = $item['corporationsCount'];
-        $instance->corporations = (object)CorporationsEndpoint::createObjectAll($item['corporations']);
+        $instance->corporations = (object)CorporationsEndpoint::createObject($item['corporations']);
         $instance->executorCorporation = (object)CorporationsEndpoint::createObject($item['executorCorporation']);
         $instance->creatorCorporation = (object)CorporationsEndpoint::createObject($item['creatorCorporation']);
         $instance->creatorCharacter = (object)CharactersEndpoint::createObject($item['creatorCharacter']);
@@ -89,25 +36,5 @@ class AlliancesEndpoint extends Endpoint
         $instance->deleted = $item['deleted'];
 
         return $instance;
-    }
-
-    /**
-     * @param $items
-     * @return AlliancesObject
-     */
-    public static function createObjectAll($items)
-    {
-        $objects = [];
-        foreach ($items as $item) {
-            $instance = new AlliancesObject();
-            $instance->endpoint = new self; // TODO: Look todo up!
-            $instance->id = $item['id'];
-            $instance->name = $item['name'];
-            $instance->shortName = $item['shortName'];
-            $instance->href = $item['href'];
-            array_push($objects, $instance);
-        }
-
-        return $objects;
     }
 }

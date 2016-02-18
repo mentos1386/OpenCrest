@@ -13,12 +13,11 @@ use OpenCrest\Endpoints\TypesEndpoint;
 
 class OpenCrest
 {
-    protected $token;
     protected static $apiVersion = "v3";
     protected static $version = "0.1";
+    public $alliances;
 
     // Endpoints
-    public $alliances;
     public $characters;
     public $corporations;
     public $types;
@@ -26,11 +25,13 @@ class OpenCrest
     public $constellations;
     public $systems;
     public $planets;
+    protected $token;
 
     /**
      * OpenCrest constructor.
      *
      * @param $token
+     * @param $apiVersion
      */
     public function __construct($token = "", $apiVersion = null)
     {

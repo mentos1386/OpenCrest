@@ -17,7 +17,7 @@ class CorporationsEndpoint extends Endpoint
      * @param $item
      * @return CorporationsObject
      */
-    public static function createObject($item)
+    protected function make($item)
     {
         $instance = new CorporationsObject();
         $instance->id = $item['id'];
@@ -27,19 +27,5 @@ class CorporationsEndpoint extends Endpoint
         $instance->href = $item['href'];
 
         return $instance;
-    }
-
-    /**
-     * @param $items
-     * @return CorporationsObject
-     */
-    public static function createObjectAll($items)
-    {
-        $objects = [];
-        foreach ($items as $item) {
-            array_push($objects, self::createObject($item));
-        }
-
-        return $objects;
     }
 }

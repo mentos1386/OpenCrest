@@ -10,7 +10,7 @@ class CharactersEndpoint extends Endpoint
      * @param $item
      * @return CharactersObject
      */
-    public static function createObject($item)
+    protected function make($item)
     {
         $instance = new CharactersObject();
         $instance->id = $item['id'];
@@ -23,17 +23,4 @@ class CharactersEndpoint extends Endpoint
         return $instance;
     }
 
-    /**
-     * @param $items
-     * @return CharactersObject
-     */
-    public static function createObjectAll($items)
-    {
-        $objects = [];
-        foreach ($items as $item) {
-            array_push($objects, self::createObject($item));
-        }
-
-        return $objects;
-    }
 }
