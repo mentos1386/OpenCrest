@@ -45,8 +45,11 @@ class ListObject extends Object
         }
         $this->attributes['items'] = [];
 
+        $object = new $this->endpoint->object;
         foreach ($items as $item) {
-            $_item = $this->endpoint->getObject()->make($item);
+
+            $_item = $object->make($item);
+            $_item->setEndpoint($this->endpoint);
             array_push($this->attributes['items'], $_item);
         }
 

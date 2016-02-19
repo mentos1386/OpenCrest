@@ -10,8 +10,8 @@ class SystemsObject extends Object
     protected function setRelations()
     {
         $this->relations = [
-            "Constellations" => ConstellationsEndpoint::class,
-            "sovereignty"    => AlliancesEndpoint::class,
+            "Constellations" => new ConstellationsEndpoint(),
+            "sovereignty"    => new AlliancesEndpoint(),
         ];
     }
 }

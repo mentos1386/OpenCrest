@@ -11,7 +11,7 @@ abstract class Endpoint
     /**
      * @var Object
      */
-    protected static $object;
+    public $object;
     /**
      * @var GuzzleHttp\Client
      */
@@ -21,10 +21,6 @@ abstract class Endpoint
      */
     public $uri;
     /**
-     * @var string
-     */
-    protected $baseUrl = "https://public-crest.eveonline.com/";
-    /**
      * @var bool
      */
     protected $oauth = False;
@@ -32,6 +28,14 @@ abstract class Endpoint
      * @var string
      */
     protected $token;
+    /**
+     * @var string
+     */
+    private $publicBase = "https://public-crest.eveonline.com/";
+    /**
+     * @var string
+     */
+    private $oauthBase = "https://crest-tq.eveonline.com/";
 
     /**
      * Endpoint constructor.
@@ -42,8 +46,7 @@ abstract class Endpoint
     {
         $this->client = new GuzzleHttp\Client($this->headers());
         $this->token = $token;
-
-        $this->setObject();
+        $this->object = "OpenCrest\\Endpoints\\Objects\\" . $this->object;
     }
 
     /**
@@ -53,7 +56,7 @@ abstract class Endpoint
     {
         if ($this->oauth) {
             $headers = [
-                'base_uri' => $this->baseUrl,
+                'base_uri' => $this->oauthBase,
                 'headers'  => [
                     'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'        => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
@@ -62,7 +65,7 @@ abstract class Endpoint
             ];
         } else {
             $headers = [
-                'base_uri' => $this->baseUrl,
+                'base_uri' => $this->publicBase,
                 'headers'  => [
                     'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'     => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
@@ -74,19 +77,12 @@ abstract class Endpoint
     }
 
     /**
-     * @return void
-     */
-    abstract protected function setObject();
-
-    /**
      * @return ListObject
      */
     public function all()
     {
         $uri = $this->uri;
-
         $content = $this->get($uri);
-
         $content = $this->createObject($content);
 
         return $content;
@@ -106,19 +102,20 @@ abstract class Endpoint
      * @param $item
      * @return Object
      */
-    public static function createObject($item)
+    public function createObject($item)
     {
         if (isset($item['items']) or isset($item[0])) {
             // If we have list of items
             $listObject = new ListObject();
-            $listObject->setEndpoint(new static);
+            $listObject->setEndpoint(new $this);
 
             return $listObject->make($item);
         } else {
             // If there is only one item
-            self::$object->setEndpoint(new static);
+            $object = new $this->object;
+            $object->setEndpoint(new $this);
 
-            return self::$object->make($item);
+            return $object->make($item);
         }
     }
 
@@ -154,10 +151,4 @@ abstract class Endpoint
 
         return $content;
     }
-
-    public function getObject()
-    {
-        return self::$object;
-    }
-
 }

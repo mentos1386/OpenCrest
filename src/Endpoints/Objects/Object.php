@@ -70,7 +70,8 @@ abstract class Object
     {
         foreach ($item as $key => $value) {
             if (array_key_exists($key, $this->relations)) {
-                $this->attributes[$key] = $this->relations[$key]::createObject($value);
+                $endpoint = new $this->relations[$key];
+                $this->attributes[$key] = $endpoint->createObject($value);
             } else {
                 $this->attributes[$key] = $value;
             }
@@ -86,4 +87,24 @@ abstract class Object
     {
         $this->endpoint = $endpoint;
     }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->attributes[$name]);
+    }
+
+    /**
+     * This is used to get relationship object to make show(id) request
+     *
+     * @return Object
+     */
+    public function get()
+    {
+        return $this->endpoint->show($this->id);
+    }
+
 }

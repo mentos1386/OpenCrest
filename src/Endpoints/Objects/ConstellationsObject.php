@@ -9,7 +9,7 @@ class ConstellationsObject extends Object
     protected function setRelations()
     {
         $this->relations = [
-            "systems" => SystemsEndpoint::class,
+            "systems" => new SystemsEndpoint(),
         ];
     }
 }

@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\ConstellationsObject;
-
 class ConstellationsEndpoint extends Endpoint
 {
     /**
@@ -11,8 +9,9 @@ class ConstellationsEndpoint extends Endpoint
      */
     public $uri = "constellations/";
 
-    protected function setObject()
-    {
-        self::$object = new ConstellationsObject();
-    }
+    /**
+     * @var string
+     */
+    public $object = "ConstellationsObject";
+
 }

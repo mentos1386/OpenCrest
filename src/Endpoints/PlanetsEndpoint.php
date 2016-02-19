@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\PlanetsObject;
-
 class PlanetsEndpoint extends Endpoint
 {
     /**
@@ -13,8 +11,9 @@ class PlanetsEndpoint extends Endpoint
      */
     public $uri = "planets/";
 
-    protected function setObject()
-    {
-        self::$object = new PlanetsObject();
-    }
+    /**
+     * @var string
+     */
+    public $object = "PlanetsObject";
+
 }

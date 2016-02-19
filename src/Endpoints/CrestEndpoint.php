@@ -2,16 +2,15 @@
 
 namespace OpenCrest\Endpoints;
 
-class RegionsEndpoint extends Endpoint
+class CrestEndpoint extends Endpoint
 {
     /**
      * @var string
      */
-    public $uri = "regions/";
+    public $uri = "";
 
     /**
      * @var string
      */
-    public $object = "RegionsObject";
-
+    public $object = "CrestObject";
 }

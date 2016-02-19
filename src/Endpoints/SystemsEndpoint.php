@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\SystemsObject;
-
 class SystemsEndpoint extends Endpoint
 {
     /**
@@ -11,8 +9,8 @@ class SystemsEndpoint extends Endpoint
      */
     public $uri = "solarsystems/";
 
-    protected function setObject()
-    {
-        self::$object = new SystemsObject();
-    }
+    /**
+     * @var string
+     */
+    public $object = "SystemsObject";
 }

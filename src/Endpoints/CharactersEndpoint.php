@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\CharactersObject;
-
 class CharactersEndpoint extends Endpoint
 {
     /**
@@ -11,9 +9,5 @@ class CharactersEndpoint extends Endpoint
      */
     public $uri = "characters/";
 
-    protected function setObject()
-    {
-        self::$object = new CharactersObject();
-    }
-
+    public $object = "CharactersObject";
 }

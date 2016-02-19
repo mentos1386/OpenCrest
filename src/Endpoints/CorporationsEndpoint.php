@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\CorporationsObject;
-
 class CorporationsEndpoint extends Endpoint
 {
     /**
@@ -11,8 +9,9 @@ class CorporationsEndpoint extends Endpoint
      */
     public $uri = "corporations/";
 
-    protected function setObject()
-    {
-        self::$object = new CorporationsObject();
-    }
+    /**
+     * @var string
+     */
+    public $object = "CorporationsObject";
+
 }

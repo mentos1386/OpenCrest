@@ -2,8 +2,6 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\TypesObject;
-
 class TypesEndpoint extends Endpoint
 {
     /**
@@ -11,8 +9,9 @@ class TypesEndpoint extends Endpoint
      */
     public $uri = "types/";
 
-    protected function setObject()
-    {
-        self::$object = new TypesObject();
-    }
+    /**
+     * @var string
+     */
+    public $object = "TypesObject";
+
 }

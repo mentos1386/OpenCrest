@@ -9,7 +9,7 @@ class PlanetsObject extends Object
     protected function setRelations()
     {
         $this->relations = [
-            "system" => SystemsEndpoint::class,
+            "system" => new SystemsEndpoint(),
         ];
     }
 }

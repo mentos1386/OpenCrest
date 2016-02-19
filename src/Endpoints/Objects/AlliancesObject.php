@@ -10,10 +10,10 @@ class AlliancesObject extends Object
     protected function setRelations()
     {
         $this->relations = [
-            "executorCorporation" => CorporationsEndpoint::class,
-            "creatorCorporation"  => CorporationsEndpoint::class,
-            "corporations"        => CorporationsEndpoint::class,
-            "creatorCharacter"    => CharactersEndpoint::class,
+            "executorCorporation" => new CorporationsEndpoint(),
+            "creatorCorporation"  => new CorporationsEndpoint(),
+            "corporations"        => new CorporationsEndpoint(),
+            "creatorCharacter"    => new CharactersEndpoint(),
         ];
     }
 }

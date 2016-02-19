@@ -2,17 +2,16 @@
 
 namespace OpenCrest\Endpoints;
 
-class AlliancesEndpoint extends Endpoint
+class WarsEndpoint extends Endpoint
 {
+    /**
+     * @var string
+     */
+    public $uri = "wars/";
 
     /**
      * @var string
      */
-    public $uri = "alliances/";
-
-    /**
-     * @var string
-     */
-    public $object = "AlliancesObject";
+    public $object = "WarsObject";
 
 }
