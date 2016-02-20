@@ -96,7 +96,6 @@ abstract class Endpoint
      */
     public function get($uri, $options = [])
     {
-        var_dump($this->client);
         return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
     }
 
