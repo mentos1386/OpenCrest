@@ -11,25 +11,39 @@ Inspired by Laravel Elequent
 $token = //oauth token, not used atm, as all data is public
 $api = new OpenCrest\OpenCrest($token);
 
-
+// Get list of constellations
 $constellations = $api->constellations->all();
 
-$id = 20000002;
-$constellations = $api->constellations->show($id);
+// You can then foreach list to get more details on constellations
+foreach ($constellations as $constellation) {
+    // This will make show($id) request for every object.
+    //Beware, that $api->[something]->all() can be very long and that will make alot of reqquests.
+    var_dump($constellation->get);
 
+}
+// Get specific constellation
+$id = 20000002;
+$constellation = $api->constellations->show($id);
+
+// Same with planets
 $id = 40000017;
 $planet = $api->planets->show($id);
 
+// Or alliances
 $id = 99000006;
-$alliances = $api->alliances->show($id)->;
+$alliance = $api->alliances->show($id)->description;
 
+// Get list of alliances
 $alliances = $api->alliances->all();
 
+// Go to specific page
 $alliances = $api->alliances->page(2);
 
+// Go to next page
 // Using allrady recived object to know which page is next.
 $alliances = $alliances->nextPage();
 
+// Go to previouse page
 // Using allrady recived object to know which page is previous.
 $alliances = $alliances->previousPage();
 
@@ -39,99 +53,127 @@ $alliances = $alliances->previousPage();
 `var_dump($api->alliances->show(99000006);` which calls url https://public-crest.eveonline.com/alliances/99000006/
 
 ```
-object(OpenCrest\Endpoints\Objects\AlliancesObject)[151]
-  public 'id' => int 99000006
-  public 'name' => string 'Everto Rex Regis' (length=16)
-  public 'shortName' => string '666' (length=3)
-  public 'description' => string '<font size="12" color="#bfffffff">No Friend nor Ally we are Mercenaries. <br><br>Lurking in the shadows hunting our latest victims for nothing more than blood money. Death to the highest bidder... Assassination by any means available.<br><br>The only question left to ask yourself is will you be next?<br><br><i>Everto Rex Regis Open For Buisness</i><br><br>[Alliance Diplo] Join: 666 PUB<br></font><font size="12" color="#ffffa600"><loc><a href="showinfo:1384//1265238237">AnatomicalFaith</a></loc><br><br></fon'... (length=975)
-  public 'startDate' => string '2010-11-04T13:11:00' (length=19)
-  public 'corporationsCount' => int 2
-  public 'executorCorporation' => 
-    object(OpenCrest\Endpoints\Objects\CorporationsObject)[142]
-      public 'id' => int 1983708877
-      public 'name' => string 'Demonic Imperial Holding' (length=24)
-      public 'logo' => 
-        array (size=4)
-          '32x32' => 
-            array (size=1)
+object(OpenCrest\Endpoints\Objects\AlliancesObject)[182]
+  protected 'endpoint' => 
+    object(OpenCrest\Endpoints\AlliancesEndpoint)[240]
+      public 'uri' => string 'alliances/99000006/' (length=19)
+      public 'object' => string 'OpenCrest\Endpoints\Objects\AlliancesObject' (length=43)
+      public 'client' => 
+        object(GuzzleHttp\Client)[23]
+          private 'config' => 
+            array (size=8)
               ...
-          '64x64' => 
-            array (size=1)
+      protected 'oauth' => boolean false
+      protected 'token' => 
+        object(League\OAuth2\Client\Token\AccessToken)[2]
+          protected 'accessToken' => string 'BunchOfLettersAndNumbersWritenHereOnlyIfYouSupplyedOauthTokenWhenCreating' (length=87)
+          protected 'expires' => int 1455999248
+          protected 'refreshToken' => null
+          protected 'resourceOwnerId' => null
+      private 'publicBase' (OpenCrest\Endpoints\Endpoint) => string 'https://public-crest.eveonline.com/' (length=35)
+      private 'oauthBase' (OpenCrest\Endpoints\Endpoint) => string 'https://crest-tq.eveonline.com/' (length=31)
+  protected 'attributes' => 
+    array (size=14)
+      'startDate' => string '2010-11-04T13:11:00' (length=19)
+      'corporationsCount' => int 2
+      'description' => string '<font size="12" color="#bfffffff">No Friend nor Ally we are Mercenaries. <br><br>Lurking in the shadows hunting our latest victims for nothing more than blood money. Death to the highest bidder... Assassination by any means available.<br><br>The only question left to ask yourself is will you be next?<br><br><i>Everto Rex Regis Open For Buisness</i><br><br>[Alliance Diplo] Join: 666 PUB<br></font><font size="12" color="#ffffa600"><loc><a href="showinfo:1384//1265238237">AnatomicalFaith</a></loc><br><br></fon'... (length=975)
+      'executorCorporation' => 
+        object(OpenCrest\Endpoints\Objects\CorporationsObject)[256]
+          protected 'endpoint' => 
+            object(OpenCrest\Endpoints\CorporationsEndpoint)[257]
               ...
-          '128x128' => 
-            array (size=1)
+          protected 'attributes' => 
+            array (size=6)
               ...
-          '256x256' => 
-            array (size=1)
+          protected 'relations' => 
+            array (size=0)
               ...
-      public 'isNPC' => boolean false
-      public 'href' => string 'https://public-crest.eveonline.com/corporations/1983708877/' (length=59)
-  public 'creatorCharacter' => 
-    object(OpenCrest\Endpoints\Objects\CharactersObject)[145]
-      public 'id' => int 549618368
-      public 'name' => string 'Drako Zay' (length=9)
-      public 'isNPC' => boolean false
-      public 'capsuleer' => 
-        array (size=1)
-          'href' => string 'https://public-crest.eveonline.com/characters/549618368/capsuleer/' (length=66)
-      public 'portrait' => 
-        array (size=4)
-          '32x32' => 
-            array (size=1)
+      'corporationsCount_str' => string '2' (length=1)
+      'deleted' => boolean false
+      'creatorCorporation' => 
+        object(OpenCrest\Endpoints\Objects\CorporationsObject)[241]
+          protected 'endpoint' => 
+            object(OpenCrest\Endpoints\CorporationsEndpoint)[273]
               ...
-          '64x64' => 
-            array (size=1)
+          protected 'attributes' => 
+            array (size=6)
               ...
-          '128x128' => 
-            array (size=1)
+          protected 'relations' => 
+            array (size=0)
               ...
-          '256x256' => 
-            array (size=1)
+      'url' => string 'http://evertorexregis.net' (length=25)
+      'id_str' => string '99000006' (length=8)
+      'creatorCharacter' => 
+        object(OpenCrest\Endpoints\Objects\CharactersObject)[258]
+          protected 'endpoint' => 
+            object(OpenCrest\Endpoints\CharactersEndpoint)[289]
               ...
-      public 'href' => string 'https://public-crest.eveonline.com/characters/549618368/' (length=56)
-  public 'creatorCorporation' => 
-    object(OpenCrest\Endpoints\Objects\CorporationsObject)[152]
-      public 'id' => int 665335352
-      public 'name' => string 'Demonic Empire' (length=14)
-      public 'logo' => 
-        array (size=4)
-          '32x32' => 
-            array (size=1)
+          protected 'attributes' => 
+            array (size=7)
               ...
-          '64x64' => 
-            array (size=1)
+          protected 'relations' => 
+            array (size=0)
               ...
-          '128x128' => 
-            array (size=1)
+      'corporations' => 
+        object(OpenCrest\Endpoints\Objects\ListObject)[274]
+          protected 'endpoint' => 
+            object(OpenCrest\Endpoints\CorporationsEndpoint)[305]
               ...
-          '256x256' => 
-            array (size=1)
+          protected 'attributes' => 
+            array (size=3)
               ...
-      public 'isNPC' => boolean false
-      public 'href' => string 'https://public-crest.eveonline.com/corporations/665335352/' (length=58)
-  public 'corporations' => 
-    object(stdClass)[156]
-      public 0 => 
-        object(OpenCrest\Endpoints\Objects\CorporationsObject)[153]
-          public 'id' => int 665335352
-          public 'name' => string 'Demonic Empire' (length=14)
-          public 'logo' => 
-            array (size=4)
+          protected 'relations' => 
+            array (size=0)
               ...
-          public 'isNPC' => boolean false
-          public 'href' => string 'https://public-crest.eveonline.com/corporations/665335352/' (length=58)
-      public 1 => 
-        object(OpenCrest\Endpoints\Objects\CorporationsObject)[158]
-          public 'id' => int 1983708877
-          public 'name' => string 'Demonic Imperial Holding' (length=24)
-          public 'logo' => 
-            array (size=4)
+      'shortName' => string '666' (length=3)
+      'id' => int 99000006
+      'name' => string 'Everto Rex Regis' (length=16)
+  protected 'relations' => 
+    array (size=4)
+      'executorCorporation' => 
+        object(OpenCrest\Endpoints\CorporationsEndpoint)[184]
+          public 'uri' => string 'corporations/' (length=13)
+          public 'object' => string 'OpenCrest\Endpoints\Objects\CorporationsObject' (length=46)
+          public 'client' => 
+            object(GuzzleHttp\Client)[189]
               ...
-          public 'isNPC' => boolean false
-          public 'href' => string 'https://public-crest.eveonline.com/corporations/1983708877/' (length=59)
-  public 'href' => null
-  public 'url' => string 'http://evertorexregis.net' (length=25)
-  public 'deleted' => boolean false
+          protected 'oauth' => boolean false
+          protected 'token' => string '' (length=0)
+          private 'publicBase' (OpenCrest\Endpoints\Endpoint) => string 'https://public-crest.eveonline.com/' (length=35)
+          private 'oauthBase' (OpenCrest\Endpoints\Endpoint) => string 'https://crest-tq.eveonline.com/' (length=31)
+      'creatorCorporation' => 
+        object(OpenCrest\Endpoints\CorporationsEndpoint)[195]
+          public 'uri' => string 'corporations/' (length=13)
+          public 'object' => string 'OpenCrest\Endpoints\Objects\CorporationsObject' (length=46)
+          public 'client' => 
+            object(GuzzleHttp\Client)[196]
+              ...
+          protected 'oauth' => boolean false
+          protected 'token' => string '' (length=0)
+          private 'publicBase' (OpenCrest\Endpoints\Endpoint) => string 'https://public-crest.eveonline.com/' (length=35)
+          private 'oauthBase' (OpenCrest\Endpoints\Endpoint) => string 'https://crest-tq.eveonline.com/' (length=31)
+      'corporations' => 
+        object(OpenCrest\Endpoints\CorporationsEndpoint)[210]
+          public 'uri' => string 'corporations/' (length=13)
+          public 'object' => string 'OpenCrest\Endpoints\Objects\CorporationsObject' (length=46)
+          public 'client' => 
+            object(GuzzleHttp\Client)[211]
+              ...
+          protected 'oauth' => boolean false
+          protected 'token' => string '' (length=0)
+          private 'publicBase' (OpenCrest\Endpoints\Endpoint) => string 'https://public-crest.eveonline.com/' (length=35)
+          private 'oauthBase' (OpenCrest\Endpoints\Endpoint) => string 'https://crest-tq.eveonline.com/' (length=31)
+      'creatorCharacter' => 
+        object(OpenCrest\Endpoints\CharactersEndpoint)[225]
+          public 'uri' => string 'characters/' (length=11)
+          public 'object' => string 'OpenCrest\Endpoints\Objects\CharactersObject' (length=44)
+          public 'client' => 
+            object(GuzzleHttp\Client)[226]
+              ...
+          protected 'oauth' => boolean false
+          protected 'token' => string '' (length=0)
+          private 'publicBase' (OpenCrest\Endpoints\Endpoint) => string 'https://public-crest.eveonline.com/' (length=35)
+          private 'oauthBase' (OpenCrest\Endpoints\Endpoint) => string 'https://crest-tq.eveonline.com/' (length=31)
 ```
 
 Data is returned as object, with whom you can interact and in feature you will be able to get additional data from objects that it is in relationship with.

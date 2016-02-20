@@ -9,7 +9,7 @@ use OpenCrest\OpenCrest;
 abstract class Endpoint
 {
     /**
-     * @var Object
+     * @var Objects\Object
      */
     public $object;
     /**
@@ -17,7 +17,7 @@ abstract class Endpoint
      */
     public $client;
     /**
-     * @var
+     * @var string
      */
     public $uri;
     /**
@@ -107,13 +107,13 @@ abstract class Endpoint
         if (isset($item['items']) or isset($item[0])) {
             // If we have list of items
             $listObject = new ListObject();
-            $listObject->setEndpoint(new $this);
+            $listObject->setEndpoint(clone $this);
 
             return $listObject->make($item);
         } else {
             // If there is only one item
             $object = new $this->object;
-            $object->setEndpoint(new $this);
+            $object->setEndpoint(clone $this);
 
             return $object->make($item);
         }
@@ -126,11 +126,10 @@ abstract class Endpoint
      */
     public function show($id)
     {
-        $uri = $this->uri . $id . "/";
-
-        $content = $this->get($uri);
-
-        $content = $this->createObject($content);
+        $instance = clone $this;
+        $instance->uri = $instance->uri . $id . "/";
+        $content = $instance->get($instance->uri);
+        $content = $instance->createObject($content);
 
         return $content;
     }
@@ -142,11 +141,9 @@ abstract class Endpoint
     public function page($id)
     {
         $uri = $this->uri;
-
         $content = $this->get($uri, [
             'query' => 'page=' . $id
         ]);
-
         $content = $this->createObject($content);
 
         return $content;

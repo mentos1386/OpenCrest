@@ -5,6 +5,12 @@
     "require": {
         "guzzlehttp/guzzle": "^6"
     },
+  "keywords": [
+    "api",
+    "crest",
+    "eve",
+    "eveonline"
+  ],
     "license": "MIT",
     "authors": [
         {

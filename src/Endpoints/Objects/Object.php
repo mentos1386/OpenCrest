@@ -50,7 +50,11 @@ abstract class Object
      */
     public function __get($name)
     {
-        return $this->getAttribute($name);
+        if (array_key_exists($name, $this->attributes)) {
+            return $this->getAttribute($name);
+        }
+
+        return $this->$name;
     }
 
     /**
