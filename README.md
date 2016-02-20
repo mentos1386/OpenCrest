@@ -1,4 +1,6 @@
 # OpenCrest
+[![Latest Stable Version](https://poser.pugx.org/mentos1386/opencrest/v/stable)](https://packagist.org/packages/mentos1386/opencrest) [![Total Downloads](https://poser.pugx.org/mentos1386/opencrest/downloads)](https://packagist.org/packages/mentos1386/opencrest) [![Latest Unstable Version](https://poser.pugx.org/mentos1386/opencrest/v/unstable)](https://packagist.org/packages/mentos1386/opencrest) [![License](https://poser.pugx.org/mentos1386/opencrest/license)](https://packagist.org/packages/mentos1386/opencrest)
+
 EVE Online CREST PHP Library
 
 
