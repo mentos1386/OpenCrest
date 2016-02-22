@@ -9,7 +9,7 @@ class BlockedEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/blocked";
+    public $uri = "/blocked/";
     /**
      * @var string
      */

@@ -9,7 +9,7 @@ class LocationEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/location";
+    public $uri = "/location/";
     /**
      * @var string
      */

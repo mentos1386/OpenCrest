@@ -8,5 +8,6 @@ class FittingsObject extends Object
 {
     protected function setRelations()
     {
+        // No relations
     }
 }

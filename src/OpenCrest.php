@@ -8,8 +8,10 @@ use OpenCrest\Endpoints\CharactersEndpoint;
 use OpenCrest\Endpoints\ConstellationsEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
 use OpenCrest\Endpoints\CrestEndpoint;
+use OpenCrest\Endpoints\Objects\CrestObject;
 use OpenCrest\Endpoints\PlanetsEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
+use OpenCrest\Endpoints\StandingsEndpoint;
 use OpenCrest\Endpoints\SystemsEndpoint;
 use OpenCrest\Endpoints\TypesEndpoint;
 use OpenCrest\Endpoints\WarsEndpoint;
@@ -68,7 +70,14 @@ class OpenCrest
      * @var WarsEndpoint
      */
     public $wars;
+    /**
+     * @var BloodLinesEndpoint
+     */
     public $bloodLines;
+    /**
+     * @var StandingsEndpoint
+     */
+    public $standings;
 
     /**
      * OpenCrest constructor.
@@ -91,6 +100,7 @@ class OpenCrest
         $this->crest = new CrestEndpoint();
         $this->wars = new WarsEndpoint();
         $this->bloodLines = new BloodLinesEndpoint();
+        $this->standings = new StandingsEndpoint();
 
         if ($apiVersion) {
             self::$apiVersion = $apiVersion;
@@ -98,7 +108,7 @@ class OpenCrest
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public static function apiVersion()
     {
@@ -114,13 +124,16 @@ class OpenCrest
     }
 
     /**
-     * @return Endpoints\Objects\ListObject
+     * @return CrestObject
      */
     public static function status()
     {
-        return (new CrestEndpoint())->all();
+        return (new CrestEndpoint())->get();
     }
 
+    /**
+     * @return string
+     */
     public static function token()
     {
         return self::$token;

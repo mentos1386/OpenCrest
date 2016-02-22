@@ -108,15 +108,23 @@ abstract class Object
     }
 
     /**
-     * This is used to get relationship object to make show(id) request
+     * This is used to get relationship object to make show(id)/get() request
      *
      * @return Object
      */
     public function get()
     {
-        return $this->endpoint->show($this->id);
+        if ($this->id) {
+            return $this->endpoint->show($this->id);
+        } else {
+            return $this->endpoint->get();
+        }
     }
 
+    /**
+     * @param array $options
+     * @return Object
+     */
     public function post($options = [])
     {
         return $this->endpoint->post($this->id, $options);

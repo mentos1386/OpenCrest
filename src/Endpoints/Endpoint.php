@@ -22,7 +22,9 @@ abstract class Endpoint
      */
     public $uri;
     /**
-     * @var array
+     * TODO: Could this be moved to Object ?
+     *
+*@var array
      */
     protected $relationId;
     /**
@@ -37,13 +39,9 @@ abstract class Endpoint
      * @var array
      */
     protected $routes = [
-        "all",
+        "get",
         "show",
     ];
-    /**
-     * @var bool
-     */
-    protected $optionalConfig = False;
     /**
      * @var string
      */
@@ -65,9 +63,7 @@ abstract class Endpoint
 
         $this->relationId = $relationId;
 
-        if ($this->optionalConfig) {
-            $this->optionalConfig();
-        }
+        $this->optionalConfig();
     }
 
     /**
@@ -108,9 +104,9 @@ abstract class Endpoint
      * @return mixed|Object
      * @throws RouteException
      */
-    public function all()
+    public function get()
     {
-        if (!array_key_exists("all", $this->routes)) {
+        if (!array_key_exists("get", $this->routes)) {
         }
         $uri = $this->uri;
         $content = $this->httpGet($uri);
@@ -171,13 +167,16 @@ abstract class Endpoint
     }
 
     /**
-     * @param $id
+     * @param integer $id
+     * @param array   $options
      * @return Object
      */
-    public function post($id, $options = [])
+    public function post($id = null, $options = [])
     {
         $instance = clone $this;
-        $instance->uri = $instance->uri . $id . "/";
+        if ($id) {
+            $instance->uri = $instance->uri . $id . "/";
+        }
         $content = $instance->httpPost($instance->uri, $options);
         $content = $instance->createObject($content);
 

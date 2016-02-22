@@ -9,7 +9,7 @@ class PrivateEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/private";
+    public $uri = "/private/";
     /**
      * @var string
      */

@@ -8,5 +8,6 @@ class LocationObject extends Object
 {
     protected function setRelations()
     {
+        // No relations
     }
 }

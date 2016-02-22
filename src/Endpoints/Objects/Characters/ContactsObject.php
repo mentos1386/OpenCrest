@@ -8,5 +8,6 @@ class ContactsObject extends Object
 {
     protected function setRelations()
     {
+        // No relations
     }
 }

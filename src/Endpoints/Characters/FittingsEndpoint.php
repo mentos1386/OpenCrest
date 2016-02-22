@@ -9,7 +9,7 @@ class FittingsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/fittings";
+    public $uri = "/fittings/";
     /**
      * @var string
      */

@@ -9,7 +9,7 @@ class CapsuleerEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/capsuleer";
+    public $uri = "/capsuleer/";
     /**
      * @var string
      */

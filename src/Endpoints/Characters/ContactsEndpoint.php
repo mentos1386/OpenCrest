@@ -9,7 +9,7 @@ class ContactsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/contacts";
+    public $uri = "/contacts/";
     /**
      * @var string
      */

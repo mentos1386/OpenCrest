@@ -9,7 +9,7 @@ class VivoxEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/vivox";
+    public $uri = "/vivox/";
     /**
      * @var string
      */
