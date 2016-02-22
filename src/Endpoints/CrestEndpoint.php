@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\CrestObject;
+
 class CrestEndpoint extends Endpoint
 {
     /**
@@ -12,5 +14,5 @@ class CrestEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "CrestObject";
+    public $object = CrestObject::class;
 }

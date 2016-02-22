@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\PlanetsObject;
+
 class PlanetsEndpoint extends Endpoint
 {
     /**
@@ -14,6 +16,6 @@ class PlanetsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "PlanetsObject";
+    public $object = PlanetsObject::class;
 
 }

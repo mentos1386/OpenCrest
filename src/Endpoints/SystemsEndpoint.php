@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\SystemsObject;
+
 class SystemsEndpoint extends Endpoint
 {
     /**
@@ -12,5 +14,5 @@ class SystemsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "SystemsObject";
+    public $object = SystemsObject::class;
 }

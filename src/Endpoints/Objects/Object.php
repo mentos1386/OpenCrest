@@ -20,13 +20,19 @@ abstract class Object
      * @var array
      */
     protected $relations = [];
-
+    /**
+     * @var int|null
+     */
+    protected $id;
 
     /**
      * Object constructor.
+     *
+     * @param integer $id
      */
-    public function __construct()
+    public function __construct($id = null)
     {
+        $this->id = $id;
         $this->setRelations();
     }
 
@@ -74,7 +80,7 @@ abstract class Object
     {
         foreach ($item as $key => $value) {
             if (array_key_exists($key, $this->relations)) {
-                $endpoint = new $this->relations[$key];
+                $endpoint = new $this->relations[$key]($this->id);
                 $this->attributes[$key] = $endpoint->createObject($value);
             } else {
                 $this->attributes[$key] = $value;
@@ -109,6 +115,11 @@ abstract class Object
     public function get()
     {
         return $this->endpoint->show($this->id);
+    }
+
+    public function post($options = [])
+    {
+        return $this->endpoint->post($this->id, $options);
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\AlliancesObject;
+
 class AlliancesEndpoint extends Endpoint
 {
 
@@ -13,6 +15,6 @@ class AlliancesEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "AlliancesObject";
+    public $object = AlliancesObject::class;
 
 }

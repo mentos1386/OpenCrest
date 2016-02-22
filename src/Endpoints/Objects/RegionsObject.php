@@ -9,7 +9,7 @@ class RegionsObject extends Object
     protected function setRelations()
     {
         $this->relations = [
-            "Constellations" => new ConstellationsEndpoint(),
+            "Constellations" => ConstellationsEndpoint::class,
         ];
     }
 

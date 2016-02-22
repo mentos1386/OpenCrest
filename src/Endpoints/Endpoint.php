@@ -4,6 +4,7 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\Exceptions\RouteException;
 use OpenCrest\OpenCrest;
 
 abstract class Endpoint
@@ -21,6 +22,10 @@ abstract class Endpoint
      */
     public $uri;
     /**
+     * @var array
+     */
+    protected $relationId;
+    /**
      * @var bool
      */
     protected $oauth = False;
@@ -28,6 +33,17 @@ abstract class Endpoint
      * @var string
      */
     protected $token;
+    /**
+     * @var array
+     */
+    protected $routes = [
+        "all",
+        "show",
+    ];
+    /**
+     * @var bool
+     */
+    protected $optionalConfig = False;
     /**
      * @var string
      */
@@ -40,14 +56,18 @@ abstract class Endpoint
     /**
      * Endpoint constructor.
      *
-     * @param string $token
+     * @param integer $relationId
      */
-    public function __construct($token = "")
+    public function __construct($relationId = null)
     {
-        $this->token = $token;
+        $this->token = OpenCrest::token();
         $this->client = new GuzzleHttp\Client($this->headers());
-        $this->object = "OpenCrest\\Endpoints\\Objects\\" . $this->object;
 
+        $this->relationId = $relationId;
+
+        if ($this->optionalConfig) {
+            $this->optionalConfig();
+        }
     }
 
     /**
@@ -78,12 +98,22 @@ abstract class Endpoint
     }
 
     /**
-     * @return ListObject
+     * This is used in some endpoints to add custom properties/functions in __constructor
+     */
+    protected function optionalConfig()
+    {
+    }
+
+    /**
+     * @return mixed|Object
+     * @throws RouteException
      */
     public function all()
     {
+        if (!array_key_exists("all", $this->routes)) {
+        }
         $uri = $this->uri;
-        $content = $this->get($uri);
+        $content = $this->httpGet($uri);
         $content = $this->createObject($content);
 
         return $content;
@@ -94,7 +124,7 @@ abstract class Endpoint
      * @param array $options
      * @return mixed
      */
-    public function get($uri, $options = [])
+    public function httpGet($uri, $options = [])
     {
         return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
     }
@@ -112,8 +142,13 @@ abstract class Endpoint
 
             return $listObject->make($item);
         } else {
+            if (isset($item["id"])) {
+                $id = $item['id'];
+            } else {
+                $id = null;
+            }
             // If there is only one item
-            $object = new $this->object;
+            $object = new $this->object($id);
             $object->setEndpoint(clone $this);
 
             return $object->make($item);
@@ -129,10 +164,34 @@ abstract class Endpoint
     {
         $instance = clone $this;
         $instance->uri = $instance->uri . $id . "/";
-        $content = $instance->get($instance->uri);
+        $content = $instance->httpGet($instance->uri);
         $content = $instance->createObject($content);
 
         return $content;
+    }
+
+    /**
+     * @param $id
+     * @return Object
+     */
+    public function post($id, $options = [])
+    {
+        $instance = clone $this;
+        $instance->uri = $instance->uri . $id . "/";
+        $content = $instance->httpPost($instance->uri, $options);
+        $content = $instance->createObject($content);
+
+        return $content;
+    }
+
+    /**
+     * @param       $uri
+     * @param array $options
+     * @return mixed
+     */
+    public function httpPost($uri, $options = [])
+    {
+        return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
     }
 
     /**
@@ -142,7 +201,7 @@ abstract class Endpoint
     public function page($id)
     {
         $uri = $this->uri;
-        $content = $this->get($uri, [
+        $content = $this->httpGet($uri, [
             'query' => 'page=' . $id
         ]);
         $content = $this->createObject($content);

@@ -9,7 +9,7 @@ class ListObject extends Object
      */
     public function nextPage()
     {
-        $page = $this->endpoint->get($this->endpoint->uri, [
+        $page = $this->endpoint->httpGet($this->endpoint->uri, [
             'query' => 'page=' . $this->attributes['nextPage']['page']
         ]);
 
@@ -21,7 +21,7 @@ class ListObject extends Object
      */
     public function previousPage()
     {
-        $page = $this->endpoint->get($this->endpoint->uri, [
+        $page = $this->endpoint->httpGet($this->endpoint->uri, [
             'query' => 'page=' . $this->attributes['previousPage']['page']
         ]);
 
@@ -47,8 +47,8 @@ class ListObject extends Object
 
         $object = new $this->endpoint->object;
         foreach ($items as $item) {
-
             $_item = $object->make($item);
+            $_item->id = $item["id"];
             $_item->setEndpoint($this->endpoint);
             array_push($this->attributes['items'], $_item);
         }

@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\CorporationsObject;
+
 class CorporationsEndpoint extends Endpoint
 {
     /**
@@ -12,6 +14,6 @@ class CorporationsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "CorporationsObject";
+    public $object = CorporationsObject::class;
 
 }

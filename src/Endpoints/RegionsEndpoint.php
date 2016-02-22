@@ -2,6 +2,8 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Objects\RegionsObject;
+
 class RegionsEndpoint extends Endpoint
 {
     /**
@@ -12,6 +14,6 @@ class RegionsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = "RegionsObject";
+    public $object = RegionsObject::class;
 
 }

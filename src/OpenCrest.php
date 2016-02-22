@@ -3,6 +3,7 @@
 namespace OpenCrest;
 
 use OpenCrest\Endpoints\AlliancesEndpoint;
+use OpenCrest\Endpoints\BloodLinesEndpoint;
 use OpenCrest\Endpoints\CharactersEndpoint;
 use OpenCrest\Endpoints\ConstellationsEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
@@ -23,6 +24,10 @@ class OpenCrest
      * @var string
      */
     protected static $version = "1.0.0";
+    /**
+     * @var string
+     */
+    private static $token;
     /**
      * @var TypesEndpoint
      */
@@ -63,10 +68,7 @@ class OpenCrest
      * @var WarsEndpoint
      */
     public $wars;
-    /**
-     * @var string
-     */
-    protected $token;
+    public $bloodLines;
 
     /**
      * OpenCrest constructor.
@@ -76,18 +78,19 @@ class OpenCrest
      */
     public function __construct($token = "", $apiVersion = null)
     {
-        $this->token = $token;
+        self::$token = $token;
 
-        $this->alliances = new AlliancesEndpoint($token);
-        $this->characters = new CharactersEndpoint($token);
-        $this->corporations = new CorporationsEndpoint($token);
-        $this->types = new TypesEndpoint($token);
-        $this->regions = new RegionsEndpoint($token);
-        $this->constellations = new ConstellationsEndpoint($token);
-        $this->systems = new SystemsEndpoint($token);
-        $this->planets = new PlanetsEndpoint($token);
-        $this->crest = new CrestEndpoint($token);
-        $this->wars = new WarsEndpoint($token);
+        $this->alliances = new AlliancesEndpoint();
+        $this->characters = new CharactersEndpoint();
+        $this->corporations = new CorporationsEndpoint();
+        $this->types = new TypesEndpoint();
+        $this->regions = new RegionsEndpoint();
+        $this->constellations = new ConstellationsEndpoint();
+        $this->systems = new SystemsEndpoint();
+        $this->planets = new PlanetsEndpoint();
+        $this->crest = new CrestEndpoint();
+        $this->wars = new WarsEndpoint();
+        $this->bloodLines = new BloodLinesEndpoint();
 
         if ($apiVersion) {
             self::$apiVersion = $apiVersion;
@@ -116,5 +119,10 @@ class OpenCrest
     public static function status()
     {
         return (new CrestEndpoint())->all();
+    }
+
+    public static function token()
+    {
+        return self::$token;
     }
 }
