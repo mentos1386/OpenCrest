@@ -2,6 +2,7 @@
 
 namespace OpenCrest;
 
+use OpenCrest\Endpoints\AccountsEndpoint;
 use OpenCrest\Endpoints\AlliancesEndpoint;
 use OpenCrest\Endpoints\BloodLinesEndpoint;
 use OpenCrest\Endpoints\CharactersEndpoint;
@@ -13,6 +14,7 @@ use OpenCrest\Endpoints\PlanetsEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
 use OpenCrest\Endpoints\StandingsEndpoint;
 use OpenCrest\Endpoints\SystemsEndpoint;
+use OpenCrest\Endpoints\TournamentsEndpoint;
 use OpenCrest\Endpoints\TypesEndpoint;
 use OpenCrest\Endpoints\WarsEndpoint;
 
@@ -78,6 +80,14 @@ class OpenCrest
      * @var StandingsEndpoint
      */
     public $standings;
+    /**
+     * @var AccountsEndpoint
+     */
+    public $accounts;
+    /**
+     * @var TournamentsEndpoint
+     */
+    public $tournaments;
 
     /**
      * OpenCrest constructor.
@@ -89,6 +99,8 @@ class OpenCrest
     {
         self::$token = $token;
 
+        // TODO: Make separate public functions for every endpoint, $this->alliances();
+        // TODO: Maybe make $this static?
         $this->alliances = new AlliancesEndpoint();
         $this->characters = new CharactersEndpoint();
         $this->corporations = new CorporationsEndpoint();
@@ -101,6 +113,8 @@ class OpenCrest
         $this->wars = new WarsEndpoint();
         $this->bloodLines = new BloodLinesEndpoint();
         $this->standings = new StandingsEndpoint();
+        $this->accounts = new AccountsEndpoint();
+        $this->tournaments = new TournamentsEndpoint();
 
         if ($apiVersion) {
             self::$apiVersion = $apiVersion;

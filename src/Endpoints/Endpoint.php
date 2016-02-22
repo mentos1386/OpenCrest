@@ -120,7 +120,7 @@ abstract class Endpoint
      * @param array $options
      * @return mixed
      */
-    public function httpGet($uri, $options = [])
+    private function httpGet($uri, $options = [])
     {
         return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
     }
@@ -188,7 +188,7 @@ abstract class Endpoint
      * @param array $options
      * @return mixed
      */
-    public function httpPost($uri, $options = [])
+    private function httpPost($uri, $options = [])
     {
         return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
     }
