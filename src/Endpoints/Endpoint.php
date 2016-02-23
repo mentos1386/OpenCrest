@@ -4,6 +4,7 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\Exceptions\OAuthException;
 use OpenCrest\Exceptions\RouteException;
 use OpenCrest\OpenCrest;
 
@@ -55,10 +56,17 @@ abstract class Endpoint
      * Endpoint constructor.
      *
      * @param integer $relationId
+     * @throws OAuthException
      */
     public function __construct($relationId = null)
     {
-        $this->token = OpenCrest::token();
+        $this->token = OpenCrest::getToken();
+
+        // If OAuth required but token not provided, throw OAuthException
+        if (empty($this->token) and $this->oauth) {
+            throw new OAuthException;
+        }
+
         $this->client = new GuzzleHttp\Client($this->headers());
 
         $this->relationId = $relationId;
@@ -76,7 +84,7 @@ abstract class Endpoint
                 'base_uri' => $this->oauthBase,
                 'headers'  => [
                     'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'        => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
+                    'Accept'        => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json',
                     'Authorization' => 'Bearer ' . $this->token,
                 ]
             ];
@@ -85,7 +93,7 @@ abstract class Endpoint
                 'base_uri' => $this->publicBase,
                 'headers'  => [
                     'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'     => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::apiVersion() . '+json',
+                    'Accept'     => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json',
                 ]
             ];
         }

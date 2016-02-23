@@ -12,36 +12,38 @@ Shouldn't be used for production just yet, as CREST API lacks data. It's better 
 ## How to use
 
 ```php
+use OpenCrest\OpenCrest;
 $token = "Access Token you got from OAuth authentication";
-$api = new OpenCrest\OpenCrest($token);
+OpenCrest::setToken($token);
 
 // Get list of constellations
-$constellations = $api->constellations->get();
+$constellations = OpenCrest::Constellations->get();
 
 // You can then foreach list to get more details on constellations
 foreach ($constellations as $constellation) {
     // This will make show($id) request for every object.
-    //Beware, that $api->[something]->get() can be very long and that will make alot of reqquests.
+    //Beware, that OpenCrest::[something]->get() can be very long and that making get request on every item 
+    // will make alot of reqquests.
     var_dump($constellation->get);
 
 }
 // Get specific constellation
 $id = 20000002;
-$constellation = $api->constellations->show($id);
+$constellation = OpenCrest::Constellations->show($id);
 
 // Same with planets
 $id = 40000017;
-$planet = $api->planets->show($id);
+$planet =OpenCrest::Planets->show($id);
 
 // Or alliances
 $id = 99000006;
-$alliance = $api->alliances->show($id)->description;
+$alliance = OpenCrest::Alliances->show($id)->description;
 
 // Get list of alliances
-$alliances = $api->alliances->get();
+$alliances = OpenCrest::Alliances->get();
 
 // Go to specific page
-$alliances = $api->alliances->page(2);
+$alliances = OpenCrest::Alliances->page(2);
 
 // Go to next page
 // Using allrady recived object to know which page is next.
@@ -54,7 +56,7 @@ $alliances = $alliances->previousPage();
 ```
 
 ## Example output
-`var_dump($api->alliances->show(99000006);` which calls url https://public-crest.eveonline.com/alliances/99000006/
+`var_dump(OpenCrest::Alliances->show(99000006);` which calls url https://public-crest.eveonline.com/alliances/99000006/
 
 ```
 object(OpenCrest\Endpoints\Objects\AlliancesObject)[212]

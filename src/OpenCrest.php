@@ -28,108 +28,163 @@ class OpenCrest
     /**
      * @var string
      */
-    protected static $version = "1.0.0";
+    protected static $version = "2.0.0";
     /**
      * @var string
      */
     private static $token;
-    /**
-     * @var TypesEndpoint
-     */
-    public $types;
-    /**
-     * @var RegionsEndpoint
-     */
-    public $regions;
-    /**
-     * @var ConstellationsEndpoint
-     */
-    public $constellations;
-    /**
-     * @var SystemsEndpoint
-     */
-    public $systems;
-    /**
-     * @var PlanetsEndpoint
-     */
-    public $planets;
-    /**
-     * @var AlliancesEndpoint
-     */
-    public $alliances;
-    /**
-     * @var CharactersEndpoint
-     */
-    public $characters;
-    /**
-     * @var CorporationsEndpoint
-     */
-    public $corporations;
-    /**
-     * @var CrestEndpoint
-     */
-    public $crest;
-    /**
-     * @var WarsEndpoint
-     */
-    public $wars;
-    /**
-     * @var BloodLinesEndpoint
-     */
-    public $bloodLines;
-    /**
-     * @var StandingsEndpoint
-     */
-    public $standings;
-    /**
-     * @var AccountsEndpoint
-     */
-    public $accounts;
-    /**
-     * @var TournamentsEndpoint
-     */
-    public $tournaments;
-    public $dogma;
 
     /**
-     * OpenCrest constructor.
-     *
-     * @param $token
-     * @param $apiVersion
+     * @return null|string
      */
-    public function __construct($token = "", $apiVersion = null)
+    public static function getApiVersion()
     {
-        self::$token = $token;
+        return self::$apiVersion;
+    }
 
-        // TODO: Make separate public functions for every endpoint, $this->alliances();
-        // TODO: Maybe make $this static?
-        $this->alliances = new AlliancesEndpoint();
-        $this->characters = new CharactersEndpoint();
-        $this->corporations = new CorporationsEndpoint();
-        $this->types = new TypesEndpoint();
-        $this->regions = new RegionsEndpoint();
-        $this->constellations = new ConstellationsEndpoint();
-        $this->systems = new SystemsEndpoint();
-        $this->planets = new PlanetsEndpoint();
-        $this->crest = new CrestEndpoint();
-        $this->wars = new WarsEndpoint();
-        $this->bloodLines = new BloodLinesEndpoint();
-        $this->standings = new StandingsEndpoint();
-        $this->accounts = new AccountsEndpoint();
-        $this->tournaments = new TournamentsEndpoint();
-        $this->dogma = new DogmaEndpoint();
-
-        if ($apiVersion) {
-            self::$apiVersion = $apiVersion;
-        }
+    /**
+     * @param string $apiVersion
+     */
+    public static function setApiVersion($apiVersion)
+    {
+        self::$apiVersion = $apiVersion;
     }
 
     /**
      * @return string
      */
-    public static function apiVersion()
+    public static function getToken()
     {
-        return self::$apiVersion;
+        return self::$token;
+    }
+
+    /**
+     * @param string $token
+     * @return mixed
+     */
+    public static function setToken($token)
+    {
+        return self::$token = $token;
+    }
+
+    /**
+     * @return AlliancesEndpoint
+     */
+    public static function Alliances()
+    {
+        return new AlliancesEndpoint();
+    }
+
+    /**
+     * @return CharactersEndpoint
+     */
+    public static function Characters()
+    {
+        return new CharactersEndpoint();
+    }
+
+    /**
+     * @return CorporationsEndpoint
+     */
+    public static function Corporations()
+    {
+        return new CorporationsEndpoint();
+    }
+
+    /**
+     * @return TypesEndpoint
+     */
+    public static function Types()
+    {
+        return new TypesEndpoint();
+    }
+
+    /**
+     * @return RegionsEndpoint
+     */
+    public static function Regions()
+    {
+        return new RegionsEndpoint();
+    }
+
+    /**
+     * @return ConstellationsEndpoint
+     */
+    public static function Constellations()
+    {
+        return new ConstellationsEndpoint();
+    }
+
+    /**
+     * @return SystemsEndpoint
+     */
+    public static function Systems()
+    {
+        return new SystemsEndpoint();
+    }
+
+    /**
+     * @return PlanetsEndpoint
+     */
+    public static function Planets()
+    {
+        return new PlanetsEndpoint();
+    }
+
+    /**
+     * @return CrestEndpoint
+     */
+    public static function Crest()
+    {
+        return new CrestEndpoint();
+    }
+
+    /**
+     * @return WarsEndpoint
+     */
+    public static function Wars()
+    {
+        return new WarsEndpoint();
+    }
+
+    /**
+     * @return BloodLinesEndpoint
+     */
+    public static function Bloodlines()
+    {
+        return new BloodLinesEndpoint();
+    }
+
+    /**
+     * @return StandingsEndpoint
+     */
+    public static function Standings()
+    {
+        return new StandingsEndpoint();
+    }
+
+    /**
+     * @return AccountsEndpoint
+     */
+    public static function Accounts()
+    {
+        return new AccountsEndpoint();
+    }
+
+    /**
+     * @return TournamentsEndpoint
+     */
+    public static function Tournaments()
+    {
+        return new TournamentsEndpoint();
+    }
+
+    /**
+     * @return DogmaEndpoint
+     */
+    public static function Dogma()
+    {
+        return new  DogmaEndpoint();
     }
 
     /**
@@ -146,13 +201,5 @@ class OpenCrest
     public static function status()
     {
         return (new CrestEndpoint())->get();
-    }
-
-    /**
-     * @return string
-     */
-    public static function token()
-    {
-        return self::$token;
     }
 }
