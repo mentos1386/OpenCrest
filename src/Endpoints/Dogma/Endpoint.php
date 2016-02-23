@@ -1,6 +1,7 @@
 <?php
 
-namespace OpenCrest\Endpoints\Characters;
+namespace OpenCrest\Endpoints\Dogma;
+
 class Endpoint extends \OpenCrest\Endpoints\Endpoint
 {
     /**
@@ -8,6 +9,6 @@ class Endpoint extends \OpenCrest\Endpoints\Endpoint
      */
     protected function optionalConfig()
     {
-        $this->uri = "characters/" . $this->relationId . "/" . $this->uri;
+        $this->uri = "dogma/" . $this->uri;
     }
 }

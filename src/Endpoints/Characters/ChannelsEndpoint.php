@@ -9,7 +9,7 @@ class ChannelsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/chat/channels/";
+    public $uri = "chat/channels/";
     /**
      * @var string
      */

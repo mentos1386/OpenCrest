@@ -16,7 +16,7 @@ class CrestObject extends Object
                 case "serverVersion":
                 case "serviceStatus":
                 case "serverName":
-                    $this->attributes[$key] = $value;
+                    $this->values[$key] = $value;
                     break;
             }
         }

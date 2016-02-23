@@ -10,7 +10,7 @@ class ListObject extends Object
     public function nextPage()
     {
         $page = $this->endpoint->httpGet($this->endpoint->uri, [
-            'query' => 'page=' . $this->attributes['nextPage']['page']
+            'query' => 'page=' . $this->values['nextPage']['page']
         ]);
 
         return $this->endpoint->createObject($page);
@@ -22,35 +22,49 @@ class ListObject extends Object
     public function previousPage()
     {
         $page = $this->endpoint->httpGet($this->endpoint->uri, [
-            'query' => 'page=' . $this->attributes['previousPage']['page']
+            'query' => 'page=' . $this->values['previousPage']['page']
         ]);
 
         return $this->endpoint->createObject($page);
     }
 
     /**
-     * @param $items
+     * @param $data
      * @return $this
      */
-    public function make($items)
+    public function make($data)
     {
-        $this->attributes['totalCount'] = isset($items['totalCount']) ? $items['totalCount'] : null;
-        $this->attributes['pageCount'] = isset($items['pageCount']) ? $items['pageCount'] : null;
-
-        $this->parsePages($items);
-
         // We check if items are inside in items array, or directly
-        if (isset($items['items'])) {
-            $items = $items['items'];
+        if (isset($data['items'])) {
+            $items = $data['items'];
+        } else {
+            $items = $data;
         }
-        $this->attributes['items'] = [];
+
+        $this->values['totalCount'] = isset($data['totalCount']) ? $data['totalCount'] : count($items);
+        $this->values['pageCount'] = isset($data['pageCount']) ? $data['pageCount'] : 0;
+
+        $this->parsePages($data);
+
+        $this->values['items'] = [];
 
         $object = new $this->endpoint->object;
         foreach ($items as $item) {
+
+            // TODO: $types->dogma->attributes->items[0] returns values inside "attribute" array, same with dogma->effects->items[0]
+            if (isset($item["attribute"])) {
+                $item = $item["attribute"];
+            } elseif (isset($item['effect'])) {
+                $item = $item["effect"];
+            }
+
             $_item = $object->make($item);
-            $_item->id = $item["id"];
+
+            // Sometimes (like in type->dogma id isnt provided, as items are relations)
+            $_item->id = isset($item['id']) ? $item['id'] : null;
+
             $_item->setEndpoint($this->endpoint);
-            array_push($this->attributes['items'], $_item);
+            array_push($this->values['items'], $_item);
         }
 
         return $this;
@@ -63,13 +77,13 @@ class ListObject extends Object
     {
 
         if (isset($pages['next'])) {
-            $this->attributes['nextPage'] = [
+            $this->values['nextPage'] = [
                 'href' => $pages['next']['href'],
                 'page' => ($this->parseUrl($pages['next']['href'])['page'] ? (int)$this->parseUrl($pages['next']['href'])['page'] : null)
             ];
         }
         if (isset($pages['previous'])) {
-            $this->attributes['previousPage'] = [
+            $this->values['previousPage'] = [
                 'href' => $pages['previous']['href'],
                 'page' => (int)(!empty($this->parseUrl($pages['previous']['href'])) ? $this->parseUrl($pages['previous']['href'])['page'] : 1)
             ];

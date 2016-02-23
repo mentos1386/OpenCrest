@@ -9,7 +9,7 @@ class MailEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/mail/";
+    public $uri = "mail/";
     /**
      * @var string
      */

@@ -9,6 +9,7 @@ use OpenCrest\Endpoints\CharactersEndpoint;
 use OpenCrest\Endpoints\ConstellationsEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
 use OpenCrest\Endpoints\CrestEndpoint;
+use OpenCrest\Endpoints\DogmaEndpoint;
 use OpenCrest\Endpoints\Objects\CrestObject;
 use OpenCrest\Endpoints\PlanetsEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
@@ -88,6 +89,7 @@ class OpenCrest
      * @var TournamentsEndpoint
      */
     public $tournaments;
+    public $dogma;
 
     /**
      * OpenCrest constructor.
@@ -115,6 +117,7 @@ class OpenCrest
         $this->standings = new StandingsEndpoint();
         $this->accounts = new AccountsEndpoint();
         $this->tournaments = new TournamentsEndpoint();
+        $this->dogma = new DogmaEndpoint();
 
         if ($apiVersion) {
             self::$apiVersion = $apiVersion;

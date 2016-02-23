@@ -24,7 +24,7 @@ abstract class Endpoint
     /**
      * TODO: Could this be moved to Object ?
      *
-*@var array
+     * @var integer
      */
     protected $relationId;
     /**
@@ -120,7 +120,7 @@ abstract class Endpoint
      * @param array $options
      * @return mixed
      */
-    private function httpGet($uri, $options = [])
+    public function httpGet($uri, $options = [])
     {
         return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
     }
@@ -138,6 +138,7 @@ abstract class Endpoint
 
             return $listObject->make($item);
         } else {
+            // TODO: Some things don't provide ID, possible BUG, that it isn't implemented in CREST
             if (isset($item["id"])) {
                 $id = $item['id'];
             } else {
@@ -188,7 +189,7 @@ abstract class Endpoint
      * @param array $options
      * @return mixed
      */
-    private function httpPost($uri, $options = [])
+    public function httpPost($uri, $options = [])
     {
         return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
     }

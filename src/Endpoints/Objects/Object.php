@@ -14,7 +14,7 @@ abstract class Object
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected $values = [];
 
     /**
      * @var array
@@ -42,11 +42,11 @@ abstract class Object
     abstract protected function setRelations();
 
     /**
-     * @param array $attributes
+     * @param array $values
      */
-    public function setAttributes($attributes)
+    public function setValues($values)
     {
-        array_push($this->attributes, $attributes);
+        array_push($this->values, $values);
     }
 
 
@@ -56,7 +56,7 @@ abstract class Object
      */
     public function __get($name)
     {
-        if (array_key_exists($name, $this->attributes)) {
+        if (array_key_exists($name, $this->values)) {
             return $this->getAttribute($name);
         }
 
@@ -69,21 +69,21 @@ abstract class Object
      */
     public function getAttribute($name)
     {
-        return $this->attributes[$name];
+        return $this->values[$name];
     }
 
     /**
      * @param $item
-     * @return CharactersObject
+     * @return Object
      */
     public function make($item)
     {
         foreach ($item as $key => $value) {
             if (array_key_exists($key, $this->relations)) {
                 $endpoint = new $this->relations[$key]($this->id);
-                $this->attributes[$key] = $endpoint->createObject($value);
+                $this->values[$key] = $endpoint->createObject($value);
             } else {
-                $this->attributes[$key] = $value;
+                $this->values[$key] = $value;
             }
         }
 
@@ -104,7 +104,7 @@ abstract class Object
      */
     public function __isset($name)
     {
-        return isset($this->attributes[$name]);
+        return isset($this->values[$name]);
     }
 
     /**

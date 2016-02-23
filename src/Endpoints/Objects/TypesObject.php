@@ -2,10 +2,14 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\DogmaEndpoint;
+
 class TypesObject extends Object
 {
     protected function setRelations()
     {
-        // No relations
+        $this->relations = [
+            "dogma" => DogmaEndpoint::class
+        ];
     }
 }

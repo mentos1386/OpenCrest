@@ -9,7 +9,7 @@ class WaypointsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/navigation/waypoints/";
+    public $uri = "navigation/waypoints/";
     /**
      * @var string
      */

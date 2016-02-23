@@ -9,7 +9,7 @@ class NotificationsEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $uri = "/notifications/";
+    public $uri = "notifications/";
     /**
      * @var string
      */
