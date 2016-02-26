@@ -4,8 +4,10 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\Exceptions\AuthenticationException;
+use OpenCrest\Exceptions\notThirdPartyEnabledException;
 use OpenCrest\Exceptions\OAuthException;
-use OpenCrest\Exceptions\RouteException;
+use OpenCrest\Exceptions\RouteNotFoundException;
 use OpenCrest\OpenCrest;
 
 abstract class Endpoint
@@ -36,13 +38,6 @@ abstract class Endpoint
      * @var string
      */
     protected $token;
-    /**
-     * @var array
-     */
-    protected $routes = [
-        "get",
-        "show",
-    ];
     /**
      * @var string
      */
@@ -110,12 +105,9 @@ abstract class Endpoint
 
     /**
      * @return mixed|Object
-     * @throws RouteException
      */
     public function get()
     {
-        if (!array_key_exists("get", $this->routes)) {
-        }
         $uri = $this->uri;
         $content = $this->httpGet($uri);
         $content = $this->createObject($content);
@@ -127,10 +119,36 @@ abstract class Endpoint
      * @param       $uri
      * @param array $options
      * @return mixed
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
      */
     public function httpGet($uri, $options = [])
     {
-        return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
+        try {
+            return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
+        } catch (GuzzleHttp\Exception\RequestException $e) {
+            $this->ExceptionHandler($e);
+        }
+    }
+
+    /**
+     * @param GuzzleHttp\Exception\RequestException $e
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
+     */
+    private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
+    {
+        $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message;
+        switch ($e->getCode()) {
+            case 401:
+                throw new AuthenticationException($message);
+            case 403:
+                throw new notThirdPartyEnabledException($message);
+            case 404:
+                throw new RouteNotFoundException($message);
+        }
     }
 
     /**
@@ -196,10 +214,17 @@ abstract class Endpoint
      * @param       $uri
      * @param array $options
      * @return mixed
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
      */
     public function httpPost($uri, $options = [])
     {
-        return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
+        try {
+            return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
+        } catch (GuzzleHttp\Exception\RequestException $e) {
+            $this->ExceptionHandler($e);
+        }
     }
 
     /**

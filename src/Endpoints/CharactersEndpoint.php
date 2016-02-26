@@ -29,12 +29,6 @@ class CharactersEndpoint extends Endpoint
      * @var bool
      */
     protected $oauth = True;
-    /**
-     * @var array
-     */
-    protected $routes = [
-        "show",
-    ];
 
     /**
      * @param $relationsId
