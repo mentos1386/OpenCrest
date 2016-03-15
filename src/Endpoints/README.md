@@ -4,7 +4,14 @@ Documentation on how to use endpoints, what they return, and if they are impleme
 
 ##Accounts
 Uri: `accounts/`
-Auth: `False`
+
+Auth: `True`
+
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route not implemented`|
+| SHOW          |`Not third party enabled`|
+
 Relations:
 ```
     No relations
@@ -12,7 +19,9 @@ Relations:
 
 ##Alliances
 Uri: `alliances/`
+
 Auth: `False`
+
 Relations:
 ```
     "executorCorporation" => CorporationsEndpoint,
@@ -23,7 +32,9 @@ Relations:
 
 ##Bloodlines
 Uri: `bloodlines/`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -31,7 +42,9 @@ Relations:
 
 ##Characters
 Uri: `characters/`
+
 Auth: `True`
+
 Relations:
 ```
     "standings"     => StandingsEndpoint,
@@ -54,7 +67,9 @@ Relations:
 
 ##Characters/Blocked
 Uri: `characters/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -62,7 +77,9 @@ Relations:
 
 ##Characters/Capsuleer
 Uri: `characters/[ID]/capsuleer`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -70,7 +87,9 @@ Relations:
 
 ##Characters/Channels
 Uri: `characters/[ID]/chat/channels/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -78,7 +97,9 @@ Relations:
 
 ##Characters/Contacts
 Uri: `characters/[ID]/contacts/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -86,7 +107,9 @@ Relations:
 
 ##Characters/Fittings
 Uri: `characters/[ID]/fittings/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -94,7 +117,9 @@ Relations:
 
 ##Characters/Location
 Uri: `characters/[ID]/location/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -102,7 +127,9 @@ Relations:
 
 ##Characters/Mail
 Uri: `characters/[ID]/mail/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -110,7 +137,9 @@ Relations:
 
 ##Characters/Notifications
 Uri: `characters/[ID]/notifications`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -118,7 +147,9 @@ Relations:
 
 ##Characters/Private
 Uri: `characters/[ID]/private`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -126,7 +157,9 @@ Relations:
 
 ##Characters/Vivox
 Uri: `characters/[ID]/vivox`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -134,7 +167,9 @@ Relations:
 
 ##Characters/Navigation/Waypoints
 Uri: `characters/[ID]/navigation/waypoints/`
+
 Auth: `True`
+
 Relations:
 ```
     No relations
@@ -142,7 +177,9 @@ Relations:
 
 ##Constellations
 Uri: `constellations/`
+
 Auth: `False`
+
 Relations:
 ```
     "systems" => SystemsEndpoint,
@@ -150,7 +187,9 @@ Relations:
 
 ##Corporations
 Uri: `corporations/`
+
 Auth: `False`
+
 Relations:
 ```
     No realations
@@ -158,7 +197,9 @@ Relations:
 
 ##Crest
 Uri: `/`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -166,7 +207,9 @@ Relations:
 
 ##Dogma
 Uri: `dogma/`
+
 Auth: `False`
+
 Relations:
 ```
     "attributes" => AttributesEndpoint,
@@ -175,7 +218,9 @@ Relations:
 
 ##Dogma/Attributes
 Uri: `dogma/attributes`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -183,7 +228,9 @@ Relations:
 
 ##Dogma/Effects
 Uri: `dogma/effects`
+
 Auth: `False`
+
 Relations:
 ```
     "dischargeAttributeID" => Dogma/AttributesEndpoint,
@@ -192,7 +239,9 @@ Relations:
 
 ##Planets
 Uri: `planets/`
+
 Auth: `False`
+
 Relations:
 ```
     "system" => SystemsEndpoint,
@@ -200,7 +249,9 @@ Relations:
 
 ##Races
 Uri: `races/`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -208,7 +259,9 @@ Relations:
 
 ##Regions
 Uri: `regions/`
+
 Auth: `False`
+
 Relations:
 ```
     "constellations" => ConstellationsEndpoint,
@@ -216,7 +269,9 @@ Relations:
 
 ##Standings
 Uri: `standings/`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -224,7 +279,9 @@ Relations:
 
 ##Systems
 Uri: `solarsystems/`
+
 Auth: `False`
+
 Relations:
 ```
     "constellations" => ConstellationsEndpoint,
@@ -233,7 +290,9 @@ Relations:
 
 ##Tournaments
 Uri: `tournaments/`
+
 Auth: `False`
+
 Relations:
 ```
     No relations
@@ -241,7 +300,9 @@ Relations:
 
 ##Types
 Uri: `types/`
+
 Auth: `False`
+
 Relations:
 ```
     "dogma" => DogmaEndpoint,
@@ -249,7 +310,9 @@ Relations:
 
 ##Wars
 Uri: `wars/`
+
 Auth: `False`
+
 Relations:
 ```
     "aggressor" => CorporationsEndpoint,
