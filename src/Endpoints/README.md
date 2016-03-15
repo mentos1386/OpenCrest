@@ -232,11 +232,9 @@ Relations:
 ```
 
 ##Crest `/`
-| Route         | Status        |
-| ------------- |:-------------:|
-| GET           |`Works`|
-
-Alias: `status()`
+| Route         | Status        |Alias|
+| ------------- |:-------------:|:-------------:|
+| GET           |`Works`|`status()`|
 
 Relations:
 ```
@@ -258,9 +256,12 @@ Relations:
 ```
 
 ##Dogma/Attributes `dogma/attributes`
-Uri: 
-
-Auth: `False`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
@@ -268,9 +269,12 @@ Relations:
 ```
 
 ##Dogma/Effects `dogma/effects`
-Uri: 
-
-Auth: `False`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```

@@ -21,7 +21,7 @@ class DogmaEndpoint extends Endpoint
     public $object = DogmaObject::class;
 
     /**
-     * @return mixed|Object
+     * @return AttributesEndpoint
      */
     public function Attributes()
     {
@@ -29,7 +29,7 @@ class DogmaEndpoint extends Endpoint
     }
 
     /**
-     * @return mixed|Object
+     * @return EffectsEndpoint
      */
     public function Effects()
     {
