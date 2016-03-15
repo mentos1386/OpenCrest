@@ -12,6 +12,7 @@ use OpenCrest\Endpoints\CrestEndpoint;
 use OpenCrest\Endpoints\DogmaEndpoint;
 use OpenCrest\Endpoints\Objects\CrestObject;
 use OpenCrest\Endpoints\PlanetsEndpoint;
+use OpenCrest\Endpoints\RacesEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
 use OpenCrest\Endpoints\StandingsEndpoint;
 use OpenCrest\Endpoints\SystemsEndpoint;
@@ -97,6 +98,14 @@ class OpenCrest
     public static function Types()
     {
         return new TypesEndpoint();
+    }
+
+    /**
+     * @return RacesEndpoint
+     */
+    public static function Races()
+    {
+        return new RacesEndpoint();
     }
 
     /**

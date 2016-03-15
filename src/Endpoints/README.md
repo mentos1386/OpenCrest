@@ -2,14 +2,12 @@
 
 Documentation on how to use endpoints, what they return, and if they are implemented.
 
-##Accounts
-Uri: `accounts/`
-
-Auth: `True`
-
+##Accounts `accounts/` `AUTH`
 | Route         | Status        |
 | ------------- |:-------------:|
 | GET           |`Route not implemented`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
 | SHOW          |`Not third party enabled`|
 
 Relations:
@@ -17,10 +15,13 @@ Relations:
     No relations
 ```
 
-##Alliances
-Uri: `alliances/`
-
-Auth: `False`
+##Alliances `alliances/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
@@ -30,20 +31,26 @@ Relations:
     "creatorCharacter"    => CharactersEndpoint,
 ```
 
-##Bloodlines
-Uri: `bloodlines/`
-
-Auth: `False`
+##Bloodlines `bloodlines/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route not found`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Route not found`|
 
 Relations:
 ```
     No relations
 ```
 
-##Characters
-Uri: `characters/`
-
-Auth: `True`
+##Characters `characters/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| GET           |`Authentication scope needed`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
@@ -65,150 +72,184 @@ Relations:
     "accounts"      => AccountsEndpoint,
 ```
 
-##Characters/Blocked
-Uri: `characters/`
+##Characters/Blocked `characters/[ID]/blocked` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Authentication scope needed`|
 
-Auth: `True`
-
-Relations:
-```
-    No relations
-```
-
-##Characters/Capsuleer
-Uri: `characters/[ID]/capsuleer`
-
-Auth: `True`
 
 Relations:
 ```
     No relations
 ```
 
-##Characters/Channels
-Uri: `characters/[ID]/chat/channels/`
-
-Auth: `True`
-
-Relations:
-```
-    No relations
-```
-
-##Characters/Contacts
-Uri: `characters/[ID]/contacts/`
-
-Auth: `True`
+##Characters/Capsuleer `characters/[ID]/capsuleer` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Not Third Party Enabled`|
 
 Relations:
 ```
     No relations
 ```
 
-##Characters/Fittings
-Uri: `characters/[ID]/fittings/`
-
-Auth: `True`
-
-Relations:
-```
-    No relations
-```
-
-##Characters/Location
-Uri: `characters/[ID]/location/`
-
-Auth: `True`
+##Characters/Channels `characters/[ID]/chat/channels/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     No relations
 ```
 
-##Characters/Mail
-Uri: `characters/[ID]/mail/`
-
-Auth: `True`
-
-Relations:
-```
-    No relations
-```
-
-##Characters/Notifications
-Uri: `characters/[ID]/notifications`
-
-Auth: `True`
+##Characters/Contacts `characters/[ID]/contacts/` 
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|`characterContactsWrite`|
+| PUT           |`WIP`|`characterContactsWrite`|
+| SHOW          |`Works`|`characterContactsRead`|
 
 Relations:
 ```
     No relations
 ```
 
-##Characters/Private
-Uri: `characters/[ID]/private`
-
-Auth: `True`
-
-Relations:
-```
-    No relations
-```
-
-##Characters/Vivox
-Uri: `characters/[ID]/vivox`
-
-Auth: `True`
+##Characters/Fittings `characters/[ID]/fittings/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|`characterFittingsWrite`|
+| PUT           |`WIP`|`characterFittingsWrite`|
+| SHOW          |`Works`|`characterFittingsRead`|
 
 Relations:
 ```
     No relations
 ```
 
-##Characters/Navigation/Waypoints
-Uri: `characters/[ID]/navigation/waypoints/`
-
-Auth: `True`
+##Characters/Location `characters/[ID]/location/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|`characterLocationRead`|
 
 Relations:
 ```
     No relations
 ```
 
-##Constellations
-Uri: `constellations/`
+##Characters/Mail `characters/[ID]/mail/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Authentication scope needed`|
 
-Auth: `False`
+Relations:
+```
+    No relations
+```
+
+##Characters/Notifications `characters/[ID]/notifications` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
+
+Relations:
+```
+    No relations
+```
+
+##Characters/Private `characters/[ID]/private` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Not Third Party Enabled`|
+
+Relations:
+```
+    No relations
+```
+
+##Characters/Vivox `characters/[ID]/vivox` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Not Third Party Enabled`|
+
+Relations:
+```
+    No relations
+```
+
+##Characters/Navigation/Waypoints `characters/[ID]/navigation/waypoints/` `AUTH`
+| Route         | Status        |Scope|
+| ------------- |:-------------:|:-------------:|
+| POST           |`WIP`|`characterNavigationWrite`|
+| PUT           |`WIP`|`characterNavigationWrite`|
+| SHOW          |`Works`|
+Relations:
+```
+    No relations
+```
+
+##Constellations `constellations/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     "systems" => SystemsEndpoint,
+    "regions" => RegionsEndpoint,
 ```
 
-##Corporations
-Uri: `corporations/`
-
-Auth: `False`
+##Corporations `corporations/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     No realations
 ```
 
-##Crest
-Uri: `/`
+##Crest `/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
 
-Auth: `False`
+Alias: `status()`
 
 Relations:
 ```
     No relations
 ```
 
-##Dogma
-Uri: `dogma/`
-
-Auth: `False`
+##Dogma `dogma/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route not found`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`??`|
 
 Relations:
 ```
@@ -216,8 +257,8 @@ Relations:
     "effects"    => EffectsEndpoint,
 ```
 
-##Dogma/Attributes
-Uri: `dogma/attributes`
+##Dogma/Attributes `dogma/attributes`
+Uri: 
 
 Auth: `False`
 
@@ -226,8 +267,8 @@ Relations:
     No relations
 ```
 
-##Dogma/Effects
-Uri: `dogma/effects`
+##Dogma/Effects `dogma/effects`
+Uri: 
 
 Auth: `False`
 
@@ -237,84 +278,123 @@ Relations:
     "durationAttributeID"  => Dogma/AttributesEndpoint,
 ```
 
-##Planets
-Uri: `planets/`
-
-Auth: `False`
+##Planets `planets/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route not found`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`InternalServerError`|
 
 Relations:
 ```
     "system" => SystemsEndpoint,
 ```
 
-##Races
-Uri: `races/`
-
-Auth: `False`
+##Races `races/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route not found`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Route not found`|
 
 Relations:
 ```
     No relations
 ```
 
-##Regions
-Uri: `regions/`
-
-Auth: `False`
+##Regions `regions/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     "constellations" => ConstellationsEndpoint,
 ```
 
-##Standings
-Uri: `standings/`
-
-Auth: `False`
-
-Relations:
-```
-    No relations
-```
-
-##Systems
-Uri: `solarsystems/`
-
-Auth: `False`
-
-Relations:
-```
-    "constellations" => ConstellationsEndpoint,
-    "sovereignty"    => AlliancesEndpoint,
-```
-
-##Tournaments
-Uri: `tournaments/`
-
-Auth: `False`
+##Standings `standings/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Route nor found`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Route nor found`|
 
 Relations:
 ```
     No relations
 ```
 
-##Types
-Uri: `types/`
+##Systems `solarsystems/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
-Auth: `False`
+Relations:
+```
+    "constellation" => ConstellationsEndpoint,
+    "sovereignty"   => AlliancesEndpoint,
+    "stats"         => StatsEndpoint,
+```
+
+##Systems/Stats `solarsystems/stats/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Not Third Party Enabled`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Route nor found`|
+
+Relations:
+```
+    No relations
+```
+
+##Tournaments `tournaments/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works/Not Third Party Enabled`|
+
+Relations:
+```
+    "series" => WIP
+```
+
+##Types `types/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     "dogma" => DogmaEndpoint,
 ```
 
-##Wars
-Uri: `wars/`
-
-Auth: `False`
+##Wars `wars/`
+| Route         | Status        |
+| ------------- |:-------------:|
+| GET           |`Works`|
+| POST           |`WIP`|
+| PUT           |`WIP`|
+| SHOW          |`Works`|
 
 Relations:
 ```
     "aggressor" => CorporationsEndpoint,
     "defender"  => CorporationsEndpoint
+    "killmails" => WIP
 ```

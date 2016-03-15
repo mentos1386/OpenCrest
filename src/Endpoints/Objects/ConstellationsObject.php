@@ -2,6 +2,7 @@
 
 namespace OpenCrest\Endpoints\Objects;
 
+use OpenCrest\Endpoints\RegionsEndpoint;
 use OpenCrest\Endpoints\SystemsEndpoint;
 
 class ConstellationsObject extends Object
@@ -10,6 +11,7 @@ class ConstellationsObject extends Object
     {
         $this->relations = [
             "systems" => SystemsEndpoint::class,
+            "region"  => RegionsEndpoint::class,
         ];
     }
 }
