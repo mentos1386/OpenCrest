@@ -2,10 +2,19 @@
 
 Documentation on how to use endpoints, what they return, and if they are implemented.
 
+If there is `AUTH` in the title, that means that OAuth token is required to use the Endpoint.
+
+You can use endpoints with `OpenCrest::[EndpointName]->get();` which gets list of items or `OpenCrest::[EndpointName]->show([ID]);` which returns specific item.
+
+Relations can be loaded after getting object with (`get()` used with relationships returns specific or list of items, depending on relationship):
+```php
+$characterCorporation = OpenCrest::Characters()->show(ID)->corporation->get();
+```
+
 ##Accounts `accounts/` `AUTH`
 | Route         | Status        |
 | ------------- |:-------------:|
-| GET           |`Route not implemented`|
+| GET           |`Route not found`|
 | POST           |`WIP`|
 | PUT           |`WIP`|
 | SHOW          |`Not third party enabled`|
@@ -324,10 +333,10 @@ Relations:
 ##Standings `standings/`
 | Route         | Status        |
 | ------------- |:-------------:|
-| GET           |`Route nor found`|
+| GET           |`Route not found`|
 | POST           |`WIP`|
 | PUT           |`WIP`|
-| SHOW          |`Route nor found`|
+| SHOW          |`Route not found`|
 
 Relations:
 ```
@@ -346,7 +355,7 @@ Relations:
 ```
     "constellation" => ConstellationsEndpoint,
     "sovereignty"   => AlliancesEndpoint,
-    "stats"         => StatsEndpoint,
+    "stats"         => Systems/StatsEndpoint,
 ```
 
 ##Systems/Stats `solarsystems/stats/`
@@ -355,7 +364,7 @@ Relations:
 | GET           |`Not Third Party Enabled`|
 | POST           |`WIP`|
 | PUT           |`WIP`|
-| SHOW          |`Route nor found`|
+| SHOW          |`Route not found`|
 
 Relations:
 ```
