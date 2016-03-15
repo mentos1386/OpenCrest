@@ -28,7 +28,7 @@ class OpenCrest
     /**
      * @var string
      */
-    protected static $version = "2.0.1";
+    protected static $version = "2.0.2";
     /**
      * @var string
      */

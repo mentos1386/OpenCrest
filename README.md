@@ -55,6 +55,9 @@ $alliances = $alliances->previousPage();
 
 ```
 
+## Endpoints Documentation
+[Documentation](https://github.com/mentos1386/OpenCrest/blob/master/src/Endpoints/README.md)
+
 ## Example output
 `var_dump(OpenCrest::Alliances->show(99000006);` which calls url https://public-crest.eveonline.com/alliances/99000006/
 
