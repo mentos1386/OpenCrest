@@ -4,7 +4,9 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\Endpoints\Objects\Object;
 use OpenCrest\Exceptions\AuthenticationException;
+use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\notThirdPartyEnabledException;
 use OpenCrest\Exceptions\OAuthException;
 use OpenCrest\Exceptions\RouteNotFoundException;
@@ -79,7 +81,7 @@ abstract class Endpoint
                 'base_uri' => $this->oauthBase,
                 'headers'  => [
                     'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'        => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json',
+                    'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
                     'Authorization' => 'Bearer ' . $this->token,
                 ]
             ];
@@ -88,7 +90,7 @@ abstract class Endpoint
                 'base_uri' => $this->publicBase,
                 'headers'  => [
                     'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'     => 'Accept: application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json',
+                    'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
                 ]
             ];
         }
@@ -110,9 +112,8 @@ abstract class Endpoint
     {
         $uri = $this->uri;
         $content = $this->httpGet($uri);
-        $content = $this->createObject($content);
 
-        return $content;
+        return $this->createObject($content);
     }
 
     /**
@@ -140,7 +141,13 @@ abstract class Endpoint
      */
     private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
     {
-        $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message;
+        // GuzzleHttp will make messages longer than 120 characters truncated, which breaks our json.
+        if (strlen($e->getResponseBodySummary($e->getResponse())) < 135) {
+            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message;
+            // So we just return all the gibberish
+        } else {
+            $message = json_decode($e->getResponseBodySummary($e->getResponse()));
+        }
         switch ($e->getCode()) {
             case 401:
                 throw new AuthenticationException($message);
@@ -178,6 +185,63 @@ abstract class Endpoint
         }
     }
 
+    /**
+     * @param Object       $body
+     * @param integer|null $id
+     * @param array        $options
+     * @return Object
+     */
+    public function post($body, $id = null, $options = [])
+    {
+        $instance = clone $this;
+
+        // Add id to uri of provided
+        if ($id) {
+            $instance->uri = $instance->uri . $id . "/";
+        }
+
+        // Add body to options as json
+        $options["json"] = $instance->makePost($body);
+
+        // Make http request
+        $instance->httpPost($instance->uri, $options);
+
+        // We return newly created resource.
+        try {
+            return $this->show($body->id);
+        } catch (Exception $e) {
+            // Or return Array with error, TODO: if GET on resource didnt work!
+            return ["POST" => "Created", "GET" => $e];
+        }
+    }
+
+    /**
+     * This function creates proper body format as requested by Crest
+     *
+     * @param array|Object $body
+     * @return array
+     */
+    public function makePost($body)
+    {
+        return $body;
+    }
+
+    /**
+     * @param              $uri
+     * @param array        $options
+     * @return mixed
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
+     */
+    public function httpPost($uri, $options = [])
+    {
+        try {
+            return $this->client->post($uri, $options);
+        } catch (GuzzleHttp\Exception\RequestException $e) {
+            $this->ExceptionHandler($e);
+        }
+    }
 
     /**
      * @param $id
@@ -194,34 +258,40 @@ abstract class Endpoint
     }
 
     /**
-     * @param integer $id
-     * @param array   $options
-     * @return Object
+     * @param Object|integer $data
+     * @param array          $options
      */
-    public function post($id = null, $options = [])
+    public function delete($data, $options = [])
     {
         $instance = clone $this;
-        if ($id) {
-            $instance->uri = $instance->uri . $id . "/";
-        }
-        $content = $instance->httpPost($instance->uri, $options);
-        $content = $instance->createObject($content);
 
-        return $content;
+        // If $data is object, we get id from object
+        if ($data instanceof Object) {
+            $id = $data->id;
+            // Else id is provided as data
+        } else {
+            $id = $data;
+        }
+
+        $instance->uri = $instance->uri . $id . "/";
+
+        // Make http request
+        $instance->httpDelete($instance->uri, $options);
+
     }
 
     /**
-     * @param       $uri
-     * @param array $options
+     * @param              $uri
+     * @param array        $options
      * @return mixed
      * @throws AuthenticationException
      * @throws RouteNotFoundException
      * @throws notThirdPartyEnabledException
      */
-    public function httpPost($uri, $options = [])
+    public function httpDelete($uri, $options = [])
     {
         try {
-            return json_decode($this->client->post($uri, $options)->getBody()->getContents(), true);
+            return $this->client->delete($uri, $options);
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->ExceptionHandler($e);
         }

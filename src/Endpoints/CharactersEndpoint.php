@@ -13,7 +13,18 @@ use OpenCrest\Endpoints\Characters\NotificationsEndpoint;
 use OpenCrest\Endpoints\Characters\PrivateEndpoint;
 use OpenCrest\Endpoints\Characters\VivoxEndpoint;
 use OpenCrest\Endpoints\Characters\WaypointsEndpoint;
+use OpenCrest\Endpoints\Objects\Characters\BlockedObject;
+use OpenCrest\Endpoints\Objects\Characters\ChannelsObject;
+use OpenCrest\Endpoints\Objects\Characters\ContactsObject;
+use OpenCrest\Endpoints\Objects\Characters\FittingsObject;
+use OpenCrest\Endpoints\Objects\Characters\LocationObject;
+use OpenCrest\Endpoints\Objects\Characters\MailObject;
+use OpenCrest\Endpoints\Objects\Characters\NotificationsObject;
+use OpenCrest\Endpoints\Objects\Characters\PrivateObject;
+use OpenCrest\Endpoints\Objects\Characters\VivoxObject;
+use OpenCrest\Endpoints\Objects\Characters\WaypointsObject;
 use OpenCrest\Endpoints\Objects\CharactersObject;
+use OpenCrest\Endpoints\Objects\ListObject;
 
 class CharactersEndpoint extends Endpoint
 {
@@ -32,7 +43,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return BlockedObject|ListObject
      */
     public function getBlocked($relationsId)
     {
@@ -41,7 +52,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return CapsuleerEndpoint|ListObject
      */
     public function getCapsuleer($relationsId)
     {
@@ -50,7 +61,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return ChannelsObject|ListObject
      */
     public function getChannels($relationsId)
     {
@@ -59,7 +70,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return ContactsObject|ListObject
      */
     public function getContacts($relationsId)
     {
@@ -68,7 +79,27 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @param $data
+     * @return ContactsObject
+     */
+    public function postContacts($relationsId, $data)
+    {
+        return (new ContactsEndpoint($relationsId))->post($data);
+    }
+
+    /**
+     * @param $relationsId
+     * @param $data
+     * @return ContactsObject
+     */
+    public function deleteContacts($relationsId, $data)
+    {
+        return (new ContactsEndpoint($relationsId))->delete($data);
+    }
+
+    /**
+     * @param $relationsId
+     * @return FittingsObject|ListObject
      */
     public function getFittings($relationsId)
     {
@@ -77,7 +108,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return LocationObject|ListObject
      */
     public function getLocation($relationsId)
     {
@@ -86,7 +117,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return MailObject|ListObject
      */
     public function getMail($relationsId)
     {
@@ -95,7 +126,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return NotificationsObject|ListObject
      */
     public function getNotifications($relationsId)
     {
@@ -104,7 +135,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return PrivateObject|ListObject
      */
     public function getPrivate($relationsId)
     {
@@ -113,7 +144,7 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return VivoxObject|ListObject
      */
     public function getVivox($relationsId)
     {
@@ -122,10 +153,20 @@ class CharactersEndpoint extends Endpoint
 
     /**
      * @param $relationsId
-     * @return mixed|Object
+     * @return WaypointsObject|ListObject
      */
     public function getWaypoints($relationsId)
     {
         return (new WaypointsEndpoint($relationsId))->get();
+    }
+
+    /**
+     * @param $relationsId
+     * @param $data
+     * @return WaypointsObject
+     */
+    public function postWaypoints($relationsId, $data)
+    {
+        return (new WaypointsEndpoint($relationsId))->post($data);
     }
 }

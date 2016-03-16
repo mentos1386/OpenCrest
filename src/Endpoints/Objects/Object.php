@@ -52,7 +52,7 @@ abstract class Object
 
     /**
      * @param $name
-     * @return array
+     * @return mixed|Object
      */
     public function __get($name)
     {
@@ -73,21 +73,32 @@ abstract class Object
     }
 
     /**
+     * @param $name
+     * @param $value
+     */
+    public function setAttribute($name, $value)
+    {
+        $this->values[$name] = $value;
+    }
+
+    /**
      * @param $item
      * @return Object
      */
     public function make($item)
     {
-        foreach ($item as $key => $value) {
-            if (array_key_exists($key, $this->relations)) {
-                $endpoint = new $this->relations[$key]($this->id);
-                $this->values[$key] = $endpoint->createObject($value);
-            } else {
-                $this->values[$key] = $value;
+        if ($item) {
+            foreach ($item as $key => $value) {
+                if (array_key_exists($key, $this->relations)) {
+                    $endpoint = new $this->relations[$key]($this->id);
+                    $this->values[$key] = $endpoint->createObject($value);
+                } else {
+                    $this->values[$key] = $value;
+                }
             }
         }
 
-        return $this;
+        return clone $this;
     }
 
     /**
@@ -110,11 +121,14 @@ abstract class Object
     /**
      * This is used to get relationship object to make show(id)/get() request
      *
+     * @param int $id
      * @return Object
      */
-    public function get()
+    public function get($id = null)
     {
-        if ($this->id) {
+        if ($id) {
+            return $this->endpoint->show($id);
+        } elseif ($this->id) {
             return $this->endpoint->show($this->id);
         } else {
             return $this->endpoint->get();
@@ -122,12 +136,18 @@ abstract class Object
     }
 
     /**
-     * @param array $options
+     * @param array|Object $body
+     * @param int          $id
+     * @param array        $options
      * @return Object
      */
-    public function post($options = [])
+    public function post($body = [], $id = null, $options = [])
     {
-        return $this->endpoint->post($this->id, $options);
+        if (!$id) {
+            $id = $this->id;
+        }
+
+        return $this->endpoint->post($body, $id, $options);
     }
 
 }

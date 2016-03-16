@@ -234,10 +234,10 @@ Relations:
 ##Corporations `corporations/`
 | Route         | Status        |
 | ------------- |:-------------:|
-| GET           |`Works`|
+| GET           |`Route not found`|
 | POST           |`WIP`|
 | PUT           |`WIP`|
-| SHOW          |`Works`|
+| SHOW          |`Route not found`|
 
 Relations:
 ```
