@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\RacesObject;
+use OpenCrest\Objects\RacesObject;
 
 class RacesEndpoint extends Endpoint
 {

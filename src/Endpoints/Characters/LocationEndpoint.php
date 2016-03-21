@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\LocationObject;
+use OpenCrest\Objects\Characters\LocationObject;
 
 class LocationEndpoint extends Endpoint
 {

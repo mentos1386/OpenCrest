@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\CrestObject;
+use OpenCrest\Objects\CrestObject;
 
 class CrestEndpoint extends Endpoint
 {

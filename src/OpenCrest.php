@@ -10,7 +10,6 @@ use OpenCrest\Endpoints\ConstellationsEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
 use OpenCrest\Endpoints\CrestEndpoint;
 use OpenCrest\Endpoints\DogmaEndpoint;
-use OpenCrest\Endpoints\Objects\CrestObject;
 use OpenCrest\Endpoints\PlanetsEndpoint;
 use OpenCrest\Endpoints\RacesEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
@@ -19,6 +18,7 @@ use OpenCrest\Endpoints\SystemsEndpoint;
 use OpenCrest\Endpoints\TournamentsEndpoint;
 use OpenCrest\Endpoints\TypesEndpoint;
 use OpenCrest\Endpoints\WarsEndpoint;
+use OpenCrest\Objects\CrestObject;
 
 class OpenCrest
 {

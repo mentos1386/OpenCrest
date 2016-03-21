@@ -2,10 +2,9 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\AlliancesObject;
-use OpenCrest\Endpoints\Objects\Characters\ContactsObject;
-use OpenCrest\Endpoints\Objects\CharactersObject;
-use OpenCrest\Endpoints\Objects\Object;
+use OpenCrest\Objects\AlliancesObject;
+use OpenCrest\Objects\Characters\ContactsObject;
+use OpenCrest\Objects\CharactersObject;
 use OpenCrest\Exceptions\PostDataException;
 
 class ContactsEndpoint extends Endpoint

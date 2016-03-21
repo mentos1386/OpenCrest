@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\VivoxObject;
+use OpenCrest\Objects\Characters\VivoxObject;
 
 class VivoxEndpoint extends Endpoint
 {

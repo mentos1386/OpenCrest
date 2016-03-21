@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\BloodLinesObject;
+use OpenCrest\Objects\BloodLinesObject;
 
 class BloodLinesEndpoint extends Endpoint
 {

@@ -4,7 +4,7 @@ namespace OpenCrest\Endpoints;
 
 use OpenCrest\Endpoints\Dogma\AttributesEndpoint;
 use OpenCrest\Endpoints\Dogma\EffectsEndpoint;
-use OpenCrest\Endpoints\Objects\DogmaObject;
+use OpenCrest\Objects\DogmaObject;
 
 class DogmaEndpoint extends Endpoint
 {

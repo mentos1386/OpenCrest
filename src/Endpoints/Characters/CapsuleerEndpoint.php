@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\CapsuleerObject;
+use OpenCrest\Objects\Characters\CapsuleerObject;
 
 class CapsuleerEndpoint extends Endpoint
 {

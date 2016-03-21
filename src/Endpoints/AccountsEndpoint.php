@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\AccountsObject;
+use OpenCrest\Objects\AccountsObject;
 
 class AccountsEndpoint extends Endpoint
 {

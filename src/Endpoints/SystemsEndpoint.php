@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\SystemsObject;
+use OpenCrest\Objects\SystemsObject;
 
 class SystemsEndpoint extends Endpoint
 {

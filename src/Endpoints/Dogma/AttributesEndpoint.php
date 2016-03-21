@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Dogma;
 
-use OpenCrest\Endpoints\Objects\Dogma\AttributesObject;
+use OpenCrest\Objects\Dogma\AttributesObject;
 
 class AttributesEndpoint extends Endpoint
 {

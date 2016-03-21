@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\TypesObject;
+use OpenCrest\Objects\TypesObject;
 
 class TypesEndpoint extends Endpoint
 {

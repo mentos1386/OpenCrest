@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\ChannelsObject;
+use OpenCrest\Objects\Characters\ChannelsObject;
 
 class ChannelsEndpoint extends Endpoint
 {

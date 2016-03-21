@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\StandingsObject;
+use OpenCrest\Objects\StandingsObject;
 
 class StandingsEndpoint extends Endpoint
 {

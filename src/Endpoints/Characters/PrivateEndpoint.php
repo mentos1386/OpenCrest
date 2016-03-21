@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\PrivateObject;
+use OpenCrest\Objects\Characters\PrivateObject;
 
 class PrivateEndpoint extends Endpoint
 {

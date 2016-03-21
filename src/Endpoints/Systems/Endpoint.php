@@ -1,6 +1,7 @@
 <?php
 
 namespace OpenCrest\Endpoints\Systems;
+
 class Endpoint extends \OpenCrest\Endpoints\Endpoint
 {
     /**

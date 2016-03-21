@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\BlockedObject;
+use OpenCrest\Objects\Characters\BlockedObject;
 
 class BlockedEndpoint extends Endpoint
 {

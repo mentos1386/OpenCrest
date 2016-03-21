@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\MailObject;
+use OpenCrest\Objects\Characters\MailObject;
 
 class MailEndpoint extends Endpoint
 {

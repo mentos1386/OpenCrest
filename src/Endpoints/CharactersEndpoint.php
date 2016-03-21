@@ -13,18 +13,18 @@ use OpenCrest\Endpoints\Characters\NotificationsEndpoint;
 use OpenCrest\Endpoints\Characters\PrivateEndpoint;
 use OpenCrest\Endpoints\Characters\VivoxEndpoint;
 use OpenCrest\Endpoints\Characters\WaypointsEndpoint;
-use OpenCrest\Endpoints\Objects\Characters\BlockedObject;
-use OpenCrest\Endpoints\Objects\Characters\ChannelsObject;
-use OpenCrest\Endpoints\Objects\Characters\ContactsObject;
-use OpenCrest\Endpoints\Objects\Characters\FittingsObject;
-use OpenCrest\Endpoints\Objects\Characters\LocationObject;
-use OpenCrest\Endpoints\Objects\Characters\MailObject;
-use OpenCrest\Endpoints\Objects\Characters\NotificationsObject;
-use OpenCrest\Endpoints\Objects\Characters\PrivateObject;
-use OpenCrest\Endpoints\Objects\Characters\VivoxObject;
-use OpenCrest\Endpoints\Objects\Characters\WaypointsObject;
-use OpenCrest\Endpoints\Objects\CharactersObject;
-use OpenCrest\Endpoints\Objects\ListObject;
+use OpenCrest\Objects\Characters\BlockedObject;
+use OpenCrest\Objects\Characters\ChannelsObject;
+use OpenCrest\Objects\Characters\ContactsObject;
+use OpenCrest\Objects\Characters\FittingsObject;
+use OpenCrest\Objects\Characters\LocationObject;
+use OpenCrest\Objects\Characters\MailObject;
+use OpenCrest\Objects\Characters\NotificationsObject;
+use OpenCrest\Objects\Characters\PrivateObject;
+use OpenCrest\Objects\Characters\VivoxObject;
+use OpenCrest\Objects\Characters\WaypointsObject;
+use OpenCrest\Objects\CharactersObject;
+use OpenCrest\Objects\ListObject;
 
 class CharactersEndpoint extends Endpoint
 {

@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Dogma;
 
-use OpenCrest\Endpoints\Objects\Dogma\EffectsObject;
+use OpenCrest\Objects\Dogma\EffectsObject;
 
 class EffectsEndpoint extends Endpoint
 {

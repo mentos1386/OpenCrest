@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\AlliancesObject;
+use OpenCrest\Objects\AlliancesObject;
 
 class AlliancesEndpoint extends Endpoint
 {

@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\ConstellationsObject;
+use OpenCrest\Objects\ConstellationsObject;
 
 class ConstellationsEndpoint extends Endpoint
 {

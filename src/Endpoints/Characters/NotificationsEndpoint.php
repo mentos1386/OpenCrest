@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\NotificationsObject;
+use OpenCrest\Objects\Characters\NotificationsObject;
 
 class NotificationsEndpoint extends Endpoint
 {

@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\WarsObject;
+use OpenCrest\Objects\WarsObject;
 
 class WarsEndpoint extends Endpoint
 {

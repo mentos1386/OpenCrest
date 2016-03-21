@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\CorporationsObject;
+use OpenCrest\Objects\CorporationsObject;
 
 class CorporationsEndpoint extends Endpoint
 {

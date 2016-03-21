@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\FittingsObject;
+use OpenCrest\Objects\Characters\FittingsObject;
 
 class FittingsEndpoint extends Endpoint
 {

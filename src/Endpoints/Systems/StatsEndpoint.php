@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints\Systems;
 
-use OpenCrest\Endpoints\Objects\Systems\StatsObject;
+use OpenCrest\Objects\Systems\StatsObject;
 
 class StatsEndpoint extends Endpoint
 {

@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\PlanetsObject;
+use OpenCrest\Objects\PlanetsObject;
 
 class PlanetsEndpoint extends Endpoint
 {

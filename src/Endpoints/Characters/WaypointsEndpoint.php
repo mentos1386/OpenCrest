@@ -2,11 +2,8 @@
 
 namespace OpenCrest\Endpoints\Characters;
 
-use OpenCrest\Endpoints\Objects\Characters\WaypointsObject;
-use OpenCrest\Endpoints\Objects\Object;
-use OpenCrest\Endpoints\Objects\SystemsObject;
-use OpenCrest\Endpoints\SystemsEndpoint;
-use OpenCrest\Exceptions\PostDataException;
+use OpenCrest\Objects\Characters\WaypointsObject;
+use OpenCrest\Objects\SystemsObject;
 
 class WaypointsEndpoint extends Endpoint
 {

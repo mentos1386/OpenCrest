@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
-use OpenCrest\Endpoints\Objects\TournamentsObject;
+use OpenCrest\Objects\TournamentsObject;
 
 class TournamentsEndpoint extends Endpoint
 {

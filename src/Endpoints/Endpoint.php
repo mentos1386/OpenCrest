@@ -3,18 +3,19 @@
 namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
-use OpenCrest\Endpoints\Objects\ListObject;
 use OpenCrest\Exceptions\AuthenticationException;
 use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\notThirdPartyEnabledException;
 use OpenCrest\Exceptions\OAuthException;
 use OpenCrest\Exceptions\RouteNotFoundException;
+use OpenCrest\Interfaces\EndpointInterface;
+use OpenCrest\Objects\ListObject;
 use OpenCrest\OpenCrest;
 
-abstract class Endpoint
+abstract class Endpoint implements EndpointInterface
 {
     /**
-     * @var Objects\Object
+     * @var Object
      */
     public $object;
     /**
@@ -26,8 +27,6 @@ abstract class Endpoint
      */
     public $uri;
     /**
-     * TODO: Could this be moved to Object ?
-     *
      * @var integer
      */
     protected $relationId;
@@ -53,7 +52,7 @@ abstract class Endpoint
     private $oauthBase = "https://crest-tq.eveonline.com/";
 
     /**
-     * Endpoint constructor.
+     * Endpoint constructor
      *
      * @param integer $relationId
      * @throws OAuthException
@@ -75,6 +74,8 @@ abstract class Endpoint
     }
 
     /**
+     * We create Public and Auth headers for CREST
+     *
      * @return array
      */
     private function headers()
@@ -111,6 +112,91 @@ abstract class Endpoint
     }
 
     /**
+     * @param Object       $body
+     * @param integer|null $id
+     * @param array        $options
+     * @return Object
+     */
+    public function post($body, $id = null, $options = [])
+    {
+        $instance = clone $this;
+
+        // Add id to uri of provided
+        if ($id) {
+            $instance->uri = $instance->uri . $id . "/";
+        }
+
+        // Add body to options as json
+        $options["json"] = $instance->makePost($body);
+
+        // Make http request
+        $instance->httpPost($instance->uri, $options);
+
+        // We return newly created resource.
+        try {
+            return $this->get($body->id);
+        } catch (Exception $e) {
+            // Or return Array with error, TODO: if GET on resource didnt work!
+            return ["POST" => "Created", "GET" => $e];
+        }
+    }
+
+    /**
+     * This function creates proper body format as requested by Crest
+     *
+     * @param array|Object $body
+     * @return array
+     */
+    protected function makePost($body)
+    {
+        return $body;
+    }
+
+    /**
+     * @param              $uri
+     * @param array        $options
+     * @return mixed
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
+     */
+    public function httpPost($uri, $options = [])
+    {
+        try {
+            $this->response = $this->client->post($uri, $options);
+        } catch (GuzzleHttp\Exception\RequestException $e) {
+            $this->ExceptionHandler($e);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * @param GuzzleHttp\Exception\RequestException $e
+     * @throws AuthenticationException
+     * @throws RouteNotFoundException
+     * @throws notThirdPartyEnabledException
+     */
+    private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
+    {
+        // GuzzleHttp will make messages longer than 120 characters truncated, which breaks our json.
+        if (strlen($e->getResponseBodySummary($e->getResponse())) < 135) {
+            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message . " URI: " . $this->uri;
+        } else {
+            // So we just return all the gibberish
+            $message = json_decode($e->getResponseBodySummary($e->getResponse()));
+        }
+        switch ($e->getCode()) {
+            case 401:
+                throw new AuthenticationException($message);
+            case 403:
+                throw new notThirdPartyEnabledException($message);
+            case 404:
+                throw new RouteNotFoundException($message);
+        }
+    }
+
+    /**
      * Create GET request on specific resource or root uri
      *
      * @param int $id
@@ -126,7 +212,6 @@ abstract class Endpoint
             $content = $instance->httpGet($instance->uri);
 
             return $instance->createObject($content);
-            var_dump("Ssssssssssss");
         }
         // Else we just create GET request on [uri]
         $uri = $this->uri;
@@ -149,37 +234,11 @@ abstract class Endpoint
     {
         try {
             $this->response = $this->client->get($uri, $options);
-
-            return json_decode($this->response->getBody()->getContents(), true);
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->ExceptionHandler($e);
         }
-    }
 
-    /**
-     * @param GuzzleHttp\Exception\RequestException $e
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
-     */
-    private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
-    {
-        var_dump($e);
-        // GuzzleHttp will make messages longer than 120 characters truncated, which breaks our json.
-        if (strlen($e->getResponseBodySummary($e->getResponse())) < 135) {
-            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message . " URI: " . $this->uri;
-        } else {
-            // So we just return all the gibberish
-            $message = json_decode($e->getResponseBodySummary($e->getResponse()));
-        }
-        switch ($e->getCode()) {
-            case 401:
-                throw new AuthenticationException($message);
-            case 403:
-                throw new notThirdPartyEnabledException($message);
-            case 404:
-                throw new RouteNotFoundException($message);
-        }
+        return json_decode($this->response->getBody()->getContents(), true);
     }
 
     /**
@@ -220,66 +279,6 @@ abstract class Endpoint
             }
 
             return $object->make($item);
-        }
-    }
-
-    /**
-     * @param Object       $body
-     * @param integer|null $id
-     * @param array        $options
-     * @return Object
-     */
-    public function post($body, $id = null, $options = [])
-    {
-        $instance = clone $this;
-
-        // Add id to uri of provided
-        if ($id) {
-            $instance->uri = $instance->uri . $id . "/";
-        }
-
-        // Add body to options as json
-        $options["json"] = $instance->makePost($body);
-
-        // Make http request
-        $instance->httpPost($instance->uri, $options);
-
-        // We return newly created resource.
-        try {
-            return $this->show($body->id);
-        } catch (Exception $e) {
-            // Or return Array with error, TODO: if GET on resource didnt work!
-            return ["POST" => "Created", "GET" => $e];
-        }
-    }
-
-    /**
-     * This function creates proper body format as requested by Crest
-     *
-     * @param array|Object $body
-     * @return array
-     */
-    public function makePost($body)
-    {
-        return $body;
-    }
-
-    /**
-     * @param              $uri
-     * @param array        $options
-     * @return mixed
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
-     */
-    public function httpPost($uri, $options = [])
-    {
-        try {
-            $this->response = $this->client->post($uri, $options);
-
-            return $this->response;
-        } catch (GuzzleHttp\Exception\RequestException $e) {
-            $this->ExceptionHandler($e);
         }
     }
 
