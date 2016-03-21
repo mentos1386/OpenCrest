@@ -4,7 +4,6 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use OpenCrest\Endpoints\Objects\ListObject;
-use OpenCrest\Endpoints\Objects\Object;
 use OpenCrest\Exceptions\AuthenticationException;
 use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\notThirdPartyEnabledException;
@@ -40,6 +39,10 @@ abstract class Endpoint
      * @var string
      */
     protected $token;
+    /**
+     * @var GuzzleHttp\Psr7\Response
+     */
+    private $response;
     /**
      * @var string
      */
@@ -99,17 +102,33 @@ abstract class Endpoint
     }
 
     /**
-     * This is used in some endpoints to add custom properties/functions in __constructor
+     * This is used in some endpoints to add custom properties/functions in __constructor()
+     * Usually in Endpoint/[Parent]/Endpoint so that Endpoint/[Parent]/[Child] can implement that Endpoint with
+     *  some custom configuration.
      */
     protected function optionalConfig()
     {
     }
 
     /**
+     * Create GET request on specific resource or root uri
+     *
+     * @param int $id
      * @return mixed|Object
      */
-    public function get()
+    public function get($id = null)
     {
+        // If ID is provided, we make GET request with ID added to the end like,
+        // [uri][id]/
+        if ($id) {
+            $instance = clone $this;
+            $instance->uri = $instance->uri . $id . "/";
+            $content = $instance->httpGet($instance->uri);
+
+            return $instance->createObject($content);
+            var_dump("Ssssssssssss");
+        }
+        // Else we just create GET request on [uri]
         $uri = $this->uri;
         $content = $this->httpGet($uri);
 
@@ -117,6 +136,8 @@ abstract class Endpoint
     }
 
     /**
+     * Make HTTP GET Request
+     *
      * @param       $uri
      * @param array $options
      * @return mixed
@@ -127,7 +148,9 @@ abstract class Endpoint
     public function httpGet($uri, $options = [])
     {
         try {
-            return json_decode($this->client->get($uri, $options)->getBody()->getContents(), true);
+            $this->response = $this->client->get($uri, $options);
+
+            return json_decode($this->response->getBody()->getContents(), true);
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->ExceptionHandler($e);
         }
@@ -141,11 +164,12 @@ abstract class Endpoint
      */
     private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
     {
+        var_dump($e);
         // GuzzleHttp will make messages longer than 120 characters truncated, which breaks our json.
         if (strlen($e->getResponseBodySummary($e->getResponse())) < 135) {
-            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message;
-            // So we just return all the gibberish
+            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message . " URI: " . $this->uri;
         } else {
+            // So we just return all the gibberish
             $message = json_decode($e->getResponseBodySummary($e->getResponse()));
         }
         switch ($e->getCode()) {
@@ -159,6 +183,8 @@ abstract class Endpoint
     }
 
     /**
+     * We create Object
+     *
      * @param $item
      * @return Object
      */
@@ -168,6 +194,12 @@ abstract class Endpoint
             // If we have list of items
             $listObject = new ListObject();
             $listObject->setEndpoint(clone $this);
+
+            // Add cache-control header to Object, but only if this Endpoint made request
+            //  we cant add cache-control for relationships, as we don't have data for them
+            if ($this->response) {
+                $listObject->cache = $this->response->getHeader("cache-control")[0];
+            }
 
             return $listObject->make($item);
         } else {
@@ -180,6 +212,12 @@ abstract class Endpoint
             // If there is only one item
             $object = new $this->object($id);
             $object->setEndpoint(clone $this);
+
+            // Add cache-control header to Object, but only if this Endpoint made request
+            //  we cant add cache-control for relationships, as we don't have data for them
+            if ($this->response) {
+                $object->cache = $this->response->getHeader("cache-control")[0];
+            }
 
             return $object->make($item);
         }
@@ -237,61 +275,9 @@ abstract class Endpoint
     public function httpPost($uri, $options = [])
     {
         try {
-            return $this->client->post($uri, $options);
-        } catch (GuzzleHttp\Exception\RequestException $e) {
-            $this->ExceptionHandler($e);
-        }
-    }
+            $this->response = $this->client->post($uri, $options);
 
-    /**
-     * @param $id
-     * @return Object
-     */
-    public function show($id)
-    {
-        $instance = clone $this;
-        $instance->uri = $instance->uri . $id . "/";
-        $content = $instance->httpGet($instance->uri);
-        $content = $instance->createObject($content);
-
-        return $content;
-    }
-
-    /**
-     * @param Object|integer $data
-     * @param array          $options
-     */
-    public function delete($data, $options = [])
-    {
-        $instance = clone $this;
-
-        // If $data is object, we get id from object
-        if ($data instanceof Object) {
-            $id = $data->id;
-            // Else id is provided as data
-        } else {
-            $id = $data;
-        }
-
-        $instance->uri = $instance->uri . $id . "/";
-
-        // Make http request
-        $instance->httpDelete($instance->uri, $options);
-
-    }
-
-    /**
-     * @param              $uri
-     * @param array        $options
-     * @return mixed
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
-     */
-    public function httpDelete($uri, $options = [])
-    {
-        try {
-            return $this->client->delete($uri, $options);
+            return $this->response;
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->ExceptionHandler($e);
         }

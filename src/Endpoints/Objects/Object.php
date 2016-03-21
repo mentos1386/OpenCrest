@@ -3,30 +3,43 @@
 namespace OpenCrest\Endpoints\Objects;
 
 use OpenCrest\Endpoints\Endpoint;
+use OpenCrest\Exceptions\RouteNotFoundException;
 
 abstract class Object
 {
     /**
+     * Time in seconds, for how long value doesn't update on endpoint
+     *
+     * @var string
+     */
+    public $cache;
+    /**
+     * Object Endpoint
+     *
      * @var Endpoint
      */
     protected $endpoint;
-
     /**
+     * Object values
+     *
      * @var array
      */
     protected $values = [];
-
     /**
+     * Names and Endpoints of relationships
+     *
      * @var array
      */
     protected $relations = [];
     /**
+     * ID of resource
+     *
      * @var int|null
      */
     protected $id;
 
     /**
-     * Object constructor.
+     * Object constructor
      *
      * @param integer $id
      */
@@ -37,11 +50,15 @@ abstract class Object
     }
 
     /**
+     * Used for child objects to set relationships
+     *
      * @return mixed
      */
     abstract protected function setRelations();
 
     /**
+     * Set values to Object
+     *
      * @param array $values
      */
     public function setValues($values)
@@ -51,6 +68,8 @@ abstract class Object
 
 
     /**
+     * Used for gating values from Object
+     *
      * @param $name
      * @return mixed|Object
      */
@@ -64,6 +83,8 @@ abstract class Object
     }
 
     /**
+     * Used for gating values from Object
+     *
      * @param $name
      * @return array
      */
@@ -73,6 +94,9 @@ abstract class Object
     }
 
     /**
+     * Used for setting values to Object
+     * Used when manipulating with object before creating POST request
+     *
      * @param $name
      * @param $value
      */
@@ -82,8 +106,10 @@ abstract class Object
     }
 
     /**
-     * @param $item
-     * @return Object
+     * Make Object, create relationships and add values to Object
+     *
+     * @param array $item
+     * @return Object $this
      */
     public function make($item)
     {
@@ -102,7 +128,9 @@ abstract class Object
     }
 
     /**
-     * @param $endpoint
+     * Set Endpoint to Object
+     *
+     * @param Endpoint $endpoint
      */
     public function setEndpoint($endpoint)
     {
@@ -110,6 +138,8 @@ abstract class Object
     }
 
     /**
+     * Check if values is set in Object
+     *
      * @param $name
      * @return bool
      */
@@ -119,23 +149,27 @@ abstract class Object
     }
 
     /**
-     * This is used to get relationship object to make show(id)/get() request
+     * This is used to get relationship object to make get() request
      *
      * @param int $id
      * @return Object
+     * @throws RouteNotFoundException
      */
     public function get($id = null)
     {
-        if ($id) {
-            return $this->endpoint->show($id);
-        } elseif ($this->id) {
-            return $this->endpoint->show($this->id);
-        } else {
-            return $this->endpoint->get();
+        if ($this instanceof ListObject) {
+            throw new RouteNotFoundException("Can't make GET request on ListObject");
         }
+        if ($this->id) {
+            $id = $this->id;
+        }
+
+        return $this->endpoint->get($id);
     }
 
     /**
+     * This is used to get relationship object to make post(id) request
+     *
      * @param array|Object $body
      * @param int          $id
      * @param array        $options

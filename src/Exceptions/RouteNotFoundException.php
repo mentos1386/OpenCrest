@@ -14,6 +14,6 @@ class RouteNotFoundException extends Exception
      */
     public function errorMessage()
     {
-        return "Route not found! (It may be implemented in the future) Message: " . $this->response;
+        return "Route not found! Message: " . $this->response;
     }
 }
