@@ -106,7 +106,7 @@ abstract class Object
     }
 
     /**
-     * Make Object, create relationships and add values to Object
+     * Make Object, create relationships or add values to Object
      *
      * @param array $item
      * @return Object $this
@@ -117,6 +117,17 @@ abstract class Object
             foreach ($item as $key => $value) {
                 if (array_key_exists($key, $this->relations)) {
                     $endpoint = new $this->relations[$key]($this->id);
+
+                    // ˇˇ
+                    if (is_string($value)) {
+                        // TODO: Sometimes relationship is only a string with href, not array like usually.
+                        // TODO: When crest behaves as it should, remove this!
+                        // Seen in GET crest.../wars/21/  value "killmails"
+                        $this->values[$key] = $value;
+                        continue;
+                    }
+                    // ^^
+
                     $this->values[$key] = $endpoint->createObject($value);
                 } else {
                     $this->values[$key] = $value;

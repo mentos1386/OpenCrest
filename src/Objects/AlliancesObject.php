@@ -4,6 +4,7 @@ namespace OpenCrest\Objects;
 
 use OpenCrest\Endpoints\CharactersEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
+use OpenCrest\Endpoints\SystemsEndpoint;
 
 class AlliancesObject extends Object
 {
@@ -14,6 +15,7 @@ class AlliancesObject extends Object
             "creatorCorporation"  => CorporationsEndpoint::class,
             "corporations"        => CorporationsEndpoint::class,
             "creatorCharacter"    => CharactersEndpoint::class,
+            "capitalSystem"       => SystemsEndpoint::class,
         ];
     }
 }

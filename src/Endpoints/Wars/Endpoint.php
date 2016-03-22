@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenCrest\Endpoints\Dogma;
+namespace OpenCrest\Endpoints\Wars;
 
 class Endpoint extends \OpenCrest\Endpoints\Endpoint
 {
@@ -13,6 +13,6 @@ class Endpoint extends \OpenCrest\Endpoints\Endpoint
     {
         parent::__construct($relationId);
 
-        $this->uri = "dogma/" . $this->uri;
+        $this->uri = "wars/" . $this->relationId . "/" . $this->uri;
     }
 }

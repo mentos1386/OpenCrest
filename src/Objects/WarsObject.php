@@ -3,6 +3,7 @@
 namespace OpenCrest\Objects;
 
 use OpenCrest\Endpoints\CorporationsEndpoint;
+use OpenCrest\Endpoints\Wars\KillmailsEndpoint;
 
 class WarsObject extends Object
 {
@@ -10,7 +11,8 @@ class WarsObject extends Object
     {
         $this->relations = [
             "aggressor" => CorporationsEndpoint::class,
-            "defender"  => CorporationsEndpoint::class
+            "defender"  => CorporationsEndpoint::class,
+            "killmails" => KillmailsEndpoint::class,
         ];
     }
 }

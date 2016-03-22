@@ -27,7 +27,7 @@ interface EndpointInterface
     /**
      * Create GET request on specific page
      *
-     * @param $id
+     * @param int $id
      * @return ListObject
      */
     function page($id);
@@ -35,7 +35,7 @@ interface EndpointInterface
     /**
      * We create Object
      *
-     * @param $item
+     * @param array $item
      * @return Object
      */
     function createObject($item);

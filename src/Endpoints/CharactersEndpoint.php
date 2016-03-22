@@ -2,6 +2,7 @@
 
 namespace OpenCrest\Endpoints;
 
+use OpenCrest\Endpoints\Characters\Navigation\WaypointsEndpoint;
 use OpenCrest\Endpoints\Characters\BlockedEndpoint;
 use OpenCrest\Endpoints\Characters\CapsuleerEndpoint;
 use OpenCrest\Endpoints\Characters\ChannelsEndpoint;
@@ -12,7 +13,6 @@ use OpenCrest\Endpoints\Characters\MailEndpoint;
 use OpenCrest\Endpoints\Characters\NotificationsEndpoint;
 use OpenCrest\Endpoints\Characters\PrivateEndpoint;
 use OpenCrest\Endpoints\Characters\VivoxEndpoint;
-use OpenCrest\Endpoints\Characters\WaypointsEndpoint;
 use OpenCrest\Objects\Characters\BlockedObject;
 use OpenCrest\Objects\Characters\ChannelsObject;
 use OpenCrest\Objects\Characters\ContactsObject;

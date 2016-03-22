@@ -6,8 +6,6 @@ use OpenCrest\Objects\TournamentsObject;
 
 class TournamentsEndpoint extends Endpoint
 {
-    // TODO: Id isn't provided when listing Tournaments, only HREF, we could use HREF instead ID to get resources?
-
     /**
      * @var string
      */

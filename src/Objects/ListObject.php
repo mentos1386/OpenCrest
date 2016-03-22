@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Objects;
 
-class ListObject extends Object
+class ListObject extends Object implements \ArrayAccess
 {
     /**
      * @return ListObject
@@ -29,8 +29,8 @@ class ListObject extends Object
     }
 
     /**
-     * @param $data
-     * @return $this
+     * @param array $data
+     * @return $this $this
      */
     public function make($data)
     {
@@ -49,6 +49,7 @@ class ListObject extends Object
         $this->values['items'] = [];
 
         $object = new $this->endpoint->object;
+
         foreach ($items as $item) {
 
             // TODO: $types->dogma->attributes->items[0] returns values inside "attribute" array, same with dogma->effects->items[0]
@@ -100,6 +101,51 @@ class ListObject extends Object
         parse_str($query, $value);
 
         return $value;
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->values["items"][] = $value;
+        } else {
+            $this->values["items"][$offset] = $value;
+        }
+    }
+
+    /**
+     * Make Object behave as values["items"] array
+     *
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->values["items"][$offset]);
+    }
+
+    /**
+     * Make Object behave as values["items"] array
+     *
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->values["items"][$offset]);
+    }
+
+    /**
+     * Make Object behave as values["items"] array
+     *
+     * @param mixed $offset
+     * @return null
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->values["items"][$offset]) ? $this->values["items"][$offset] : null;
     }
 
     /**

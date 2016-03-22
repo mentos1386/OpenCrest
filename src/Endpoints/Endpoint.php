@@ -69,8 +69,6 @@ abstract class Endpoint implements EndpointInterface
         $this->client = new GuzzleHttp\Client($this->headers());
 
         $this->relationId = $relationId;
-
-        $this->optionalConfig();
     }
 
     /**
@@ -100,15 +98,6 @@ abstract class Endpoint implements EndpointInterface
         }
 
         return $headers;
-    }
-
-    /**
-     * This is used in some endpoints to add custom properties/functions in __constructor()
-     * Usually in Endpoint/[Parent]/Endpoint so that Endpoint/[Parent]/[Child] can implement that Endpoint with
-     *  some custom configuration.
-     */
-    protected function optionalConfig()
-    {
     }
 
     /**
@@ -153,8 +142,8 @@ abstract class Endpoint implements EndpointInterface
     }
 
     /**
-     * @param              $uri
-     * @param array        $options
+     * @param       $uri
+     * @param array $options
      * @return mixed
      * @throws AuthenticationException
      * @throws RouteNotFoundException
@@ -244,12 +233,13 @@ abstract class Endpoint implements EndpointInterface
     /**
      * We create Object
      *
-     * @param $item
+     * @param array $item
      * @return Object
      */
     public function createObject($item)
     {
         if (isset($item['items']) or isset($item[0])) {
+
             // If we have list of items
             $listObject = new ListObject();
             $listObject->setEndpoint(clone $this);
@@ -260,7 +250,7 @@ abstract class Endpoint implements EndpointInterface
                 $listObject->cache = $this->response->getHeader("cache-control")[0];
             }
 
-            return $listObject->make($item);
+            $object = $listObject->make($item);
         } else {
             // TODO: Some things don't provide ID, possible BUG, that it isn't implemented in CREST
             if (isset($item["id"])) {
@@ -278,8 +268,10 @@ abstract class Endpoint implements EndpointInterface
                 $object->cache = $this->response->getHeader("cache-control")[0];
             }
 
-            return $object->make($item);
+            $object = $object->make($item);
         }
+
+        return $object;
     }
 
     /**

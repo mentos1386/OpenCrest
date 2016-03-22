@@ -1,7 +1,8 @@
 <?php
 
-namespace OpenCrest\Endpoints\Characters;
+namespace OpenCrest\Endpoints\Characters\Navigation;
 
+use OpenCrest\Endpoints\Characters\Endpoint;
 use OpenCrest\Objects\Characters\WaypointsObject;
 use OpenCrest\Objects\SystemsObject;
 
