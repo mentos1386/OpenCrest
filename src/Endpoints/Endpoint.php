@@ -42,14 +42,6 @@ abstract class Endpoint implements EndpointInterface
      * @var GuzzleHttp\Psr7\Response
      */
     private $response;
-    /**
-     * @var string
-     */
-    private $publicBase = "https://public-crest.eveonline.com/";
-    /**
-     * @var string
-     */
-    private $oauthBase = "https://crest-tq.eveonline.com/";
 
     /**
      * Endpoint constructor
@@ -66,6 +58,7 @@ abstract class Endpoint implements EndpointInterface
             throw new OAuthException;
         }
 
+        // Create new GuzzleHttp Client
         $this->client = new GuzzleHttp\Client($this->headers());
 
         $this->relationId = $relationId;
@@ -80,7 +73,7 @@ abstract class Endpoint implements EndpointInterface
     {
         if ($this->oauth) {
             $headers = [
-                'base_uri' => $this->oauthBase,
+                'base_uri' => OpenCrest::getOauthBase(),
                 'headers'  => [
                     'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
@@ -89,7 +82,7 @@ abstract class Endpoint implements EndpointInterface
             ];
         } else {
             $headers = [
-                'base_uri' => $this->publicBase,
+                'base_uri' => OpenCrest::getPublicBase(),
                 'headers'  => [
                     'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
@@ -149,7 +142,7 @@ abstract class Endpoint implements EndpointInterface
      * @throws RouteNotFoundException
      * @throws notThirdPartyEnabledException
      */
-    public function httpPost($uri, $options = [])
+    private function httpPost($uri, $options = [])
     {
         try {
             $this->response = $this->client->post($uri, $options);
@@ -188,10 +181,11 @@ abstract class Endpoint implements EndpointInterface
     /**
      * Create GET request on specific resource or root uri
      *
-     * @param int $id
+     * @param int   $id
+     * @param array $options
      * @return mixed|Object
      */
-    public function get($id = null)
+    public function get($id = null, $options = [])
     {
         // If ID is provided, we make GET request with ID added to the end like,
         // [uri][id]/
@@ -204,7 +198,7 @@ abstract class Endpoint implements EndpointInterface
         }
         // Else we just create GET request on [uri]
         $uri = $this->uri;
-        $content = $this->httpGet($uri);
+        $content = $this->httpGet($uri, $options);
 
         return $this->createObject($content);
     }
@@ -219,7 +213,7 @@ abstract class Endpoint implements EndpointInterface
      * @throws RouteNotFoundException
      * @throws notThirdPartyEnabledException
      */
-    public function httpGet($uri, $options = [])
+    private function httpGet($uri, $options = [])
     {
         try {
             $this->response = $this->client->get($uri, $options);
@@ -287,5 +281,26 @@ abstract class Endpoint implements EndpointInterface
         $content = $this->createObject($content);
 
         return $content;
+    }
+
+    /**
+     * @param Object        $body
+     * @param int|null|null $id
+     * @param array         $options
+     * @return mixed
+     */
+    function put($body, $id = null, $options = [])
+    {
+        // TODO: Implement put() method.
+    }
+
+    /**
+     * @param int|null|null $id
+     * @param array         $options
+     * @return mixed
+     */
+    function delete($id = null, $options = [])
+    {
+        // TODO: Implement delete() method.
     }
 }

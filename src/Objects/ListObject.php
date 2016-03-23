@@ -5,11 +5,13 @@ namespace OpenCrest\Objects;
 class ListObject extends Object implements \ArrayAccess
 {
     /**
+     * Create Next Page from data we received
+     *
      * @return ListObject
      */
     public function nextPage()
     {
-        $page = $this->endpoint->httpGet($this->endpoint->uri, [
+        $page = $this->endpoint->get($this->endpoint->uri, [
             'query' => 'page=' . $this->values['nextPage']['page']
         ]);
 
@@ -17,11 +19,13 @@ class ListObject extends Object implements \ArrayAccess
     }
 
     /**
+     * Create Previous Page from data we received
+     *
      * @return ListObject
      */
     public function previousPage()
     {
-        $page = $this->endpoint->httpGet($this->endpoint->uri, [
+        $page = $this->endpoint->get($this->endpoint->uri, [
             'query' => 'page=' . $this->values['previousPage']['page']
         ]);
 
@@ -29,8 +33,10 @@ class ListObject extends Object implements \ArrayAccess
     }
 
     /**
+     * Custom make function, as ListObject is differently processed
+     *
      * @param array $data
-     * @return $this $this
+     * @return Object $this
      */
     public function make($data)
     {
@@ -72,6 +78,8 @@ class ListObject extends Object implements \ArrayAccess
     }
 
     /**
+     * We parse next and previous pages depending on date we received
+     *
      * @param $pages
      */
     private function parsePages($pages)
@@ -92,6 +100,8 @@ class ListObject extends Object implements \ArrayAccess
     }
 
     /**
+     * Used when parsing Pages
+     *
      * @param $url
      * @return string
      */
@@ -104,6 +114,8 @@ class ListObject extends Object implements \ArrayAccess
     }
 
     /**
+     * Make Object behave as values["items"] array
+     *
      * @param mixed $offset
      * @param mixed $value
      */

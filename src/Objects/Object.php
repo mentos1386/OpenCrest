@@ -4,8 +4,9 @@ namespace OpenCrest\Objects;
 
 use OpenCrest\Endpoints\Endpoint;
 use OpenCrest\Exceptions\RouteNotFoundException;
+use OpenCrest\Interfaces\ObjectInterface;
 
-abstract class Object
+abstract class Object implements ObjectInterface
 {
     /**
      * Time in seconds, for how long value doesn't update on endpoint
@@ -57,17 +58,6 @@ abstract class Object
     abstract protected function setRelations();
 
     /**
-     * Set values to Object
-     *
-     * @param array $values
-     */
-    public function setValues($values)
-    {
-        array_push($this->values, $values);
-    }
-
-
-    /**
      * Used for gating values from Object
      *
      * @param $name
@@ -95,7 +85,7 @@ abstract class Object
 
     /**
      * Used for setting values to Object
-     * Used when manipulating with object before creating POST request
+     * Used when manipulating with object before creating POST/PUT request
      *
      * @param $name
      * @param $value
