@@ -2,6 +2,10 @@
 
 namespace OpenCrest;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Psr7\Response;
 use OpenCrest\Endpoints\AccountsEndpoint;
 use OpenCrest\Endpoints\AlliancesEndpoint;
 use OpenCrest\Endpoints\BloodLinesEndpoint;
@@ -24,6 +28,43 @@ use OpenCrest\Objects\CrestObject;
 
 class OpenCrest
 {
+    /**
+     * @var array
+     */
+    public static $asyncRequestsPublic = [];
+    /**
+     * @var array
+     */
+    public static $asyncEndpointsPublic = [];
+    /**
+     * @var array
+     */
+    public static $asyncResponsesPublic = [];
+    /**
+     * @var array
+     */
+    public static $asyncRequestsOauth = [];
+    /**
+     * @var array
+     */
+    public static $asyncEndpointsOauth = [];
+    /**
+     * @var array
+     */
+    public static $asyncResponsesOauth = [];
+
+    /**
+     * @var Promise
+     */
+    public static $asyncPromisePublic;
+    /**
+     * @var Promise
+     */
+    public static $asyncPromiseOauth;
+    /**
+     * @var bool
+     */
+    public static $async = False;
     /**
      * Crest api version selection
      *  - Dosen't work atm
@@ -64,24 +105,127 @@ class OpenCrest
     private static $oauthLogin = "https://login.eveonline.com/";
 
     /**
-     * @return string
+     *
      */
-    public static function getOauthLogin()
+    static public function asyncRun()
     {
-        return self::$oauthLogin;
+        // We set up the arrays
+        self::$asyncResponsesPublic["success"] = [];
+        self::$asyncResponsesPublic["rejected"] = [];
+        self::$asyncResponsesOauth["success"] = [];
+        self::$asyncResponsesOauth["rejected"] = [];
+
+        // Create new GuzzleHttp Clients for Public and Oauth
+        $clientPublic = new Client(self::headers());
+        $clientOauth = new Client(self::headers(true));
+
+        // Public
+        $poolPublic = new Pool($clientPublic, self::$asyncRequestsPublic, [
+            "concurrency" => 20,
+            "fulfilled"   => function (Response $response, $index) {
+                $response = json_decode($response->getBody()->getContents(), true);
+
+                array_push(self::$asyncResponsesPublic["success"], self::$asyncEndpointsPublic[$index]->createObject($response));
+            },
+            "rejected"    => function ($reason, $index) {
+                array_push(self::$asyncResponsesPublic["rejected"], ["reason" => $reason, "index" => $index]);
+            }
+        ]);
+
+        self::$asyncPromisePublic = $poolPublic->promise();
+        self::$asyncPromisePublic->wait();
+
+        // Oauth
+        $poolOauth = new Pool($clientOauth, self::$asyncRequestsOauth, [
+            "concurrency" => 20,
+            "fulfilled"   => function (Response $response, $index) {
+                $response = json_decode($response->getBody()->getContents(), true);
+
+                array_push(self::$asyncResponsesOauth["success"], self::$asyncEndpointsOauth[$index]->createObject($response));
+            },
+            "rejected"    => function ($reason, $index) {
+                array_push(self::$asyncResponsesOauth["rejected"], ["reason" => $reason, "index" => $index]);
+            }
+        ]);
+
+        self::$asyncPromiseOauth = $poolOauth->promise();
+        self::$asyncPromiseOauth->wait();
     }
 
     /**
-     * Change oauthLogin url, only used for ease of access, not used by library
+     * We create Public and Auth headers for CREST
      *
-     * @param string $oauthLogin
+     * @param bool $oauth
+     * @return array
      */
-    public static function setOauthLogin($oauthLogin)
+    public static function headers($oauth = False)
     {
-        if ($oauthLogin == "sisi") {
-            $oauthLogin = " https://sisilogin.testeveonline.com/";
+        if ($oauth) {
+            $headers = [
+                'base_uri' => OpenCrest::getOauthBase(),
+                'headers'  => [
+                    'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
+                    'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
+                    'Authorization' => 'Bearer ' . OpenCrest::$token,
+                ]
+            ];
+        } else {
+            $headers = [
+                'base_uri' => OpenCrest::getPublicBase(),
+                'headers'  => [
+                    'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
+                    'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
+                ]
+            ];
         }
-        self::$oauthLogin = $oauthLogin;
+
+        return $headers;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getOauthBase()
+    {
+        return self::$oauthBase;
+    }
+
+    /**
+     * Change Oauth CREST base
+     *  - Shortcut "sisi" sets Oauth base to Singularity server
+     *
+     * @param string $oauthBase
+     */
+    public static function setOauthBase($oauthBase)
+    {
+        if ($oauthBase == "sisi") {
+            $oauthBase = "https://api-sisi.testeveonline.com/";
+        }
+        self::$oauthBase = $oauthBase;
+    }
+
+    /**
+     * @return string
+     */
+    public static function version()
+    {
+        return self::$version;
+    }
+
+    /**
+     * @return null|string
+     */
+    public static function getApiVersion()
+    {
+        return self::$apiVersion;
+    }
+
+    /**
+     * @param string $apiVersion
+     */
+    public static function setApiVersion($apiVersion)
+    {
+        self::$apiVersion = $apiVersion;
     }
 
     /**
@@ -109,39 +253,22 @@ class OpenCrest
     /**
      * @return string
      */
-    public static function getOauthBase()
+    public static function getOauthLogin()
     {
-        return self::$oauthBase;
+        return self::$oauthLogin;
     }
 
     /**
-     * Change Oauth CREST base
-     *  - Shortcut "sisi" sets Oauth base to Singularity server
+     * Change oauthLogin url, only used for ease of access, not used by library
      *
-     * @param string $oauthBase
+     * @param string $oauthLogin
      */
-    public static function setOauthBase($oauthBase)
+    public static function setOauthLogin($oauthLogin)
     {
-        if ($oauthBase == "sisi") {
-            $oauthBase = "https://api-sisi.testeveonline.com/";
+        if ($oauthLogin == "sisi") {
+            $oauthLogin = " https://sisilogin.testeveonline.com/";
         }
-        self::$oauthBase = $oauthBase;
-    }
-
-    /**
-     * @return null|string
-     */
-    public static function getApiVersion()
-    {
-        return self::$apiVersion;
-    }
-
-    /**
-     * @param string $apiVersion
-     */
-    public static function setApiVersion($apiVersion)
-    {
-        self::$apiVersion = $apiVersion;
+        self::$oauthLogin = $oauthLogin;
     }
 
     /**
@@ -305,14 +432,6 @@ class OpenCrest
     public static function Universe()
     {
         return new  UniverseEndpoint();
-    }
-
-    /**
-     * @return string
-     */
-    public static function version()
-    {
-        return self::$version;
     }
 
     /**

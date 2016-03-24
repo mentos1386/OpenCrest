@@ -3,6 +3,7 @@
 namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
+use GuzzleHttp\Psr7\Request as Request;
 use OpenCrest\Exceptions\apiException;
 use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\OAuthException;
@@ -27,7 +28,7 @@ abstract class Endpoint implements EndpointInterface
     /**
      * @var integer
      */
-    public $relationId;
+    protected $relationId;
     /**
      * @var bool
      */
@@ -49,47 +50,11 @@ abstract class Endpoint implements EndpointInterface
      */
     public function __construct($relationId = null)
     {
-        $this->token = OpenCrest::getToken();
-
-        // If OAuth required but token not provided, throw OAuthException
-        if (empty($this->token) and $this->oauth) {
-            throw new OAuthException;
-        }
-
-        // Create new GuzzleHttp Client
-        $this->client = new GuzzleHttp\Client($this->headers());
+        $this->client = new GuzzleHttp\Client(OpenCrest::headers($this->oauth));
 
         $this->relationId = $relationId;
     }
 
-    /**
-     * We create Public and Auth headers for CREST
-     *
-     * @return array
-     */
-    private function headers()
-    {
-        if ($this->oauth) {
-            $headers = [
-                'base_uri' => OpenCrest::getOauthBase(),
-                'headers'  => [
-                    'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
-                    'Authorization' => 'Bearer ' . $this->token,
-                ]
-            ];
-        } else {
-            $headers = [
-                'base_uri' => OpenCrest::getPublicBase(),
-                'headers'  => [
-                    'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
-                ]
-            ];
-        }
-
-        return $headers;
-    }
 
     /**
      * @param Object       $body
@@ -175,15 +140,45 @@ abstract class Endpoint implements EndpointInterface
         if ($id) {
             $instance = clone $this;
             $instance->uri = $instance->uri . $id . "/";
-            $content = $instance->httpGet($instance->uri);
 
-            return $instance->createObject($content);
+            if (OpenCrest::$async) {
+                $this->httpAsyncGet($instance->uri, $options);
+
+            } else {
+                $content = $this->httpGet($instance->uri, $options);
+
+                return $this->createObject($content);
+            }
+
+        } else {
+            // Else we just create GET request on [uri]
+            $uri = $this->uri;
+
+            if (OpenCrest::$async) {
+                $this->httpAsyncGet($uri, $options);
+            } else {
+                $content = $this->httpGet($uri, $options);
+
+                return $this->createObject($content);
+            }
         }
-        // Else we just create GET request on [uri]
-        $uri = $this->uri;
-        $content = $this->httpGet($uri, $options);
 
-        return $this->createObject($content);
+    }
+
+    /**
+     * Make HTTP GET Async Request
+     *
+     * @param       $uri
+     * @param array $options
+     * @return mixed
+     * @throws apiException
+     */
+    private function httpAsyncGet($uri, $options = [])
+    {
+        $request = new Request("get", $uri, $options);
+
+        array_push(OpenCrest::$asyncRequestsPublic, $request);
+        array_push(OpenCrest::$asyncEndpointsPublic, $this);
     }
 
     /**
