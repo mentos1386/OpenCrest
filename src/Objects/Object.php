@@ -3,7 +3,7 @@
 namespace OpenCrest\Objects;
 
 use OpenCrest\Endpoints\Endpoint;
-use OpenCrest\Exceptions\RouteNotFoundException;
+use OpenCrest\Exceptions\apiException;
 use OpenCrest\Interfaces\ObjectInterface;
 
 abstract class Object implements ObjectInterface
@@ -20,6 +20,13 @@ abstract class Object implements ObjectInterface
      * @var Endpoint
      */
     protected $endpoint;
+    /**
+     * Object Endpoint that is used for Listed Objects
+     *  Used for regions->sell/buyOrders where you get list, and then access specific order from orders()->get(id)
+     *
+     * @var Endpoint
+     */
+    protected $listEndpoint = null;
     /**
      * Object values
      *
@@ -152,20 +159,21 @@ abstract class Object implements ObjectInterface
     /**
      * This is used to get relationship object to make get() request
      *
-     * @param int $id
+     * @param int   $id
+     * @param array $options
      * @return Object
-     * @throws RouteNotFoundException
+     * @throws apiException
      */
-    public function get($id = null)
+    public function get($id = null, $options = [])
     {
         if ($this instanceof ListObject) {
-            throw new RouteNotFoundException("Can't make GET request on ListObject");
+            throw new apiException("Can't make GET request on ListObject");
         }
         if ($this->id) {
             $id = $this->id;
         }
 
-        return $this->endpoint->get($id);
+        return $this->endpoint->get($id, $options);
     }
 
     /**

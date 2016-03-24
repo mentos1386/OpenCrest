@@ -10,6 +10,7 @@ use OpenCrest\Endpoints\ConstellationsEndpoint;
 use OpenCrest\Endpoints\CorporationsEndpoint;
 use OpenCrest\Endpoints\CrestEndpoint;
 use OpenCrest\Endpoints\DogmaEndpoint;
+use OpenCrest\Endpoints\MarketEndpoint;
 use OpenCrest\Endpoints\PlanetsEndpoint;
 use OpenCrest\Endpoints\RacesEndpoint;
 use OpenCrest\Endpoints\RegionsEndpoint;
@@ -17,6 +18,7 @@ use OpenCrest\Endpoints\StandingsEndpoint;
 use OpenCrest\Endpoints\SystemsEndpoint;
 use OpenCrest\Endpoints\TournamentsEndpoint;
 use OpenCrest\Endpoints\TypesEndpoint;
+use OpenCrest\Endpoints\UniverseEndpoint;
 use OpenCrest\Endpoints\WarsEndpoint;
 use OpenCrest\Objects\CrestObject;
 
@@ -287,6 +289,22 @@ class OpenCrest
     public static function Dogma()
     {
         return new  DogmaEndpoint();
+    }
+
+    /**
+     * @return MarketEndpoint
+     */
+    public static function Market()
+    {
+        return new  MarketEndpoint();
+    }
+
+    /**
+     * @return UniverseEndpoint
+     */
+    public static function Universe()
+    {
+        return new  UniverseEndpoint();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenCrest\Endpoints\Market;
+namespace OpenCrest\Endpoints\Universe;
 
 class Endpoint extends \OpenCrest\Endpoints\Endpoint
 {
@@ -13,6 +13,6 @@ class Endpoint extends \OpenCrest\Endpoints\Endpoint
     {
         parent::__construct($relationId);
 
-        $this->uri = "market/" . $this->relationId . "/" . $this->uri;
+        $this->uri = "universe/" . $this->uri;
     }
 }

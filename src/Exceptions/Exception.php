@@ -16,7 +16,7 @@ class Exception extends \Exception
      * @param int            $code
      * @param Exception|null $previous
      */
-    public function __construct($message = "", $code = 0, Exception $previous = null)
+    public function __construct($message = "", $code = 405, Exception $previous = null)
     {
         $this->response = $message;
         $this->message = $this->errorMessage();

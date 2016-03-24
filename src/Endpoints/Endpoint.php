@@ -3,11 +3,9 @@
 namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
-use OpenCrest\Exceptions\AuthenticationException;
+use OpenCrest\Exceptions\apiException;
 use OpenCrest\Exceptions\Exception;
-use OpenCrest\Exceptions\notThirdPartyEnabledException;
 use OpenCrest\Exceptions\OAuthException;
-use OpenCrest\Exceptions\RouteNotFoundException;
 use OpenCrest\Interfaces\EndpointInterface;
 use OpenCrest\Objects\ListObject;
 use OpenCrest\OpenCrest;
@@ -29,7 +27,7 @@ abstract class Endpoint implements EndpointInterface
     /**
      * @var integer
      */
-    protected $relationId;
+    public $relationId;
     /**
      * @var bool
      */
@@ -138,9 +136,7 @@ abstract class Endpoint implements EndpointInterface
      * @param       $uri
      * @param array $options
      * @return mixed
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
+     * @throws apiException
      */
     private function httpPost($uri, $options = [])
     {
@@ -155,27 +151,14 @@ abstract class Endpoint implements EndpointInterface
 
     /**
      * @param GuzzleHttp\Exception\RequestException $e
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
+     * @throws apiException
      */
     private function ExceptionHandler(GuzzleHttp\Exception\RequestException $e)
     {
-        // GuzzleHttp will make messages longer than 120 characters truncated, which breaks our json.
-        if (strlen($e->getResponseBodySummary($e->getResponse())) < 135) {
-            $message = json_decode($e->getResponseBodySummary($e->getResponse()))->message . " URI: " . $this->uri;
-        } else {
-            // So we just return all the gibberish
-            $message = json_decode($e->getResponseBodySummary($e->getResponse()));
-        }
-        switch ($e->getCode()) {
-            case 401:
-                throw new AuthenticationException($message);
-            case 403:
-                throw new notThirdPartyEnabledException($message);
-            case 404:
-                throw new RouteNotFoundException($message);
-        }
+        $json = $e->getResponse()->getBody()->getContents();
+        $message = $json . ", URI: " . $this->uri;
+
+        throw new apiException($message);
     }
 
     /**
@@ -209,9 +192,7 @@ abstract class Endpoint implements EndpointInterface
      * @param       $uri
      * @param array $options
      * @return mixed
-     * @throws AuthenticationException
-     * @throws RouteNotFoundException
-     * @throws notThirdPartyEnabledException
+     * @throws apiException
      */
     private function httpGet($uri, $options = [])
     {

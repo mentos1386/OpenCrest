@@ -3,7 +3,7 @@
 namespace OpenCrest\Endpoints\Market\Orders;
 
 use OpenCrest\Endpoints\Market\Endpoint;
-use OpenCrest\Objects\Market\Orders\SellObject;
+use OpenCrest\Objects\Market\OrdersObject;
 
 class SellEndpoint extends Endpoint
 {
@@ -14,5 +14,5 @@ class SellEndpoint extends Endpoint
     /**
      * @var string
      */
-    public $object = SellObject::class;
+    public $object = OrdersObject::class;
 }

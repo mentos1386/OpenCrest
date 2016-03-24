@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenCrest\Objects\Market\Orders;
+namespace OpenCrest\Objects\Universe;
 
 use OpenCrest\Objects\Object;
 
-class BuyObject extends Object
+class LocationsObject extends Object
 {
     protected function setRelations()
     {

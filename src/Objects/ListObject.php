@@ -70,7 +70,14 @@ class ListObject extends Object implements \ArrayAccess
             // Sometimes (like in type->dogma id isnt provided, as items are relations)
             $_item->id = isset($item['id']) ? $item['id'] : null;
 
-            $_item->setEndpoint($this->endpoint);
+            // In rare cases, you can get object listing thro one endpoint, but get specific object thro another
+            // This is the case for regions->buy/sellOrders where you get list of orders, but you access those orders
+            if ($object->listEndpoint) {
+                $_item->setEndpoint(new $object->listEndpoint($this->endpoint->relationId));
+            } else {
+                $_item->setEndpoint($this->endpoint);
+            }
+
             array_push($this->values['items'], $_item);
         }
 
