@@ -2,10 +2,6 @@
 
 namespace OpenCrest;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Psr7\Response;
 use OpenCrest\Endpoints\AccountsEndpoint;
 use OpenCrest\Endpoints\AlliancesEndpoint;
 use OpenCrest\Endpoints\BloodLinesEndpoint;
@@ -29,39 +25,6 @@ use OpenCrest\Objects\CrestObject;
 class OpenCrest
 {
     /**
-     * @var array
-     */
-    public static $asyncRequestsPublic = [];
-    /**
-     * @var array
-     */
-    public static $asyncEndpointsPublic = [];
-    /**
-     * @var array
-     */
-    public static $asyncResponsesPublic = [];
-    /**
-     * @var array
-     */
-    public static $asyncRequestsOauth = [];
-    /**
-     * @var array
-     */
-    public static $asyncEndpointsOauth = [];
-    /**
-     * @var array
-     */
-    public static $asyncResponsesOauth = [];
-
-    /**
-     * @var Promise
-     */
-    public static $asyncPromisePublic;
-    /**
-     * @var Promise
-     */
-    public static $asyncPromiseOauth;
-    /**
      * @var bool
      */
     public static $async = False;
@@ -71,13 +34,13 @@ class OpenCrest
      *
      * @var null|string
      */
-    protected static $apiVersion = "v3";
+    private static $apiVersion = "v3";
     /**
      * OpenCrest version
      *
      * @var string
      */
-    protected static $version = "2.0.2";
+    private static $version = "2.0.2";
     /**
      * Oauth Token
      *
@@ -105,55 +68,7 @@ class OpenCrest
     private static $oauthLogin = "https://login.eveonline.com/";
 
     /**
-     *
-     */
-    static public function asyncRun()
-    {
-        // We set up the arrays
-        self::$asyncResponsesPublic["success"] = [];
-        self::$asyncResponsesPublic["rejected"] = [];
-        self::$asyncResponsesOauth["success"] = [];
-        self::$asyncResponsesOauth["rejected"] = [];
-
-        // Create new GuzzleHttp Clients for Public and Oauth
-        $clientPublic = new Client(self::headers());
-        $clientOauth = new Client(self::headers(true));
-
-        // Public
-        $poolPublic = new Pool($clientPublic, self::$asyncRequestsPublic, [
-            "concurrency" => 20,
-            "fulfilled"   => function (Response $response, $index) {
-                $response = json_decode($response->getBody()->getContents(), true);
-
-                array_push(self::$asyncResponsesPublic["success"], self::$asyncEndpointsPublic[$index]->createObject($response));
-            },
-            "rejected"    => function ($reason, $index) {
-                array_push(self::$asyncResponsesPublic["rejected"], ["reason" => $reason, "index" => $index]);
-            }
-        ]);
-
-        self::$asyncPromisePublic = $poolPublic->promise();
-        self::$asyncPromisePublic->wait();
-
-        // Oauth
-        $poolOauth = new Pool($clientOauth, self::$asyncRequestsOauth, [
-            "concurrency" => 20,
-            "fulfilled"   => function (Response $response, $index) {
-                $response = json_decode($response->getBody()->getContents(), true);
-
-                array_push(self::$asyncResponsesOauth["success"], self::$asyncEndpointsOauth[$index]->createObject($response));
-            },
-            "rejected"    => function ($reason, $index) {
-                array_push(self::$asyncResponsesOauth["rejected"], ["reason" => $reason, "index" => $index]);
-            }
-        ]);
-
-        self::$asyncPromiseOauth = $poolOauth->promise();
-        self::$asyncPromiseOauth->wait();
-    }
-
-    /**
-     * We create Public and Auth headers for CREST
+     * Create Public and Auth headers for CREST
      *
      * @param bool $oauth
      * @return array

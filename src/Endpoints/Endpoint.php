@@ -4,6 +4,7 @@ namespace OpenCrest\Endpoints;
 
 use GuzzleHttp;
 use GuzzleHttp\Psr7\Request as Request;
+use OpenCrest\Async\Async;
 use OpenCrest\Exceptions\apiException;
 use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\OAuthException;
@@ -154,6 +155,7 @@ abstract class Endpoint implements EndpointInterface
             // Else we just create GET request on [uri]
             $uri = $this->uri;
 
+            // If Async is enabled, we use httpAsyncGet function to make requests
             if (OpenCrest::$async) {
                 $this->httpAsyncGet($uri, $options);
             } else {
@@ -170,15 +172,14 @@ abstract class Endpoint implements EndpointInterface
      *
      * @param       $uri
      * @param array $options
-     * @return mixed
-     * @throws apiException
+     * @return void
      */
     private function httpAsyncGet($uri, $options = [])
     {
         $request = new Request("get", $uri, $options);
 
-        array_push(OpenCrest::$asyncRequestsPublic, $request);
-        array_push(OpenCrest::$asyncEndpointsPublic, $this);
+        Async::addRequest($this->oauth, $request);
+        Async::addEndpoint($this->oauth, $this);
     }
 
     /**
