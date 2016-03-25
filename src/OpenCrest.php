@@ -25,6 +25,8 @@ use OpenCrest\Objects\CrestObject;
 class OpenCrest
 {
     /**
+     * Determines if requests should be made Asynchronously
+     *
      * @var bool
      */
     public static $async = False;
@@ -40,7 +42,7 @@ class OpenCrest
      *
      * @var string
      */
-    private static $version = "2.0.2";
+    private static $version = "3.0.0-beta";
     /**
      * Oauth Token
      *

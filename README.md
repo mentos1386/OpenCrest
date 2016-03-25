@@ -4,8 +4,7 @@
 EVE Online CREST PHP Library
 
 
-Open Source PHP Library for using EVE Online CREST API, Inspired by Laravel Elequent
-
+Open Source PHP Library for using EVE Online CREST API
 
 Shouldn't be used for production just yet, as CREST API lacks data. It's better to use XML API for now.
 

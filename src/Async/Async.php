@@ -12,14 +12,17 @@ use OpenCrest\OpenCrest;
 class Async
 {
     /**
+     * Contains all requests
+     *
      * @var array
      */
     private static $requests = [
         "public" => [],
         "oauth"  => [],
     ];
-
     /**
+     * Contains endpoints of requests (Used to create objects)
+     *
      * @var array
      */
     private static $endpoints = [
@@ -34,6 +37,8 @@ class Async
         "oauth"  => null,
     ];
     /**
+     * Contains public and oauth responses (successes and rejections/errors)
+     *
      * @var array
      */
     private static $responses = [
@@ -57,10 +62,11 @@ class Async
     private static $clientOauth;
 
     /**
-     *
+     * Make all the requests and push responses (as objects if success) to self::responses["public" or "oauth"]
      */
     public static function run()
     {
+        // Create Public and Oauth Clients
         self::$clientPublic = new Client(OpenCrest::headers());
         self::$clientOauth = new Client(OpenCrest::headers(true));
 
