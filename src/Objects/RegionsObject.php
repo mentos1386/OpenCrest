@@ -2,19 +2,17 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Endpoints\ConstellationsEndpoint;
-use OpenCrest\Endpoints\Market\Orders\BuyEndpoint;
-use OpenCrest\Endpoints\Market\Orders\SellEndpoint;
+use OpenCrest\Objects\Market\Orders\BuyObject;
+use OpenCrest\Objects\Market\Orders\SellObject;
 
 class RegionsObject extends Object
 {
-    protected function setRelations()
-    {
-        $this->relations = [
-            "constellations"   => ConstellationsEndpoint::class,
-            "marketBuyOrders"  => BuyEndpoint::class,
-            "marketSellOrders" => SellEndpoint::class,
-        ];
-    }
+    protected $uri = "regions/";
+
+    protected $relations = [
+        "constellations"   => ConstellationsObject::class,
+        "marketBuyOrders"  => BuyObject::class,
+        "marketSellOrders" => SellObject::class,
+    ];
 
 }

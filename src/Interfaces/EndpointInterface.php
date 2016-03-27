@@ -2,7 +2,6 @@
 
 namespace OpenCrest\Interfaces;
 
-use OpenCrest\Objects\ListObject;
 
 interface EndpointInterface
 {
@@ -11,7 +10,7 @@ interface EndpointInterface
      *
      * @param int   $id
      * @param array $options
-     * @return Object
+     * @return ObjectInterface
      */
     function get($id = null, $options = []);
 
@@ -21,7 +20,7 @@ interface EndpointInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return Object
+     * @return ObjectInterface
      */
     function post($body, $id = null, $options = []);
 
@@ -31,7 +30,7 @@ interface EndpointInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return Object
+     * @return ObjectInterface
      */
     function put($body, $id = null, $options = []);
 
@@ -40,24 +39,30 @@ interface EndpointInterface
      *
      * @param integer|null $id
      * @param array        $options
-     * @return Object
+     * @return ObjectInterface
      */
     function delete($id = null, $options = []);
 
     /**
      * Create GET request on specific page
      *
-     * @param int $id
-     * @return ListObject
+     * @param int $page
+     * @return ObjectInterface
      */
-    function page($id);
+    function page($page);
 
     /**
-     * Create Object
+     * Goes to next page
      *
-     * @param array $item
-     * @return Object
+     * @return ObjectInterface
      */
-    function createObject($item);
+    function nextPage();
+
+    /**
+     * Goes to previous page
+     *
+     * @return ObjectInterface
+     */
+    function previousPage();
 
 }

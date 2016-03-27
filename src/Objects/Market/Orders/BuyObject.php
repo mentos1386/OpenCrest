@@ -1,13 +1,16 @@
 <?php
 
-namespace OpenCrest\Objects\Market;
+namespace OpenCrest\Objects\Market\Orders;
 
+use OpenCrest\Objects\Market\Object;
 use OpenCrest\Objects\TypesObject;
 use OpenCrest\Objects\Universe\LocationsObject;
 
-class OrdersObject extends Object
+class BuyObject extends Object
 {
-    protected $uri = "orders/";
+    protected $uri = "orders/buy/";
+
+    protected $listUri = "orders/";
 
     protected $relations = [
         "location" => LocationsObject::class,

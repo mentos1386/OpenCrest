@@ -4,8 +4,5 @@ namespace OpenCrest\Objects;
 
 class StandingsObject extends Object
 {
-    protected function setRelations()
-    {
-        // No relations
-    }
+    protected $uri = "standings/";
 }

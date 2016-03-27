@@ -2,60 +2,98 @@
 
 namespace OpenCrest\Interfaces;
 
-use OpenCrest\Endpoints\Endpoint;
-use OpenCrest\Exceptions\RouteNotFoundException;
-
 interface ObjectInterface
 {
-    /**
-     * This is used to get relationship object to make get() request
-     *
-     * @param int $id
-     * @return Object
-     * @throws RouteNotFoundException
-     */
-    function get($id = null);
 
     /**
-     * This is used to get relationship object to make post(id) request
+     * ObjectInterface constructor.
      *
-     * @param array|Object $body
-     * @param int          $id
-     * @param array        $options
-     * @return Object
+     * @param int $relationId
      */
-    function post($body = [], $id = null, $options = []);
+    function __construct(int $relationId);
 
     /**
-     * Used for gating values from Object
+     * Used for gating attributes from Object
+     *  - _get() should be used to get values
      *
-     * @param $name
-     * @return array
+     * @param string $name
+     * @return array|string|int|ObjectInterface
      */
-    function getAttribute($name);
+    function getAttribute(string $name);
+
+    /**
+     * @param string|null $name
+     * @return ObjectInterface|array
+     */
+    function getRelations(string $name = NULL);
+
+    /**
+     * Used for setting attributes to Object
+     *
+     * @param string                           $name
+     * @param array|string|int|ObjectInterface $value
+     */
+    function setAttribute(string $name, $value);
+
+    /**
+     * Used for setting values array to Object
+     *
+     * @param array $values
+     */
+    function setValues(array $values);
 
     /**
      * Used for setting values to Object
-     * Used when manipulating with object before creating POST/PUT request
      *
-     * @param $name
-     * @param $value
+     * @param string                           $name
+     * @param array|string|int|ObjectInterface $value
      */
-    function setAttribute($name, $value);
+    function setValue(string $name, $value);
 
     /**
-     * Make Object, create relationships or add values to Object
+     * Create GET request on specific resource or root URI
      *
-     * @param array $item
-     * @return Object $this
+     * @param int   $id
+     * @param array $options
+     * @return ObjectInterface
      */
-    function make($item);
+    function get($id = NULL, $options = []);
 
     /**
-     * Set Endpoint to Object
+     * Create POST request on specific resource or root URI
      *
-     * @param Endpoint $endpoint
+     * @param Object       $body
+     * @param integer|null $id
+     * @param array        $options
+     * @return ObjectInterface
      */
-    function setEndpoint($endpoint);
+    function post($body, $id = NULL, $options = []);
 
+    /**
+     * Create PUT request on specific resource or root URI
+     *
+     * @param Object       $body
+     * @param integer|null $id
+     * @param array        $options
+     * @return ObjectInterface
+     */
+    function put($body, $id = NULL, $options = []);
+
+    /**
+     * Create DELETE request on specific resource or root URI
+     *
+     * @param integer|null $id
+     * @param array        $options
+     * @return ObjectInterface
+     */
+    function delete($id = NULL, $options = []);
+
+    /**
+     * Create GET request on specific page
+     *
+     * @param int   $page
+     * @param array $options
+     * @return ObjectInterface
+     */
+    function page($page, $options = []);
 }

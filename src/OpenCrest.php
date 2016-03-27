@@ -2,39 +2,40 @@
 
 namespace OpenCrest;
 
-use OpenCrest\Endpoints\AccountsEndpoint;
-use OpenCrest\Endpoints\AlliancesEndpoint;
-use OpenCrest\Endpoints\BloodLinesEndpoint;
-use OpenCrest\Endpoints\CharactersEndpoint;
-use OpenCrest\Endpoints\ConstellationsEndpoint;
-use OpenCrest\Endpoints\CorporationsEndpoint;
-use OpenCrest\Endpoints\CrestEndpoint;
-use OpenCrest\Endpoints\DogmaEndpoint;
-use OpenCrest\Endpoints\MarketEndpoint;
-use OpenCrest\Endpoints\PlanetsEndpoint;
-use OpenCrest\Endpoints\RacesEndpoint;
-use OpenCrest\Endpoints\RegionsEndpoint;
-use OpenCrest\Endpoints\StandingsEndpoint;
-use OpenCrest\Endpoints\SystemsEndpoint;
-use OpenCrest\Endpoints\TournamentsEndpoint;
-use OpenCrest\Endpoints\TypesEndpoint;
-use OpenCrest\Endpoints\UniverseEndpoint;
-use OpenCrest\Endpoints\WarsEndpoint;
+use OpenCrest\Interfaces\EndpointInterface;
+use OpenCrest\Interfaces\FactoryInterface;
+use OpenCrest\Interfaces\ObjectInterface;
+use OpenCrest\Objects\AccountsObject;
+use OpenCrest\Objects\AlliancesObject;
+use OpenCrest\Objects\BloodLinesObject;
+use OpenCrest\Objects\CharactersObject;
+use OpenCrest\Objects\ConstellationsObject;
+use OpenCrest\Objects\CorporationsObject;
 use OpenCrest\Objects\CrestObject;
+use OpenCrest\Objects\DogmaObject;
+use OpenCrest\Objects\MarketObject;
+use OpenCrest\Objects\PlanetsObject;
+use OpenCrest\Objects\RacesObject;
+use OpenCrest\Objects\RegionsObject;
+use OpenCrest\Objects\StandingsObject;
+use OpenCrest\Objects\SystemsObject;
+use OpenCrest\Objects\TournamentsObject;
+use OpenCrest\Objects\TypesObject;
+use OpenCrest\Objects\UniverseObject;
+use OpenCrest\Objects\WarsObject;
 
 class OpenCrest
 {
     /**
-     * Determines if requests should be made Asynchronously
+     * Determines if requests should be made Asynchronously (Forced to use OpenCrest provided Endpoint)
      *
      * @var bool
      */
-    public static $async = False;
+    public static $async = FALSE;
     /**
      * Crest api version selection
-     *  - Dosen't work atm
      *
-     * @var null|string
+     * @var string
      */
     private static $apiVersion = "v3";
     /**
@@ -68,36 +69,52 @@ class OpenCrest
      * @var string
      */
     private static $oauthLogin = "https://login.eveonline.com/";
+    /**
+     * Endpoint used for getting data
+     *
+     * @var EndpointInterface
+     */
+    private static $endpoint = Endpoint::class;
+    /**
+     * Factory used for processing data
+     *
+     * @var FactoryInterface
+     */
+    private static $factory = Factory::class;
 
     /**
-     * Create Public and Auth headers for CREST
-     *
-     * @param bool $oauth
-     * @return array
+     * @return FactoryInterface
      */
-    public static function headers($oauth = False)
+    public static function getFactory()
     {
-        if ($oauth) {
-            $headers = [
-                'base_uri' => OpenCrest::getOauthBase(),
-                'headers'  => [
-                    'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
-                    'Authorization' => 'Bearer ' . OpenCrest::$token,
-                ]
-            ];
-        } else {
-            $headers = [
-                'base_uri' => OpenCrest::getPublicBase(),
-                'headers'  => [
-                    'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
-                    'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
-                ]
-            ];
-        }
-
-        return $headers;
+        return new self::$factory;
     }
+
+    /**
+     * @param FactoryInterface $factory
+     */
+    public static function setFactory(FactoryInterface $factory)
+    {
+        self::$factory = $factory;
+    }
+
+    /**
+     * @param ObjectInterface $object
+     * @return EndpointInterface
+     */
+    public static function getEndpoint(ObjectInterface $object)
+    {
+        return new self::$endpoint($object);
+    }
+
+    /**
+     * @param EndpointInterface $endpoint
+     */
+    public static function setEndpoint(EndpointInterface $endpoint)
+    {
+        self::$endpoint = $endpoint;
+    }
+
 
     /**
      * @return string
@@ -197,7 +214,7 @@ class OpenCrest
     }
 
     /**
-     * Set OAUTH token, used for Authentication when connecting to endpoint on OAuth base
+     * Set OAUTH token, used for Authentication when connecting to Object on OAuth base
      *
      * @param string $token
      * @return mixed
@@ -208,147 +225,147 @@ class OpenCrest
     }
 
     /**
-     * @return AlliancesEndpoint
+     * @return AlliancesObject
      */
     public static function Alliances()
     {
-        return new AlliancesEndpoint();
+        return new AlliancesObject();
     }
 
     /**
-     * @return CharactersEndpoint
+     * @return CharactersObject
      */
     public static function Characters()
     {
-        return new CharactersEndpoint();
+        return new CharactersObject();
     }
 
     /**
-     * @return CorporationsEndpoint
+     * @return CorporationsObject
      */
     public static function Corporations()
     {
-        return new CorporationsEndpoint();
+        return new CorporationsObject();
     }
 
     /**
-     * @return TypesEndpoint
+     * @return TypesObject
      */
     public static function Types()
     {
-        return new TypesEndpoint();
+        return new TypesObject();
     }
 
     /**
-     * @return RacesEndpoint
+     * @return RacesObject
      */
     public static function Races()
     {
-        return new RacesEndpoint();
+        return new RacesObject();
     }
 
     /**
-     * @return RegionsEndpoint
+     * @return RegionsObject
      */
     public static function Regions()
     {
-        return new RegionsEndpoint();
+        return new RegionsObject();
     }
 
     /**
-     * @return ConstellationsEndpoint
+     * @return ConstellationsObject
      */
     public static function Constellations()
     {
-        return new ConstellationsEndpoint();
+        return new ConstellationsObject();
     }
 
     /**
-     * @return SystemsEndpoint
+     * @return SystemsObject
      */
     public static function Systems()
     {
-        return new SystemsEndpoint();
+        return new SystemsObject();
     }
 
     /**
-     * @return PlanetsEndpoint
+     * @return PlanetsObject
      */
     public static function Planets()
     {
-        return new PlanetsEndpoint();
+        return new PlanetsObject();
     }
 
     /**
-     * @return CrestEndpoint
+     * @return CrestObject
      */
     public static function Crest()
     {
-        return new CrestEndpoint();
+        return new CrestObject();
     }
 
     /**
-     * @return WarsEndpoint
+     * @return WarsObject
      */
     public static function Wars()
     {
-        return new WarsEndpoint();
+        return new WarsObject();
     }
 
     /**
-     * @return BloodLinesEndpoint
+     * @return BloodLinesObject
      */
     public static function Bloodlines()
     {
-        return new BloodLinesEndpoint();
+        return new BloodLinesObject();
     }
 
     /**
-     * @return StandingsEndpoint
+     * @return StandingsObject
      */
     public static function Standings()
     {
-        return new StandingsEndpoint();
+        return new StandingsObject();
     }
 
     /**
-     * @return AccountsEndpoint
+     * @return AccountsObject
      */
     public static function Accounts()
     {
-        return new AccountsEndpoint();
+        return new AccountsObject();
     }
 
     /**
-     * @return TournamentsEndpoint
+     * @return TournamentsObject
      */
     public static function Tournaments()
     {
-        return new TournamentsEndpoint();
+        return new TournamentsObject();
     }
 
     /**
-     * @return DogmaEndpoint
+     * @return DogmaObject
      */
     public static function Dogma()
     {
-        return new  DogmaEndpoint();
+        return new  DogmaObject();
     }
 
     /**
-     * @return MarketEndpoint
+     * @return MarketObject
      */
     public static function Market()
     {
-        return new  MarketEndpoint();
+        return new  MarketObject();
     }
 
     /**
-     * @return UniverseEndpoint
+     * @return UniverseObject
      */
     public static function Universe()
     {
-        return new  UniverseEndpoint();
+        return new  UniverseObject();
     }
 
     /**
@@ -356,6 +373,6 @@ class OpenCrest
      */
     public static function status()
     {
-        return (new CrestEndpoint())->get();
+        return (new CrestObject())->get();
     }
 }

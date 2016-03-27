@@ -2,12 +2,9 @@
 
 namespace OpenCrest\Objects\Characters;
 
-use OpenCrest\Objects\Object;
-
 class NotificationsObject extends Object
 {
-    protected function setRelations()
-    {
-        // No relations
-    }
+    protected $uri = "notifications/";
+
+    protected $oauth = TRUE;
 }

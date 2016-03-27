@@ -2,31 +2,48 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Endpoints\Endpoint;
-use OpenCrest\Exceptions\apiException;
 use OpenCrest\Interfaces\ObjectInterface;
+use OpenCrest\OpenCrest;
 
-abstract class Object implements ObjectInterface
+class Object implements ObjectInterface
 {
     /**
-     * Time in seconds, for how long value doesn't update on endpoint
+     * Time in seconds, for how long value doesn't update on CREST
      *
      * @var string
      */
-    public $cache;
+    protected $cache;
     /**
-     * Object Endpoint
+     * ID of resource
      *
-     * @var Endpoint
+     * @var int|null
      */
-    protected $endpoint;
+    protected $id;
     /**
-     * Object Endpoint that is used for Listed Objects
-     *  Used for regions->sell/buyOrders where you get list, and then access specific order from orders()->get(id)
+     * Relation ID of resource (like character id)
      *
-     * @var Endpoint
+     * @var int|null
      */
-    protected $listEndpoint = null;
+    protected $relationId;
+    /**
+     * URI Of resource
+     *
+     * @var string
+     */
+    protected $uri;
+    /**
+     * URI Of list resource (sometimes this one is different than uri for only one item)
+     *  - in case of market/orders/buy or market/orders/sell
+     *
+     * @var string
+     */
+    protected $listUri;
+    /**
+     * Is OAUTH required for this resource
+     *
+     * @var bool
+     */
+    protected $oauth = FALSE;
     /**
      * Object values
      *
@@ -39,30 +56,16 @@ abstract class Object implements ObjectInterface
      * @var array
      */
     protected $relations = [];
-    /**
-     * ID of resource
-     *
-     * @var int|null
-     */
-    protected $id;
 
     /**
      * Object constructor
      *
-     * @param integer $id
+     * @param int $relationId
      */
-    public function __construct($id = null)
+    public function __construct(int $relationId = NULL)
     {
-        $this->id = $id;
-        $this->setRelations();
+        $this->relationId = $relationId;
     }
-
-    /**
-     * Used for child objects to set relationships
-     *
-     * @return mixed
-     */
-    abstract protected function setRelations();
 
     /**
      * Used for gating values from Object
@@ -72,77 +75,29 @@ abstract class Object implements ObjectInterface
      */
     public function __get($name)
     {
-        if (array_key_exists($name, $this->values)) {
-            return $this->getAttribute($name);
-        }
-
-        return $this->$name;
-    }
-
-    /**
-     * Used for gating values from Object
-     *
-     * @param $name
-     * @return array
-     */
-    public function getAttribute($name)
-    {
         return $this->values[$name];
     }
 
     /**
-     * Used for setting values to Object
-     * Used when manipulating with object before creating POST/PUT request
+     * Used for gating attribute from Object
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @return array|string|int|ObjectInterface
      */
-    public function setAttribute($name, $value)
+    public function getAttribute(string $name)
     {
-        $this->values[$name] = $value;
+        return $this->$name;
     }
 
     /**
-     * Make Object, create relationships or add values to Object
+     * Used for setting attributes to Object
      *
-     * @param array $item
-     * @return Object $this
+     * @param string                           $name
+     * @param array|string|int|ObjectInterface $value
      */
-    public function make($item)
+    public function setAttribute(string $name, $value)
     {
-        if ($item) {
-            foreach ($item as $key => $value) {
-                if (array_key_exists($key, $this->relations)) {
-                    $endpoint = new $this->relations[$key]($this->id);
-
-                    // ˇˇ
-                    if (is_string($value)) {
-                        // TODO: Sometimes relationship is only a string with href, not array like usually.
-                        // TODO: When crest behaves as it should, remove this!
-                        // Seen in GET crest.../wars/21/  value "killmails"
-                        $this->values[$key] = $value;
-                        continue;
-                    }
-                    // ^^
-
-                    $this->values[$key] = $endpoint->createObject($value);
-                } else {
-                    $this->values[$key] = $value;
-                }
-            }
-        }
-
-        return clone $this;
-    }
-
-    /**
-     * Set Endpoint to Object
-     *
-     * @param Endpoint $endpoint
-     */
-    public function setEndpoint($endpoint)
-    {
-        $this->endpoint = $endpoint;
+        $this->$name = $value;
     }
 
     /**
@@ -157,40 +112,88 @@ abstract class Object implements ObjectInterface
     }
 
     /**
-     * This is used to get relationship object to make get() request
-     *
-     * @param int   $id
-     * @param array $options
-     * @return Object
-     * @throws apiException
+     * @param int|null $id
+     * @param array    $options
+     * @return mixed
      */
-    public function get($id = null, $options = [])
+    function get($id = NULL, $options = [])
     {
-        if ($this instanceof ListObject) {
-            throw new apiException("Can't make GET request on ListObject");
-        }
-        if ($this->id) {
-            $id = $this->id;
-        }
+        $endpoint = OpenCrest::getEndpoint($this);
 
-        return $this->endpoint->get($id, $options);
+        return $endpoint->get($id, $options);
     }
 
     /**
-     * This is used to get relationship object to make post(id) request
-     *
-     * @param array|Object $body
-     * @param int          $id
-     * @param array        $options
-     * @return Object
+     * @param Object        $body
+     * @param int|null|null $id
+     * @param array         $options
+     * @return mixed
      */
-    public function post($body = [], $id = null, $options = [])
+    function post($body, $id = NULL, $options = [])
     {
-        if (!$id) {
-            $id = $this->id;
-        }
-
-        return $this->endpoint->post($body, $id, $options);
+        // TODO: Implement post() method.
     }
 
+    /**
+     * @param Object        $body
+     * @param int|null|null $id
+     * @param array         $options
+     * @return mixed
+     */
+    function put($body, $id = NULL, $options = [])
+    {
+        // TODO: Implement put() method.
+    }
+
+    /**
+     * @param int|null|null $id
+     * @param array         $options
+     * @return mixed
+     */
+    function delete($id = NULL, $options = [])
+    {
+        // TODO: Implement delete() method.
+    }
+
+    /**
+     * @param int   $page
+     * @param array $options
+     * @return mixed
+     */
+    function page($page, $options = [])
+    {
+        // TODO: Implement page() method.
+    }
+
+    /**
+     * @param array $values
+     */
+    function setValues(array $values)
+    {
+        $this->values = $values;
+    }
+
+    /**
+     * Used for setting values to Object
+     *
+     * @param string                           $name
+     * @param array|string|int|ObjectInterface $value
+     */
+    public function setValue(string $name, $value)
+    {
+        $this->values[$name] = $value;
+    }
+
+    /**
+     * @param null|string|null $name
+     * @return mixed
+     */
+    public function getRelations(string $name = NULL)
+    {
+        if ($name) {
+            return $this->relations[$name];
+        }
+
+        return $this->relations;
+    }
 }

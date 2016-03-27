@@ -2,17 +2,15 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Endpoints\CorporationsEndpoint;
-use OpenCrest\Endpoints\Wars\KillmailsEndpoint;
+use OpenCrest\Objects\Wars\KillmailsObject;
 
 class WarsObject extends Object
 {
-    protected function setRelations()
-    {
-        $this->relations = [
-            "aggressor" => CorporationsEndpoint::class,
-            "defender"  => CorporationsEndpoint::class,
-            "killmails" => KillmailsEndpoint::class,
-        ];
-    }
+    protected $uri = "wars/";
+
+    protected $relations = [
+        "aggressor" => CorporationsObject::class,
+        "defender"  => CorporationsObject::class,
+        "killmails" => KillmailsObject::class,
+    ];
 }

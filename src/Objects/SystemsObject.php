@@ -2,21 +2,16 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Endpoints\AlliancesEndpoint;
-use OpenCrest\Endpoints\ConstellationsEndpoint;
-use OpenCrest\Endpoints\PlanetsEndpoint;
-use OpenCrest\Endpoints\Systems\StatsEndpoint;
+use OpenCrest\Objects\Systems\StatsObject;
 
 class SystemsObject extends Object
 {
-    protected function setRelations()
-    {
-        $this->relations = [
-            "constellation" => ConstellationsEndpoint::class,
-            "sovereignty"   => AlliancesEndpoint::class,
-            "stats"         => StatsEndpoint::class,
-            "planets"       => PlanetsEndpoint::class,
+    protected $uri = "solarsystems/";
 
-        ];
-    }
+    protected $relations = [
+        "constellation" => ConstellationsObject::class,
+        "sovereignty"   => AlliancesObject::class,
+        "stats"         => StatsObject::class,
+        "planets"       => PlanetsObject::class,
+    ];
 }

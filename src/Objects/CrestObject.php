@@ -1,8 +1,12 @@
 <?php
 
 namespace OpenCrest\Objects;
+
 class CrestObject extends Object
 {
+
+    public $uri = "";
+
     /**
      * @param $item
      * @return CharactersObject
@@ -22,10 +26,5 @@ class CrestObject extends Object
         }
 
         return $this;
-    }
-
-    protected function setRelations()
-    {
-        // No relations
     }
 }

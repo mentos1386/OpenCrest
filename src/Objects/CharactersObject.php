@@ -2,44 +2,41 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Endpoints\AccountsEndpoint;
-use OpenCrest\Endpoints\BloodLinesEndpoint;
-use OpenCrest\Endpoints\CorporationsEndpoint;
-use OpenCrest\Endpoints\RacesEndpoint;
-use OpenCrest\Endpoints\StandingsEndpoint;
-use OpenCrest\Endpoints\Characters\PrivateEndpoint;
-use OpenCrest\Endpoints\Characters\ChannelsEndpoint;
-use OpenCrest\Endpoints\Characters\BlockedEndpoint;
-use OpenCrest\Endpoints\Characters\FittingsEndpoint;
-use OpenCrest\Endpoints\Characters\ContactsEndpoint;
-use OpenCrest\Endpoints\Characters\LocationEndpoint;
-use OpenCrest\Endpoints\Characters\MailEndpoint;
-use OpenCrest\Endpoints\Characters\CapsuleerEndpoint;
-use OpenCrest\Endpoints\Characters\VivoxEndpoint;
-use OpenCrest\Endpoints\Characters\NotificationsEndpoint;
-use OpenCrest\Endpoints\Characters\Navigation\WaypointsEndpoint;
+use OpenCrest\Objects\Characters\BlockedObject;
+use OpenCrest\Objects\Characters\CapsuleerObject;
+use OpenCrest\Objects\Characters\Chat\ChannelsObject;
+use OpenCrest\Objects\Characters\ContactsObject;
+use OpenCrest\Objects\Characters\FittingsObject;
+use OpenCrest\Objects\Characters\LocationObject;
+use OpenCrest\Objects\Characters\MailObject;
+use OpenCrest\Objects\Characters\Navigation\WaypointsObject;
+use OpenCrest\Objects\Characters\NotificationsObject;
+use OpenCrest\Objects\Characters\PrivateObject;
+use OpenCrest\Objects\Characters\VivoxObject;
 
 class CharactersObject extends Object
 {
-    protected function setRelations()
-    {
-        $this->relations = [
-            "standings"     => StandingsEndpoint::class,
-            "bloodLine"     => BloodLinesEndpoint::class,
-            "waypoints"     => WaypointsEndpoint::class,
-            "private"       => PrivateEndpoint::class,
-            "channels"      => ChannelsEndpoint::class,
-            "blocked"       => BlockedEndpoint::class,
-            "fittings"      => FittingsEndpoint::class,
-            "contacts"      => ContactsEndpoint::class,
-            "location"      => LocationEndpoint::class,
-            "mail"          => MailEndpoint::class,
-            "capsuleer"     => CapsuleerEndpoint::class,
-            "vivox"         => VivoxEndpoint::class,
-            "notifications" => NotificationsEndpoint::class,
-            "corporation"   => CorporationsEndpoint::class,
-            "race"          => RacesEndpoint::class,
-            "accounts"      => AccountsEndpoint::class,
-        ];
-    }
+
+    protected $uri = "characters/";
+
+    protected $oauth = TRUE;
+
+    protected $relations = [
+        "standings"     => StandingsObject::class,
+        "bloodLine"     => BloodLinesObject::class,
+        "waypoints"     => WaypointsObject::class,
+        "private"       => PrivateObject::class,
+        "channels"      => ChannelsObject::class,
+        "blocked"       => BlockedObject::class,
+        "fittings"      => FittingsObject::class,
+        "contacts"      => ContactsObject::class,
+        "location"      => LocationObject::class,
+        "mail"          => MailObject::class,
+        "capsuleer"     => CapsuleerObject::class,
+        "vivox"         => VivoxObject::class,
+        "notifications" => NotificationsObject::class,
+        "corporation"   => CorporationsObject::class,
+        "race"          => RacesObject::class,
+        "accounts"      => AccountsObject::class,
+    ];
 }
