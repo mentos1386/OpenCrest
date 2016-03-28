@@ -3,6 +3,7 @@
 namespace OpenCrest;
 
 use GuzzleHttp\Psr7\Response;
+use OpenCrest\Exceptions\apiException;
 use OpenCrest\Interfaces\FactoryInterface;
 use OpenCrest\Interfaces\ObjectInterface;
 
@@ -53,8 +54,13 @@ class Factory implements FactoryInterface
 
         // Add cache-control header to Object, but only if this Endpoint made request
         //  we cant add cache-control for relationships, as we don't have data for them
+        // Add HTTP Code, might be useful
         if ($response) {
-            $object->setAttribute("cache", $response->getHeader("cache-control")[0]);
+            // On POST/PUT/DELETE responses cache-control isn't provided.
+            if ($response->hasHeader("cache-control")) {
+                $object->setAttribute("cache", $response->getHeader("cache-control")[0]);
+            }
+            $object->setAttribute("httpCode", $response->getStatusCode());
         }
 
         return $object;
@@ -79,8 +85,7 @@ class Factory implements FactoryInterface
         $values = [];
         $values["totalCount"] = isset($data['totalCount']) ? $data['totalCount'] : count($items);
         $values["pageCount"] = isset($data['pageCount']) ? $data['pageCount'] : 0;
-
-        array_merge($values, $this->parsePages($data));
+        $values += $this->parsePages($data);
 
         $values['items'] = [];
 
@@ -153,12 +158,45 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * @param ObjectInterface $object
-     * @param array           $pattern
-     * @return mixed
+     * @param ObjectInterface       $object
+     * @param ObjectInterface|array $data
+     * @return ObjectInterface
+     * @throws apiException
      */
-    function modify(ObjectInterface $object, array $pattern)
+    function modify(ObjectInterface $object, $data)
     {
-        // TODO: Implement modify() method.
+        // Get pattern
+        $pattern = $object->getPattern();
+        // Go through pattern and replace values with values got from data
+        // If data dosn't contain value, throw apiException
+        $values = $this->patternSearch($pattern, $data);
+
+        // return values
+        return $values;
+    }
+
+    /**
+     * @param array           $pattern
+     * @param ObjectInterface $data
+     * @return array
+     * @throws apiException
+     */
+    private function patternSearch($pattern, ObjectInterface $data)
+    {
+        // Go through all pattern and replace values with proper values from data
+        foreach ($pattern as $key => $value) {
+            if (is_array($value)) {
+                $pattern[$key] = $this->patternSearch($value, $data);
+            } else {
+                // If data desn't contain value, throw apiException
+                if (!isset($data->$key)) {
+                    throw new apiException("'$key => $value' is not provided, but required for POST/PUT request!");
+                }
+                // Assign value to key that we get from data
+                $pattern[$key] = $data->$key;
+            }
+        }
+
+        return $pattern;
     }
 }

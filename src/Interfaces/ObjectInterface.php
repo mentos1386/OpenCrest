@@ -10,7 +10,14 @@ interface ObjectInterface
      *
      * @param int $relationId
      */
-    function __construct(int $relationId);
+    function __construct(int $relationId = NULL);
+
+    /**
+     * Returns values of object as json
+     *
+     * @return string
+     */
+    function json();
 
     /**
      * Used for gating attributes from Object
@@ -22,10 +29,19 @@ interface ObjectInterface
     function getAttribute(string $name);
 
     /**
+     * Get Object relations, if $name == null, return whole array, otherwise return Object that is == $name
+     *
      * @param string|null $name
      * @return ObjectInterface|array
      */
     function getRelations(string $name = NULL);
+
+    /**
+     * Get Pattern array that is used when making POST/PUT requests
+     *
+     * @return array
+     */
+    function getPattern();
 
     /**
      * Used for setting attributes to Object
@@ -55,7 +71,7 @@ interface ObjectInterface
      *
      * @param int   $id
      * @param array $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function get($id = NULL, $options = []);
 
@@ -65,7 +81,7 @@ interface ObjectInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function post($body, $id = NULL, $options = []);
 
@@ -75,7 +91,7 @@ interface ObjectInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function put($body, $id = NULL, $options = []);
 
@@ -84,7 +100,7 @@ interface ObjectInterface
      *
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function delete($id = NULL, $options = []);
 
@@ -93,7 +109,21 @@ interface ObjectInterface
      *
      * @param int   $page
      * @param array $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function page($page, $options = []);
+
+    /**
+     * Goes to next page
+     *
+     * @return ObjectInterface|void
+     */
+    function nextPage();
+
+    /**
+     * Goes to previous page
+     *
+     * @return ObjectInterface|void
+     */
+    function previousPage();
 }

@@ -5,7 +5,6 @@ namespace OpenCrest;
 use GuzzleHttp;
 use GuzzleHttp\Psr7\Request as Request;
 use OpenCrest\Exceptions\apiException;
-use OpenCrest\Exceptions\Exception;
 use OpenCrest\Exceptions\OAuthException;
 use OpenCrest\Interfaces\EndpointInterface;
 use OpenCrest\Interfaces\FactoryInterface;
@@ -46,6 +45,7 @@ class Endpoint implements EndpointInterface
 
         $this->client = new GuzzleHttp\Client($this->headers($oauth));
 
+        // When making AuthRequest but token isn't provided, throw OAuthException
         if ($oauth and !OpenCrest::getToken()) {
             throw new OAuthException();
         }
@@ -84,50 +84,62 @@ class Endpoint implements EndpointInterface
     }
 
     /**
-     * @param Object       $body
-     * @param integer|null $id
-     * @param array        $options
-     * @return Object
+     * @param int   $page
+     * @param array $options
+     * @return ObjectInterface|void
      */
-    public function post($body, $id = NULL, $options = [])
+    public function page($page, $options = [])
     {
-        $instance = clone $this;
+        $uri = $this->object->getAttribute("uri");
 
-        // Add id to uri of provided
-        if ($id) {
-            $instance->uri = $instance->uri . $id . "/";
-        }
+        // Add page query to get specific page
+        $options["query"] = "page=" . $page;
 
-        // Add body to options as json
-        $options["json"] = $instance->makePost($body);
+        // If Async is enabled, we use httpAsyncGet function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("get", $uri, $options);
+        } else {
+            $content = $this->http("get", $uri, $options);
 
-        // Make http request
-        $instance->httpPost($instance->uri, $options);
-
-        // We return newly created resource.
-        try {
-            return $this->get($body->id);
-        } catch (Exception $e) {
-            // Or return Array with error, TODO: if GET on resource didnt work!
-            return ["POST" => "Created", "GET" => $e];
+            return $this->factory->create(new $this->object, $content, $this->response);
         }
     }
 
     /**
-     * @param       $uri
-     * @param array $options
-     * @return mixed
+     * Make HTTP GET Async Request
+     *
+     * @param string  $method
+     * @param  string $uri
+     * @param array   $options
+     * @return void
+     */
+    private function httpAsync($method, $uri, $options = [])
+    {
+        $request = new Request($method, $uri, $options);
+
+        Async::addRequest($this->object->getAttribute("oauth"), $request);
+        Async::addObject($this->object->getAttribute("oauth"), new $this->object);
+    }
+
+    /**
+     * Make HTTP Request
+     *
+     * @param string $method
+     * @param string $uri
+     * @param array  $options
+     * @return array
      * @throws apiException
      */
-    private function httpPost($uri, $options = [])
+    private function http($method, $uri, $options = [])
     {
         try {
-            $this->response = $this->client->post($uri, $options);
+            $this->response = $this->client->request($method, $uri, $options);
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->ExceptionHandler($e);
         }
+        $return = $this->response->getBody()->getContents();
 
-        return $this->response;
+        return json_decode($return, TRUE);
     }
 
     /**
@@ -143,123 +155,166 @@ class Endpoint implements EndpointInterface
     }
 
     /**
-     * Create GET request on specific resource or root uri
-     *
-     * @param int   $id
-     * @param array $options
-     * @return ObjectInterface
+     * @param ObjectInterface $body
+     * @param int|null        $id
+     * @param array           $options
+     * @return ObjectInterface|void
      */
-    public function get($id = NULL, $options = [])
+    function put($body, $id = NULL, $options = [])
     {
         $uri = $this->object->getAttribute("uri");
 
-        // If Async is enabled, we use httpAsyncGet function to make requests
+        if ($id) {
+            $uri = $uri . $id . "/";
+        }
+
+        // Add body to options as json
+        $options["json"] = $this->factory->modify($this->object, $body);
+
+        // If Async is enabled, we use httpAsync function to make requests
         if (OpenCrest::$async) {
-            $this->httpAsyncGet($uri, $options);
+            $this->httpAsync("put", $uri, $options);
         } else {
-            $content = $this->httpGet($uri, $options);
+            $content = $this->http("put", $uri, $options);
 
             return $this->factory->create(new $this->object, $content, $this->response);
         }
     }
 
     /**
-     * Make HTTP GET Async Request
+     * Create GET request on specific resource or root uri
      *
-     * @param       $uri
+     * @param int   $id
      * @param array $options
-     * @return void
+     * @return ObjectInterface|void
      */
-    private function httpAsyncGet($uri, $options = [])
+    public function get($id = NULL, $options = [])
     {
-        $request = new Request("get", $uri, $options);
+        $uri = $this->object->getAttribute("uri");
 
-        Async::addRequest($this->object->getAttribute("oauth"), $request);
-        Async::addObject($this->object->getAttribute("oauth"), new $this->object);
-    }
-
-    /**
-     * Make HTTP GET Request
-     *
-     * @param string $uri
-     * @param array  $options
-     * @return array
-     * @throws apiException
-     */
-    private function httpGet($uri, $options = [])
-    {
-        try {
-            $this->response = $this->client->get($uri, $options);
-        } catch (GuzzleHttp\Exception\RequestException $e) {
-            $this->ExceptionHandler($e);
+        if ($id) {
+            $uri = $uri . $id . "/";
         }
 
-        $return = $this->response->getBody()->getContents();
+        // If Async is enabled, we use httpAsync function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("get", $uri, $options);
+        } else {
+            $content = $this->http("get", $uri, $options);
 
-        return json_decode($return, TRUE);
+            return $this->factory->create(new $this->object, $content, $this->response);
+        }
     }
 
     /**
-     * @param $id
-     * @return mixed|ListObject
+     * @param ObjectInterface|array $body
+     * @param integer|null          $id
+     * @param array                 $options
+     * @return ObjectInterface
      */
-    public function page($id)
+    public function post($body, $id = NULL, $options = [])
     {
-        $uri = $this->uri;
-        $content = $this->httpGet($uri, [
-            'query' => 'page=' . $id
-        ]);
-        $content = $this->createObject($content);
+        $uri = $this->object->getAttribute("uri");
 
-        return $content;
+        if ($id) {
+            $uri = $uri . $id . "/";
+        }
+
+        // Add body to options as json
+        $options["json"] = $this->factory->modify($this->object, $body);
+
+        // If Async is enabled, we use httpAsync function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("post", $uri, $options);
+        } else {
+            $content = $this->http("post", $uri, $options);
+
+            if (!$content) {
+                $content = [];
+            }
+
+            return $this->factory->create(new $this->object, $content, $this->response);
+        }
     }
 
     /**
-     * @param Object        $body
-     * @param int|null|null $id
-     * @param array         $options
-     * @return mixed
-     */
-    function put($body, $id = NULL, $options = [])
-    {
-        // TODO: Implement put() method.
-    }
-
-    /**
-     * @param int|null|null $id
-     * @param array         $options
-     * @return mixed
+     * @param int|null $id
+     * @param array    $options
+     * @return ObjectInterface|void
      */
     function delete($id = NULL, $options = [])
     {
-        // TODO: Implement delete() method.
+        $uri = $this->object->getAttribute("uri");
+
+        if ($id) {
+            $uri = $uri . $id . "/";
+        }
+
+        // If Async is enabled, we use httpAsync function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("delete", $uri, $options);
+        } else {
+            $content = $this->http("delete", $uri, $options);
+
+            return $this->factory->create(new $this->object, $content, $this->response);
+        }
     }
 
     /**
      * Create Next Page from data we received
      *
-     * @return ListObject
+     * @param array $options
+     * @return ObjectInterface
+     * @throws apiException
      */
-    function nextPage()
+    function nextPage($options = [])
     {
-        $page = $this->endpoint->get($this->endpoint->uri, [
-            'query' => 'page=' . $this->values['nextPage']['page']
-        ]);
+        $uri = $this->object->getAttribute("uri");
 
-        return $this->endpoint->createObject($page);
+        // Check if next page exists
+        if (!array_key_exists("nextPage", $this->object->getAttribute("values"))) {
+            throw new apiException("There is no next page!");
+        }
+
+        // Add page query to get next page
+        $options["query"] = "page=" . $this->object->getAttribute("values")["nextPage"]["page"];
+
+        // If Async is enabled, we use httpAsyncGet function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("get", $uri, $options);
+        } else {
+            $content = $this->http("get", $uri, $options);
+
+            return $this->factory->create(new $this->object, $content, $this->response);
+        }
     }
 
     /**
      * Create Previous Page from data we received
      *
-     * @return ListObject
+     * @param array $options
+     * @return ObjectInterface
+     * @throws apiException
      */
-    function previousPage()
+    function previousPage($options = [])
     {
-        $page = $this->endpoint->get($this->endpoint->uri, [
-            'query' => 'page=' . $this->values['previousPage']['page']
-        ]);
+        $uri = $this->object->getAttribute("uri");
 
-        return $this->endpoint->createObject($page);
+        // Check if next page exists
+        if (!array_key_exists("previousPage", $this->object->getAttribute("values"))) {
+            throw new apiException("There is no previous page!");
+        }
+
+        // Add page query to get next page
+        $options["query"] = "page=" . $this->object->getAttribute("values")["previousPage"]["page"];
+
+        // If Async is enabled, we use httpAsyncGet function to make requests
+        if (OpenCrest::$async) {
+            $this->httpAsync("get", $uri, $options);
+        } else {
+            $content = $this->http("get", $uri, $options);
+
+            return $this->factory->create(new $this->object, $content, $this->response);
+        }
     }
 }

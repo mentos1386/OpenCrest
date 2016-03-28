@@ -3,6 +3,8 @@
 namespace OpenCrest\Interfaces;
 
 
+use OpenCrest\Exceptions\apiException;
+
 interface EndpointInterface
 {
     /**
@@ -10,7 +12,7 @@ interface EndpointInterface
      *
      * @param int   $id
      * @param array $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function get($id = null, $options = []);
 
@@ -20,7 +22,7 @@ interface EndpointInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function post($body, $id = null, $options = []);
 
@@ -30,7 +32,7 @@ interface EndpointInterface
      * @param Object       $body
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function put($body, $id = null, $options = []);
 
@@ -39,7 +41,7 @@ interface EndpointInterface
      *
      * @param integer|null $id
      * @param array        $options
-     * @return ObjectInterface
+     * @return ObjectInterface|void
      */
     function delete($id = null, $options = []);
 
@@ -47,22 +49,28 @@ interface EndpointInterface
      * Create GET request on specific page
      *
      * @param int $page
-     * @return ObjectInterface
+     * @param array $options
+     * @return ObjectInterface|void
      */
-    function page($page);
+    function page($page, $options = []);
 
     /**
      * Goes to next page
+     * Throws exception if there is no next page
      *
-     * @return ObjectInterface
+     * @param array $options
+     * @return ObjectInterface|void
+     * @throws apiException
      */
-    function nextPage();
+    function nextPage($options);
 
     /**
      * Goes to previous page
+     * Throws exception if there is no previous page
      *
-     * @return ObjectInterface
+     * @param array $options
+     * @return ObjectInterface|void
+     * @throws apiException
      */
-    function previousPage();
-
+    function previousPage($options);
 }

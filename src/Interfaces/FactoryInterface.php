@@ -17,12 +17,12 @@ interface FactoryInterface
     function create(ObjectInterface $object, array $data, Response $response);
 
     /**
-     * Modify object to respect body format for post/put requests
+     * Modify data to respect body format for post/put requests (patter is got from provided object)
      *
-     * @param ObjectInterface $object
-     * @param array           $pattern
+     * @param ObjectInterface       $object
+     * @param ObjectInterface|array $data
      * @return ObjectInterface
      */
-    function modify(ObjectInterface $object, array $pattern);
+    function modify(ObjectInterface $object, $data);
 
 }

@@ -2,7 +2,6 @@
 
 namespace OpenCrest\Objects\Characters;
 
-use OpenCrest\Exceptions\PostDataException;
 use OpenCrest\Objects\AlliancesObject;
 use OpenCrest\Objects\CharactersObject;
 
@@ -17,33 +16,15 @@ class ContactsObject extends Object
         "character" => CharactersObject::class,
     ];
 
-    /**
-     * TODO: NEEDS IMPLEMENTATION IN NEW FACTORY
-     *
-     * @param AlliancesObject|CharactersObject $data
-     * @return array
-     * @throws PostDataException
-     */
-    public function makePost($data)
-    {
-        if ($data instanceof AlliancesObject) {
-            $contactType = "Alliance";
-        } elseif ($data instanceof CharactersObject) {
-            $contactType = "Character";
-        } else {
-            throw new PostDataException("Creating Contacts, provided data should be Alliance or Character Object");
-        }
-
-        return [
-            // Standing attribute should be added on Object with Object->setAttribute("standing", Integer);
-            "standing"    => $data->getAttribute("standing"),
-            "contactType" => $contactType,
-            "contact"     => [
-                "id_str" => $data->getAttribute("id_str"),
-                "href"   => $data->getAttribute("href"),
-                "name"   => $data->getAttribute("name"),
-                "id"     => $data->getAttribute("id"),
-            ],
-        ];
-    }
+    protected $pattern = [
+        "standing"    => "Standing from -10.0 to +10.0 <double>",
+        "contactType" => "Type of contact 'Character' or 'Alliance' <string>",
+        "watched"     => "Is contacted listed as Watched <boolan>",
+        "contact"     => [
+            "href"   => "Href to Contact <string>",
+            "id"     => "ID of Contact <int>",
+            "id_str" => "ID of Contact as String <strig>",
+            "name"   => "Name of contact <string>",
+        ]
+    ];
 }

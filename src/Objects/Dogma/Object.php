@@ -4,7 +4,7 @@ namespace OpenCrest\Objects\Dogma;
 
 class Object extends \OpenCrest\Objects\Object
 {
-    function __construct(int $relationId)
+    function __construct(int $relationId = null)
     {
         parent::__construct($relationId);
 
