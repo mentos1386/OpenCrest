@@ -63,7 +63,7 @@ class Endpoint implements EndpointInterface
     {
         if ($oauth) {
             $headers = [
-                'base_uri' => OpenCrest::getOauthBase(),
+                'base_uri' => OpenCrest::getCrestBase(),
                 'headers'  => [
                     'User-Agent'    => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'        => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
@@ -72,7 +72,7 @@ class Endpoint implements EndpointInterface
             ];
         } else {
             $headers = [
-                'base_uri' => OpenCrest::getPublicBase(),
+                'base_uri' => OpenCrest::getCrestBase(),
                 'headers'  => [
                     'User-Agent' => 'OpenCrest/' . OpenCrest::version(),
                     'Accept'     => 'application/vnd.ccp.eve.Api-' . OpenCrest::getApiVersion() . '+json; charset=utf-8',
@@ -93,7 +93,11 @@ class Endpoint implements EndpointInterface
         $uri = $this->object->getAttribute("uri");
 
         // Add page query to get specific page
-        $options["query"] = "page=" . $page;
+        if (empty($options["query"])) {
+            $options["query"] = "page=" . $page;
+        } else {
+            $options["query"] .= "&page=" . $page;
+        }
 
         // If Async is enabled, we use httpAsyncGet function to make requests
         if (OpenCrest::$async) {
@@ -101,7 +105,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("get", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -177,7 +181,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("put", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -202,7 +206,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("get", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -233,7 +237,7 @@ class Endpoint implements EndpointInterface
                 $content = [];
             }
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -256,7 +260,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("delete", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -285,7 +289,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("get", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 
@@ -314,7 +318,7 @@ class Endpoint implements EndpointInterface
         } else {
             $content = $this->http("get", $uri, $options);
 
-            return $this->factory->create(new $this->object, $content, $this->response);
+            return $this->factory->create($this->object, $content, $this->response);
         }
     }
 }

@@ -11,6 +11,6 @@ class AlliancesObject extends Object
         "creatorCorporation"  => CorporationsObject::class,
         "corporations"        => CorporationsObject::class,
         "creatorCharacter"    => CharactersObject::class,
-        "capitalSystem"       => SystemsObject::class,
+        "capitalSystem"       => SolarSystemsObject::class,
     ];
 }

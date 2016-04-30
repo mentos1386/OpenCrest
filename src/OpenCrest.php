@@ -10,15 +10,24 @@ use OpenCrest\Objects\AlliancesObject;
 use OpenCrest\Objects\BloodLinesObject;
 use OpenCrest\Objects\CharactersObject;
 use OpenCrest\Objects\ConstellationsObject;
+use OpenCrest\Objects\Corporations\LoyaltyStoreObject;
 use OpenCrest\Objects\CorporationsObject;
 use OpenCrest\Objects\CrestObject;
 use OpenCrest\Objects\DogmaObject;
+use OpenCrest\Objects\FleetsObject;
+use OpenCrest\Objects\InsurancePricesObject;
+use OpenCrest\Objects\Market\OrdersObject;
 use OpenCrest\Objects\MarketObject;
+use OpenCrest\Objects\MoonsObject;
+use OpenCrest\Objects\Opportunities\GroupsObject;
+use OpenCrest\Objects\Opportunities\TasksObject;
+use OpenCrest\Objects\OpportunitiesObject;
 use OpenCrest\Objects\PlanetsObject;
 use OpenCrest\Objects\RacesObject;
 use OpenCrest\Objects\RegionsObject;
 use OpenCrest\Objects\StandingsObject;
-use OpenCrest\Objects\SystemsObject;
+use OpenCrest\Objects\SolarSystemsObject;
+use OpenCrest\Objects\StargatesObject;
 use OpenCrest\Objects\TournamentsObject;
 use OpenCrest\Objects\TypesObject;
 use OpenCrest\Objects\UniverseObject;
@@ -51,24 +60,11 @@ class OpenCrest
      */
     private static $token;
     /**
-     * Public CREST base
+     * CREST base
      *
      * @var string
      */
-    private static $publicBase = "https://public-crest.eveonline.com/";
-    /**
-     * OAuth CREST base
-     *
-     * @var string
-     */
-    private static $oauthBase = "https://crest-tq.eveonline.com/";
-    /**
-     * OAuth Login url
-     * Only used for ease of access, not used by library
-     *
-     * @var string
-     */
-    private static $oauthLogin = "https://login.eveonline.com/";
+    private static $crestBase = "https://crest-tq.eveonline.com/";
     /**
      * Endpoint used for getting data
      *
@@ -115,29 +111,6 @@ class OpenCrest
         self::$endpoint = $endpoint;
     }
 
-
-    /**
-     * @return string
-     */
-    public static function getOauthBase()
-    {
-        return self::$oauthBase;
-    }
-
-    /**
-     * Change Oauth CREST base
-     *  - Shortcut "sisi" sets Oauth base to Singularity server
-     *
-     * @param string $oauthBase
-     */
-    public static function setOauthBase($oauthBase)
-    {
-        if ($oauthBase == "sisi") {
-            $oauthBase = "https://api-sisi.testeveonline.com/";
-        }
-        self::$oauthBase = $oauthBase;
-    }
-
     /**
      * @return string
      */
@@ -165,44 +138,23 @@ class OpenCrest
     /**
      * @return string
      */
-    public static function getPublicBase()
+    public static function getCrestBase()
     {
-        return self::$publicBase;
+        return self::$crestBase;
     }
 
     /**
      * Change public CREST base
      *  - Shortcut "sisi" sets public base to Singularity server
      *
-     * @param string $publicBase
+     * @param string $crestBase
      */
-    public static function setPublicBase($publicBase)
+    public static function setCrestBase($crestBase)
     {
-        if ($publicBase == "sisi") {
-            $publicBase = "http://public-crest-sisi.testeveonline.com/";
+        if ($crestBase == "sisi") {
+            $crestBase = "https://crest-sisi.testeveonline.com/";
         }
-        self::$publicBase = $publicBase;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getOauthLogin()
-    {
-        return self::$oauthLogin;
-    }
-
-    /**
-     * Change oauthLogin url, only used for ease of access, not used by library
-     *
-     * @param string $oauthLogin
-     */
-    public static function setOauthLogin($oauthLogin)
-    {
-        if ($oauthLogin == "sisi") {
-            $oauthLogin = " https://sisilogin.testeveonline.com/";
-        }
-        self::$oauthLogin = $oauthLogin;
+        self::$crestBase = $crestBase;
     }
 
     /**
@@ -281,11 +233,11 @@ class OpenCrest
     }
 
     /**
-     * @return SystemsObject
+     * @return SolarSystemsObject
      */
-    public static function Systems()
+    public static function SolarSystems()
     {
-        return new SystemsObject();
+        return new SolarSystemsObject();
     }
 
     /**
@@ -361,11 +313,85 @@ class OpenCrest
     }
 
     /**
+     * @param int $regionId
+     * @return OrdersObject
+     */
+    public static function Orders(int $regionId)
+    {
+        return new  OrdersObject($regionId);
+    }
+
+    /**
+     * @param int $corporationId
+     * @return LoyaltyStoreObject
+     */
+    public static function LoyaltyStore(int $corporationId)
+    {
+        return new  LoyaltyStoreObject($corporationId);
+    }
+
+    /**
+     * @return OpportunitiesObject
+     */
+    public static function Opportunities()
+    {
+        return new  OpportunitiesObject();
+    }
+
+    /**
+     * @return GroupsObject
+     */
+    public static function OpportunitiesGroups()
+    {
+        return new  GroupsObject();
+    }
+
+    /**
+     * @return TasksObject
+     */
+    public static function OpportunitiesTasks()
+    {
+        return new  TasksObject();
+    }
+
+    /**
+     * @return InsurancePricesObject
+     */
+    public static function InsurancePrices()
+    {
+        return new  InsurancePricesObject();
+    }
+
+    /**
      * @return UniverseObject
      */
     public static function Universe()
     {
         return new  UniverseObject();
+    }
+
+    /**
+     * @return FleetsObject
+     */
+    public static function Fleets()
+    {
+        return new  FleetsObject();
+    }
+
+    /**
+     * @return MoonsObject
+     */
+    public static function Moons()
+    {
+        return new  MoonsObject();
+    }
+
+    /**
+     * @return StargatesObject
+     */
+    public static function Stargates()
+    {
+        return new  StargatesObject();
     }
 
     /**

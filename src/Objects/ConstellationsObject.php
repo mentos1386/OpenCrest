@@ -7,7 +7,7 @@ class ConstellationsObject extends Object
     public $uri = "constellations/";
 
     protected $relations = [
-        "systems" => SystemsObject::class,
+        "systems" => SolarSystemsObject::class,
         "region"  => RegionsObject::class,
     ];
 }

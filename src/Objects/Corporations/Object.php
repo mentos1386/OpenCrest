@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenCrest\Objects\Market;
+namespace OpenCrest\Objects\Corporations;
 
 class Object extends \OpenCrest\Objects\Object
 {
@@ -8,6 +8,6 @@ class Object extends \OpenCrest\Objects\Object
     {
         parent::__construct($relationId);
 
-        $this->uri = "market/" . $relationId . "/" . $this->uri;
+        $this->uri = "corporations/" . $relationId . "/" . $this->uri;
     }
 }

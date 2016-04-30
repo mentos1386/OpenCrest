@@ -2,12 +2,12 @@
 
 namespace OpenCrest\Objects;
 
-class PlanetsObject extends Object
+class MoonsObject extends Object
 {
-    protected $uri = "planets/";
+    protected $uri = "moons/";
 
     protected $relations = [
-        "solarSystem" => SolarSystemsObject::class,
         "type"        => TypesObject::class,
+        "solarSystem" => SolarSystemsObject::class,
     ];
 }

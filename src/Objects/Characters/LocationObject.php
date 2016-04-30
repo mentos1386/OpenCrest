@@ -2,7 +2,8 @@
 
 namespace OpenCrest\Objects\Characters;
 
-use OpenCrest\Objects\SystemsObject;
+use OpenCrest\Objects\StationsObject;
+use OpenCrest\Objects\SolarSystemsObject;
 
 class LocationObject extends Object
 {
@@ -11,6 +12,7 @@ class LocationObject extends Object
     protected $oauth = TRUE;
 
     protected $relations = [
-        "solarSystem" => SystemsObject::class,
+        "solarSystem" => SolarSystemsObject::class,
+        "station"     => StationsObject::class,
     ];
 }

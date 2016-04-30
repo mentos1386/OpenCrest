@@ -4,7 +4,7 @@ namespace OpenCrest\Objects;
 
 use OpenCrest\Objects\Systems\StatsObject;
 
-class SystemsObject extends Object
+class SolarSystemsObject extends Object
 {
     protected $uri = "solarsystems/";
 
@@ -13,5 +13,6 @@ class SystemsObject extends Object
         "sovereignty"   => AlliancesObject::class,
         "stats"         => StatsObject::class,
         "planets"       => PlanetsObject::class,
+        "stargates"     => StargatesObject::class,
     ];
 }

@@ -9,7 +9,8 @@ interface FactoryInterface
     /**
      * Create new object from data
      *
-     * @param ObjectInterface $object
+     * @param ObjectInterface $object Populated Object that created Request,
+     *                                make new Object of same type with new $object
      * @param array           $data
      * @param Response        $response
      * @return ObjectInterface

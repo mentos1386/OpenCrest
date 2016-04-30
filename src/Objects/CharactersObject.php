@@ -8,9 +8,11 @@ use OpenCrest\Objects\Characters\Chat\ChannelsObject;
 use OpenCrest\Objects\Characters\ContactsObject;
 use OpenCrest\Objects\Characters\FittingsObject;
 use OpenCrest\Objects\Characters\LocationObject;
+use OpenCrest\Objects\Characters\LoyaltyPointsObject;
 use OpenCrest\Objects\Characters\MailObject;
 use OpenCrest\Objects\Characters\Navigation\WaypointsObject;
 use OpenCrest\Objects\Characters\NotificationsObject;
+use OpenCrest\Objects\Characters\OpportunitiesObject;
 use OpenCrest\Objects\Characters\PrivateObject;
 use OpenCrest\Objects\Characters\VivoxObject;
 
@@ -38,5 +40,7 @@ class CharactersObject extends Object
         "corporation"   => CorporationsObject::class,
         "race"          => RacesObject::class,
         "accounts"      => AccountsObject::class,
+        "opportunities" => OpportunitiesObject::class,
+        "loyaltyPoints" => LoyaltyPointsObject::class,
     ];
 }

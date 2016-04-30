@@ -17,15 +17,28 @@ class Factory implements FactoryInterface
      */
     function create(ObjectInterface $object, array $data, Response $response = NULL)
     {
+        // If object had relationId, we pass it to new object
+        if ($object->getAttribute("relationId")) {
+            $relationId = $object->getAttribute("relationId");
+            $object = new $object($relationId);
+        } else {
+            $object = new $object;
+        }
+
         if (isset($data['items']) or isset($data[0])) {
 
             // If we have list of items
             $object = $this->createList($object, $data);
 
         } else {
-            // TODO: Some things don't provide ID, possible BUG, that it isn't implemented in CREST
             if (isset($data["id"])) {
+                // TODO: Some things don't provide ID, possible BUG, that it isn't implemented in CREST
                 $object->setAttribute("id", $data['id']);
+                $uri = $object->getAttribute("uri") . $object->getAttribute("id") . "/";
+                $object->setAttribute("uri", $uri);
+            } elseif (!empty($data['href']) && is_numeric(basename($data["href"]))) {
+                // TODO: Meybe not bug, so we just take it from href
+                $object->setAttribute("id", (int)basename($data["href"]));
                 $uri = $object->getAttribute("uri") . $object->getAttribute("id") . "/";
                 $object->setAttribute("uri", $uri);
             }
