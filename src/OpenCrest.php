@@ -16,6 +16,7 @@ use OpenCrest\Objects\CrestObject;
 use OpenCrest\Objects\DogmaObject;
 use OpenCrest\Objects\FleetsObject;
 use OpenCrest\Objects\InsurancePricesObject;
+use OpenCrest\Objects\Inventory\CategoriesObject;
 use OpenCrest\Objects\Market\OrdersObject;
 use OpenCrest\Objects\MarketObject;
 use OpenCrest\Objects\MoonsObject;
@@ -28,6 +29,8 @@ use OpenCrest\Objects\RegionsObject;
 use OpenCrest\Objects\StandingsObject;
 use OpenCrest\Objects\SolarSystemsObject;
 use OpenCrest\Objects\StargatesObject;
+use OpenCrest\Objects\Systems\CampaignsObject;
+use OpenCrest\Objects\Systems\StructuresObject;
 use OpenCrest\Objects\TournamentsObject;
 use OpenCrest\Objects\TypesObject;
 use OpenCrest\Objects\UniverseObject;
@@ -393,6 +396,31 @@ class OpenCrest
     {
         return new  StargatesObject();
     }
+
+    /**
+     * @return CampaignsObject
+     */
+    public static function SovereigntyCampaigns()
+    {
+        return new  CampaignsObject();
+    }
+
+    /**
+     * @return StructuresObject
+     */
+    public static function SovereigntyStructures()
+    {
+        return new  StructuresObject();
+    }
+
+    /**
+     * @return \OpenCrest\Objects\Inventory\CategoriesObject
+     */
+    public static function InventoryCategories()
+    {
+        return new  CategoriesObject();
+    }
+
 
     /**
      * @return CrestObject
