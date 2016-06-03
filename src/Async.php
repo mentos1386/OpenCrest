@@ -118,11 +118,7 @@ class Async
      */
     public static function setRequests($oauth, $requests)
     {
-        if (!$oauth) {
-            self::$requests["public"] = $requests;
-        } else {
-            self::$requests["oauth"] = $requests;
-        }
+        $oauth ? self::$requests["oauth"] = $requests : self::$requests["public"] = $requests;
     }
 
     /**
@@ -131,11 +127,7 @@ class Async
      */
     public static function addRequest($oauth, $request)
     {
-        if (!$oauth) {
-            array_push(self::$requests["public"], $request);
-        } else {
-            array_push(self::$requests["oauth"], $request);
-        }
+        $oauth ? array_push(self::$requests["oauth"], $request) : array_push(self::$requests["public"], $request);
     }
 
     /**
@@ -144,11 +136,7 @@ class Async
      */
     public static function setObjects($oauth, $objects)
     {
-        if (!$oauth) {
-            self::$objects["public"] = $objects;
-        } else {
-            self::$objects["oauth"] = $objects;
-        }
+        $oauth ? self::$objects["oauth"] = $objects : self::$objects["public"] = $objects;
     }
 
     /**
@@ -157,11 +145,7 @@ class Async
      */
     public static function addObject($oauth, ObjectInterface $object)
     {
-        if (!$oauth) {
-            array_push(self::$objects["public"], $object);
-        } else {
-            array_push(self::$objects["oauth"], $object);
-        }
+        $oauth ? array_push(self::$objects["oauth"], $object) : array_push(self::$objects["public"], $object);
     }
 
     /**

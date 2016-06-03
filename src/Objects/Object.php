@@ -2,7 +2,8 @@
 
 namespace OpenCrest\Objects;
 
-use OpenCrest\Exceptions\apiException;
+use OpenCrest\Exceptions\ApiException;
+use OpenCrest\Interfaces\EndpointInterface;
 use OpenCrest\Interfaces\ObjectInterface;
 use OpenCrest\OpenCrest;
 
@@ -25,7 +26,7 @@ class Object implements ObjectInterface
      *
      * @var int|null
      */
-    protected $id;
+    protected $resourceId;
     /**
      * Relation ID of resource (like character id)
      *
@@ -50,7 +51,7 @@ class Object implements ObjectInterface
      *
      * @var bool
      */
-    protected $oauth = FALSE;
+    protected $oauth = false;
     /**
      * Object values
      *
@@ -69,15 +70,30 @@ class Object implements ObjectInterface
      * @var array
      */
     protected $pattern = [];
+    /**
+     * Endpoint used for making get/post/put/delete requests
+     *
+     * @var EndpointInterface
+     */
+    protected $endpoint;
 
     /**
      * Object constructor
      *
      * @param int $relationId
      */
-    public function __construct(int $relationId = NULL)
+    public function __construct(int $relationId = null)
     {
         $this->relationId = $relationId;
+        $this->endpoint = OpenCrest::getEndpoint($this);
+    }
+
+    /**
+     * @param EndpointInterface $endpoint
+     */
+    public function setEndpoint(EndpointInterface $endpoint)
+    {
+        $this->endpoint = $endpoint;
     }
 
     /**
@@ -125,53 +141,45 @@ class Object implements ObjectInterface
     }
 
     /**
-     * @param int|null $id
+     * @param int|null $resourceId
      * @param array    $options
      * @return ObjectInterface
      */
-    function get($id = NULL, $options = [])
+    public function get($resourceId = null, $options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->get($id, $options);
+        return $this->endpoint->get($resourceId, $options);
     }
 
     /**
      * @param Object        $body
-     * @param int|null|null $id
+     * @param int|null|null $resourceId
      * @param array         $options
      * @return ObjectInterface
      */
-    function post($body, $id = NULL, $options = [])
+    public function post($body, $resourceId = null, $options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->post($body, $id, $options);
+        return $this->endpoint->post($body, $resourceId, $options);
     }
 
     /**
      * @param Object        $body
-     * @param int|null|null $id
+     * @param int|null|null $resourceId
      * @param array         $options
      * @return ObjectInterface
      */
-    function put($body, $id = NULL, $options = [])
+    public function put($body, $resourceId = null, $options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->put($body, $id, $options);
+        return $this->endpoint->put($body, $resourceId, $options);
     }
 
     /**
-     * @param int|null|null $id
+     * @param int|null|null $resourceId
      * @param array         $options
      * @return ObjectInterface
      */
-    function delete($id = NULL, $options = [])
+    public function delete($resourceId = null, $options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->delete($id, $options);
+        return $this->endpoint->delete($resourceId, $options);
     }
 
     /**
@@ -179,41 +187,35 @@ class Object implements ObjectInterface
      * @param array $options
      * @return ObjectInterface
      */
-    function page($page, $options = [])
+    public function page($page, $options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->page($page, $options);
+        return $this->endpoint->page($page, $options);
     }
 
     /**
      * @param array $options
      * @return ObjectInterface|void
-     * @throws apiException
+     * @throws ApiException
      */
-    function nextPage($options = [])
+    public function nextPage($options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->nextPage($options);
+        return $this->endpoint->nextPage($options);
     }
 
     /**
      * @param array $options
      * @return ObjectInterface|void
-     * @throws apiException
+     * @throws ApiException
      */
-    function previousPage($options = [])
+    public function previousPage($options = [])
     {
-        $endpoint = OpenCrest::getEndpoint($this);
-
-        return $endpoint->previousPage($options);
+        return $this->endpoint->previousPage($options);
     }
 
     /**
      * @param array $values
      */
-    function setValues(array $values)
+    public function setValues(array $values)
     {
         $this->values = $values;
     }
@@ -233,7 +235,7 @@ class Object implements ObjectInterface
      * @param null|string|null $name
      * @return mixed
      */
-    public function getRelations(string $name = NULL)
+    public function getRelations(string $name = null)
     {
         if ($name) {
             return $this->relations[$name];
@@ -245,7 +247,7 @@ class Object implements ObjectInterface
     /**
      * @return array
      */
-    function getPattern()
+    public function getPattern()
     {
         return $this->pattern;
     }
@@ -253,8 +255,8 @@ class Object implements ObjectInterface
     /**
      * @return string
      */
-    function json()
+    public function json()
     {
-        return json_encode($this->values, TRUE);
+        return json_encode($this->values, true);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OpenCrest\Exceptions;
 
-class apiException extends Exception
+class ApiException extends Exception
 {
     /**
      * @return string

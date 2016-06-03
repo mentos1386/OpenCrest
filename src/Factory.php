@@ -3,7 +3,7 @@
 namespace OpenCrest;
 
 use GuzzleHttp\Psr7\Response;
-use OpenCrest\Exceptions\apiException;
+use OpenCrest\Exceptions\ApiException;
 use OpenCrest\Interfaces\FactoryInterface;
 use OpenCrest\Interfaces\ObjectInterface;
 
@@ -15,7 +15,7 @@ class Factory implements FactoryInterface
      * @param Response        $response
      * @return ObjectInterface
      */
-    function create(ObjectInterface $object, array $data, Response $response = NULL)
+    public function create(ObjectInterface $object, array $data, Response $response = null)
     {
         // If object had relationId, we pass it to new object
         if ($object->getAttribute("relationId")) {
@@ -112,16 +112,16 @@ class Factory implements FactoryInterface
             }
 
             // Create new object
-            $_item = $this->create(clone $object, $item);
+            $newItem = $this->create(clone $object, $item);
 
             // In rare cases, you can get object listing through one endpoint, but get specific object through another
             // This is the case for regions->buy/sellOrders where you get list of orders, but you access those orders
             if ($object->getAttribute("listUri")) {
-                $_item->setAttribute("uri", $object->getAttribute("listUri"));
+                $newItem->setAttribute("uri", $object->getAttribute("listUri"));
             }
 
             // Push item to items
-            array_push($values['items'], $_item);
+            array_push($values['items'], $newItem);
         }
 
         // Set all values
@@ -143,13 +143,20 @@ class Factory implements FactoryInterface
         if (isset($pages['next'])) {
             $values['nextPage'] = [
                 'href' => $pages['next']['href'],
-                'page' => ($this->parseUrl($pages['next']['href'])['page'] ? (int)$this->parseUrl($pages['next']['href'])['page'] : NULL)
+                'page' => (
+                $this->parseUrl($pages['next']['href'])['page'] ?
+                    (int)$this->parseUrl($pages['next']['href'])['page'] :
+                    null
+                )
             ];
         }
         if (isset($pages['previous'])) {
             $values['previousPage'] = [
                 'href' => $pages['previous']['href'],
-                'page' => (int)(!empty($this->parseUrl($pages['previous']['href'])) ? $this->parseUrl($pages['previous']['href'])['page'] : 1)
+                'page' => (
+                !empty($this->parseUrl($pages['previous']['href'])) ?
+                    (int)$this->parseUrl($pages['previous']['href'])['page'] :
+                    1)
             ];
         }
 
@@ -174,9 +181,9 @@ class Factory implements FactoryInterface
      * @param ObjectInterface       $object
      * @param ObjectInterface|array $data
      * @return ObjectInterface
-     * @throws apiException
+     * @throws ApiException
      */
-    function modify(ObjectInterface $object, $data)
+    public function modify(ObjectInterface $object, $data)
     {
         // Get pattern
         $pattern = $object->getPattern();
@@ -192,7 +199,7 @@ class Factory implements FactoryInterface
      * @param array           $pattern
      * @param ObjectInterface $data
      * @return array
-     * @throws apiException
+     * @throws ApiException
      */
     private function patternSearch($pattern, ObjectInterface $data)
     {
@@ -203,7 +210,7 @@ class Factory implements FactoryInterface
             } else {
                 // If data desn't contain value, throw apiException
                 if (!isset($data->$key)) {
-                    throw new apiException("'$key => $value' is not provided, but required for POST/PUT request!");
+                    throw new ApiException("'$key => $value' is not provided, but required for POST/PUT request!");
                 }
                 // Assign value to key that we get from data
                 $pattern[$key] = $data->$key;

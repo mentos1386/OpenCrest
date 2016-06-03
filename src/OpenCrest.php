@@ -43,7 +43,7 @@ class OpenCrest
      *
      * @var bool
      */
-    public static $async = FALSE;
+    public static $async = false;
     /**
      * Crest api version selection
      *
@@ -55,7 +55,7 @@ class OpenCrest
      *
      * @var string
      */
-    private static $version = "3.0.0-beta";
+    private static $version = "3.1.0-dev";
     /**
      * Oauth Token
      *

@@ -2,57 +2,56 @@
 
 namespace OpenCrest\Interfaces;
 
-
-use OpenCrest\Exceptions\apiException;
+use OpenCrest\Exceptions\ApiException;
 
 interface EndpointInterface
 {
     /**
      * Create GET request on specific resource or root URI
      *
-     * @param int   $id
+     * @param int   $resourceId
      * @param array $options
      * @return ObjectInterface|void
      */
-    function get($id = null, $options = []);
+    public function get($resourceId = null, $options = []);
 
     /**
      * Create POST request on specific resource or root URI
      *
      * @param Object       $body
-     * @param integer|null $id
+     * @param integer|null $resourceId
      * @param array        $options
      * @return ObjectInterface|void
      */
-    function post($body, $id = null, $options = []);
+    public function post($body, $resourceId = null, $options = []);
 
     /**
      * Create PUT request on specific resource or root URI
      *
      * @param Object       $body
-     * @param integer|null $id
+     * @param integer|null $resourceId
      * @param array        $options
      * @return ObjectInterface|void
      */
-    function put($body, $id = null, $options = []);
+    public function put($body, $resourceId = null, $options = []);
 
     /**
      * Create DELETE request on specific resource or root URI
      *
-     * @param integer|null $id
+     * @param integer|null $resourceId
      * @param array        $options
      * @return ObjectInterface|void
      */
-    function delete($id = null, $options = []);
+    public function delete($resourceId = null, $options = []);
 
     /**
      * Create GET request on specific page
      *
-     * @param int $page
+     * @param int   $page
      * @param array $options
      * @return ObjectInterface|void
      */
-    function page($page, $options = []);
+    public function page($page, $options = []);
 
     /**
      * Goes to next page
@@ -60,9 +59,9 @@ interface EndpointInterface
      *
      * @param array $options
      * @return ObjectInterface|void
-     * @throws apiException
+     * @throws ApiException
      */
-    function nextPage($options);
+    public function nextPage($options);
 
     /**
      * Goes to previous page
@@ -70,7 +69,7 @@ interface EndpointInterface
      *
      * @param array $options
      * @return ObjectInterface|void
-     * @throws apiException
+     * @throws ApiException
      */
-    function previousPage($options);
+    public function previousPage($options);
 }
