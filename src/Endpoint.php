@@ -155,6 +155,12 @@ class Endpoint implements EndpointInterface
      */
     private function httpAsync($method, $uri, $options = [])
     {
+        // Attach the query string to the request for ASYNC
+        if (!empty($options['query'])) {
+            $uri .= '?' . $options['query'];
+            unset($options['query']);
+        }
+
         $request = new Request($method, $uri, $options);
 
         Async::addRequest($this->object->getAttribute("oauth"), $request);
