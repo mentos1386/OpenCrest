@@ -3,7 +3,7 @@
   "description": "CREST Library for Eve Online",
   "type": "library",
   "require": {
-    "guzzlehttp/guzzle": "^6",
+    "guzzlehttp/guzzle": "^6.2.1",
     "php": "^7.0"
   },
   "require-dev": {
